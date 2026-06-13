@@ -65,3 +65,14 @@ obj/*
 
 # AppImage build artifacts
 *.AppImage
+
+# Binary content assets — fetched from ctrdx-assets at build time, not stored in Git
+content/**/*.png
+content/**/*.wav
+content/**/*.ogg
+content/**/*.mp4
+content/**/*.ttf
+content/**/*.otf
+content/**/*.cur
+content/**/*.xnb
+content/**/*.wmv
