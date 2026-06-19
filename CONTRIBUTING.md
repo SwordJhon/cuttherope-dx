@@ -68,6 +68,7 @@ For translation contribution guide, please refer to [the translation guide](http
 
 - Submitting low-effort or noise PRs, including, but not limited to: unnecessary README edits, cosmetic documentation tweaks, or changes unrelated to an actual issue or improvement.
     - If a change does not fix a bug, add a feature, or meaningfully improve documentation, it likely does not belong in a pull request.
+    - Users who repeatedly submit low-effort or spam PRs may be blocked from further contributions.
 
 - Avoid submitting pull requests with **only cosmetic changes** (e.g., whitespace tweaks or code reformatting without functional impact).
     - These changes clutter diffs and make code reviews harder. [See this comment by the Rails team](https://github.com/rails/rails/pull/13771#issuecomment-32746700).
@@ -82,12 +83,17 @@ For translation contribution guide, please refer to [the translation guide](http
 ### 🚫 Prohibited actions
 
 - Add code that is unclear in intent or function.
+
 - Add code or commits that:
     - Are **malicious** or **unsafe**
     - **Executes scripts from external sources** associated with malicious, unsafe, or illegal behavior
     - Attempts to introduce **backdoors** or hidden functionality
 
         Any code violating these rules will result in the contributor being **blocked** and **reported** to GitHub for Terms of Service violations.
+
+- Add code, assets, or implementation details copied from leaked, stolen, or otherwise unauthorized sources.
+    - Public availability does not mean the material is legally or ethically safe to use.
+    - Contributions based on leaked or unauthorized material will be rejected.
 
 - Use expletives or offensive language. This project is intended for everyone, and we strive to maintain a respectful environment for all contributors and users.
 
