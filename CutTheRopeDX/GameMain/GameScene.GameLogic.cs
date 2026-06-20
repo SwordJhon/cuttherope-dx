@@ -729,7 +729,7 @@ namespace CutTheRopeDX.GameMain
                         continue;
                     }
 
-                    BreakCandyContextFromHazard(ci, ctx);
+                    BreakCandyFromHazard(ci, ctx);
                     return true;
                 }
             }
@@ -737,6 +737,13 @@ namespace CutTheRopeDX.GameMain
             return false;
         }
 
+        /// <summary>
+        /// Breaks the split candy (candies[0], <c>twoParts != 2</c>) when either half touches a Time
+        /// Travel axe blade. Owns only the axe hit-test; the break effect is shared with the spike via
+        /// <see cref="BreakSplitCandyHalf"/>.
+        /// </summary>
+        /// <param name="axeCtx">The candy carrying the axe blade.</param>
+        /// <returns><see langword="true"/> when a half was broken.</returns>
         private bool BreakSplitCandyTouchedByAxe(CandyContext axeCtx)
         {
             if (candies[0].inLantern)
@@ -751,92 +758,8 @@ namespace CutTheRopeDX.GameMain
                 return false;
             }
 
-            if (leftHit)
-            {
-                if (candyBubbleL != null)
-                {
-                    PopCandyBubble(true);
-                }
-                noCandyL = true;
-            }
-            else
-            {
-                if (candyBubbleR != null)
-                {
-                    PopCandyBubble(false);
-                }
-                noCandyR = true;
-            }
-
-            ExhaustAllActiveRockets();
-            SpawnCandyBreakParticles(leftHit ? candyL.x : candyR.x, leftHit ? candyL.y : candyR.y);
-            ReleaseAllRopes(leftHit);
-            DetachActiveHands();
-            DetachActiveSnails();
-            if (restartState != 0 && (!noCandyL || !noCandyR))
-            {
-                dd.CallObjectSelectorParamafterDelay(new DelayedDispatcher.DispatchFunc(Selector_gameLost), null, 0.3f);
-            }
-            MarkGhostsCandyBreak();
+            BreakSplitCandyHalf(leftHit);
             return true;
-        }
-
-        private void BreakCandyContextFromHazard(int index, CandyContext ctx)
-        {
-            if (index == 0)
-            {
-                if (candyBubble != null)
-                {
-                    PopCandyBubble(false);
-                }
-            }
-            else
-            {
-                PopCandyBubble(ctx);
-            }
-
-            ctx.candy.x = ctx.point.pos.X;
-            ctx.candy.y = ctx.point.pos.Y;
-            if (index == 0)
-            {
-                noCandy = true;
-            }
-            else
-            {
-                ctx.noCandy = true;
-            }
-
-            ExhaustAllActiveRockets();
-            SpawnCandyBreakParticles(ctx.candy.x, ctx.candy.y);
-            if (index == 0)
-            {
-                ReleaseAllRopes(false);
-            }
-            else
-            {
-                ReleaseRopesForPoint(ctx.point);
-            }
-            DetachActiveHands();
-            DetachSnailsForPoint(ctx.point);
-            if (restartState != 0)
-            {
-                dd.CallObjectSelectorParamafterDelay(new DelayedDispatcher.DispatchFunc(Selector_gameLost), null, 0.3f);
-            }
-            MarkGhostsCandyBreak();
-        }
-
-        private void MarkGhostsCandyBreak()
-        {
-            if (ghosts == null)
-            {
-                return;
-            }
-
-            foreach (object objGhost in ghosts)
-            {
-                Ghost ghost = (Ghost)objGhost;
-                _ = (ghost?.candyBreak = true);
-            }
         }
 
         /// <summary>
