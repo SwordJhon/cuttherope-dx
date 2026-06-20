@@ -688,6 +688,158 @@ namespace CutTheRopeDX.GameMain
         }
 
         /// <summary>
+        /// Breaks normal candy bodies that touch a Time Travel axe blade.
+        /// </summary>
+        /// <returns><see langword="true"/> when a candy was broken and update should stop.</returns>
+        private bool BreakCandyTouchedByAxes()
+        {
+            for (int ai = 0; ai < candies.Count; ai++)
+            {
+                CandyContext axeCtx = candies[ai];
+                if (axeCtx.axe == null || axeCtx.noCandy)
+                {
+                    continue;
+                }
+
+                for (int ci = 0; ci < candies.Count; ci++)
+                {
+                    CandyContext ctx = candies[ci];
+                    if (!ctx.Capabilities.CanBeBrokenByHazards)
+                    {
+                        continue;
+                    }
+
+                    if (ci == 0 && twoParts != 2)
+                    {
+                        if (BreakSplitCandyTouchedByAxe(axeCtx))
+                        {
+                            return true;
+                        }
+                        continue;
+                    }
+
+                    bool gone = ci == 0 ? noCandy : ctx.noCandy;
+                    if (gone || ctx.inLantern)
+                    {
+                        continue;
+                    }
+
+                    if (VectDistance(ctx.point.pos, axeCtx.point.pos) > AxeDefinition.HazardCollisionDistance)
+                    {
+                        continue;
+                    }
+
+                    BreakCandyContextFromHazard(ci, ctx);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool BreakSplitCandyTouchedByAxe(CandyContext axeCtx)
+        {
+            if (candies[0].inLantern)
+            {
+                return false;
+            }
+
+            bool leftHit = !noCandyL && VectDistance(starL.pos, axeCtx.point.pos) <= AxeDefinition.HazardCollisionDistance;
+            bool rightHit = !leftHit && !noCandyR && VectDistance(starR.pos, axeCtx.point.pos) <= AxeDefinition.HazardCollisionDistance;
+            if (!leftHit && !rightHit)
+            {
+                return false;
+            }
+
+            if (leftHit)
+            {
+                if (candyBubbleL != null)
+                {
+                    PopCandyBubble(true);
+                }
+                noCandyL = true;
+            }
+            else
+            {
+                if (candyBubbleR != null)
+                {
+                    PopCandyBubble(false);
+                }
+                noCandyR = true;
+            }
+
+            ExhaustAllActiveRockets();
+            SpawnCandyBreakParticles(leftHit ? candyL.x : candyR.x, leftHit ? candyL.y : candyR.y);
+            ReleaseAllRopes(leftHit);
+            DetachActiveHands();
+            DetachActiveSnails();
+            if (restartState != 0 && (!noCandyL || !noCandyR))
+            {
+                dd.CallObjectSelectorParamafterDelay(new DelayedDispatcher.DispatchFunc(Selector_gameLost), null, 0.3f);
+            }
+            MarkGhostsCandyBreak();
+            return true;
+        }
+
+        private void BreakCandyContextFromHazard(int index, CandyContext ctx)
+        {
+            if (index == 0)
+            {
+                if (candyBubble != null)
+                {
+                    PopCandyBubble(false);
+                }
+            }
+            else
+            {
+                PopCandyBubble(ctx);
+            }
+
+            ctx.candy.x = ctx.point.pos.X;
+            ctx.candy.y = ctx.point.pos.Y;
+            if (index == 0)
+            {
+                noCandy = true;
+            }
+            else
+            {
+                ctx.noCandy = true;
+            }
+
+            ExhaustAllActiveRockets();
+            SpawnCandyBreakParticles(ctx.candy.x, ctx.candy.y);
+            if (index == 0)
+            {
+                ReleaseAllRopes(false);
+            }
+            else
+            {
+                ReleaseRopesForPoint(ctx.point);
+            }
+            DetachActiveHands();
+            DetachSnailsForPoint(ctx.point);
+            if (restartState != 0)
+            {
+                dd.CallObjectSelectorParamafterDelay(new DelayedDispatcher.DispatchFunc(Selector_gameLost), null, 0.3f);
+            }
+            MarkGhostsCandyBreak();
+        }
+
+        private void MarkGhostsCandyBreak()
+        {
+            if (ghosts == null)
+            {
+                return;
+            }
+
+            foreach (object objGhost in ghosts)
+            {
+                Ghost ghost = (Ghost)objGhost;
+                _ = (ghost?.candyBreak = true);
+            }
+        }
+
+        /// <summary>
         /// Spawns the additive spark burst at a world position.
         /// </summary>
         /// <param name="x">World-space X for the sparks.</param>
