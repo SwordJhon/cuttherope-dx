@@ -93,6 +93,14 @@ namespace CutTheRopeDX.GameMain
             waterLayer?.DrawBack();
             targetObject?.Draw();
             targetAnimationController?.DrawSleepOverlays();
+            // Draw additional Om Noms. targets[0] is the primary, drawn above.
+            for (int ti = 1; ti < targets.Count; ti++)
+            {
+                TargetContext t = targets[ti];
+                t.support?.Draw();
+                t.targetObject?.Draw();
+                t.controller?.DrawSleepOverlays();
+            }
             foreach (object tutorialText in tutorials)
             {
                 ((Text)tutorialText).Draw();
@@ -190,6 +198,12 @@ namespace CutTheRopeDX.GameMain
                 grab.DrawBack();
                 grab.Draw();
             }
+
+            // candiesConnected elastic: not a Grab, so draw it directly after the grab ropes.
+            Renderer.SetBlendFunc(BlendingFactor.GLSRCALPHA, BlendingFactor.GLONEMINUSSRCALPHA);
+            candyConnector?.Draw();
+            Renderer.SetColor(Color.White);
+
             foreach (object bungeeGun in bungees)
             {
                 Grab grab = (Grab)bungeeGun;
@@ -216,7 +230,7 @@ namespace CutTheRopeDX.GameMain
                 }
             }
             Renderer.SetBlendFunc(BlendingFactor.GLONE, BlendingFactor.GLONEMINUSSRCALPHA);
-            foreach (LightBulb bulb in lightBulbs)
+            foreach (LightBulb bulb in LightEmitterVisuals())
             {
                 bulb?.DrawLight();
             }
@@ -229,25 +243,51 @@ namespace CutTheRopeDX.GameMain
             {
                 foreach (Rocket rocket in rockets)
                 {
-                    if (rocket != null && !(rocket == activeRocket && (targetSock != null || targetBambooTube != null)))
+                    if (rocket == null)
+                    {
+                        continue;
+                    }
+                    bool hiddenForTransit = false;
+                    for (int ci = 0; ci < candies.Count; ci++)
+                    {
+                        CandyContext ctx = candies[ci];
+                        if (rocket == ctx.activeRocket && ctx.InTransport)
+                        {
+                            hiddenForTransit = true;
+                            break;
+                        }
+                    }
+                    if (!hiddenForTransit)
                     {
                         rocket.Draw();
                     }
                 }
             }
-            if (!noCandy && targetSock == null)
+            // Draw every candy + its blink in one pass. candies[0] reads the same objects the
+            // old primary-candy aliases exposed. candies[0].candyBlink is always non-null.
+            for (int ci = 0; ci < candies.Count; ci++)
             {
-                if (!isCandyInLantern)
+                CandyContext ctx = candies[ci];
+                if (ctx.emitsLight)
                 {
-                    candy.x = star.pos.X;
-                    candy.y = star.pos.Y;
+                    continue;
                 }
-                candy.Draw();
-                if (candyBlink.GetCurrentTimeline() != null && !isCandyInLantern)
+                bool gone = CandyGone(ci, ctx);
+                Sock sock = ctx.targetSock;
+                if (!gone && sock == null)
                 {
-                    Renderer.SetBlendFunc(BlendingFactor.GLSRCALPHA, BlendingFactor.GLONE);
-                    candyBlink.Draw();
-                    Renderer.SetBlendFunc(BlendingFactor.GLONE, BlendingFactor.GLONEMINUSSRCALPHA);
+                    if (!ctx.inLantern)
+                    {
+                        ctx.candy.x = ctx.point.pos.X;
+                        ctx.candy.y = ctx.point.pos.Y;
+                        ctx.candy.Draw();
+                    }
+                    if (ctx.candyBlink != null && ctx.candyBlink.GetCurrentTimeline() != null && !ctx.inLantern)
+                    {
+                        Renderer.SetBlendFunc(BlendingFactor.GLSRCALPHA, BlendingFactor.GLONE);
+                        ctx.candyBlink.Draw();
+                        Renderer.SetBlendFunc(BlendingFactor.GLONE, BlendingFactor.GLONEMINUSSRCALPHA);
+                    }
                 }
             }
             if (hands != null)
@@ -283,7 +323,7 @@ namespace CutTheRopeDX.GameMain
                 }
             }
             waterLayer?.DrawFront(camera.pos.Y);
-            foreach (LightBulb bulb in lightBulbs)
+            foreach (LightBulb bulb in LightEmitterVisuals())
             {
                 bulb?.DrawBottleAndFirefly();
             }

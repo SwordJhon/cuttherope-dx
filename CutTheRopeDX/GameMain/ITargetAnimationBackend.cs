@@ -13,6 +13,9 @@ namespace CutTheRopeDX.GameMain
         /// <summary>Gets the primary Om Nom gameplay object.</summary>
         GameObject TargetObject { get; }
 
+        /// <summary>Gets the skin definition for this target's skin, or <see langword="null"/> for the classic skin.</summary>
+        OmNomSkinDefinition SkinDefinition { get; }
+
         /// <summary>Gets the default horizontal scale that should be applied to the target object.</summary>
         /// <returns>Default X scale for the target object.</returns>
         float GetTargetBaseScaleX();
@@ -34,6 +37,12 @@ namespace CutTheRopeDX.GameMain
         void Play(TargetAnimationState state);
 
         /// <summary>
+        /// Plays the sleeping state, optionally applying the configured idle-to-sleep trim.
+        /// </summary>
+        /// <param name="trimIdleToSleepTransition"><see langword="true"/> to trim idle-to-sleep; otherwise play it from frame 0.</param>
+        void PlaySleeping(bool trimIdleToSleepTransition);
+
+        /// <summary>
         /// Plays a backend-specific random idle variation.
         /// </summary>
         /// <param name="rng">Inclusive random function with signature <c>(min, max) => value</c>.</param>
@@ -41,6 +50,9 @@ namespace CutTheRopeDX.GameMain
 
         /// <summary>Whether this skin plays the greeting animation on initialization instead of idle.</summary>
         bool StartsWithGreeting { get; }
+
+        /// <summary>Whether this backend is driven by Flash XML animation exports.</summary>
+        bool UsesFlashXmlAnimations { get; }
 
         /// <summary>
         /// Checks whether the requested target animation state is currently active.

@@ -33,36 +33,52 @@ namespace CutTheRopeDX.GameMain
             support.DoRestoreCutTransparency();
             support.anchor = 18;
 
-            ITargetAnimationBackend targetAnimationBackend = TargetAnimationBackendFactory.CreateOriginal(nightLevel, SpecialEvents.IsXmas);
-            targetAnimationController = TargetAnimationController.Create(targetAnimationBackend);
-            targetObject = targetAnimationController.TargetObject;
-            targetBaseScaleX = targetAnimationController.GetTargetBaseScaleX();
-            targetBaseScaleY = targetAnimationController.GetTargetBaseScaleY();
-            targetObject.scaleX = targetBaseScaleX;
-            targetObject.scaleY = targetBaseScaleY;
+            int targetType = ParseIntOrZero(xmlNode.Attribute("targetType")?.Value ?? string.Empty);
+            ITargetAnimationBackend targetAnimationBackend = TargetAnimationBackendFactory.CreateForTarget(
+                targetType, nightLevel, SpecialEvents.IsXmas);
+            TargetAnimationController controller = TargetAnimationController.Create(targetAnimationBackend);
+            GameObject targetObj = controller.TargetObject;
+            targetBaseScaleX = controller.GetTargetBaseScaleX();
+            targetBaseScaleY = controller.GetTargetBaseScaleY();
+            targetObj.scaleX = targetBaseScaleX;
+            targetObj.scaleY = targetBaseScaleY;
 
             string xAttribute = xmlNode.Attribute("x")?.Value ?? string.Empty;
             int sourceX = ParseIntOrZero(xAttribute);
             float transformedX = (sourceX * scale) + offsetX + mapOffsetX;
-            targetObject.x = support.x = transformedX;
+            targetObj.x = support.x = transformedX;
 
             string yAttribute = xmlNode.Attribute("y")?.Value ?? string.Empty;
             int sourceY = ParseIntOrZero(yAttribute);
             float transformedY = (sourceY * scale) + offsetY + mapOffsetY;
-            targetObject.y = support.y = transformedY;
+            targetObj.y = support.y = transformedY;
 
             // Mouth hitbox: 56 px left of center, 30 px below center.
             // Derived from classic char_animations (640x640): bb = (264, 350, 108, 2).
-            targetObject.bb = MakeRectangle((targetObject.width >> 1) - 56f, (targetObject.height >> 1) + 30f, 108f, 2f);
-            blinkTimer = BLINK_SKIP;
+            targetObj.bb = MakeRectangle((targetObj.width >> 1) - 56f, (targetObj.height >> 1) + 30f, 108f, 2f);
 
-            targetAnimationController.Initialize(this);
+            controller.Initialize(this);
+
+            // Register this Om Nom as an independent target. targets[0] stays the primary.
+            targets.Add(new TargetContext
+            {
+                controller = controller,
+                targetObject = targetObj,
+                support = support,
+                baseScaleX = targetBaseScaleX,
+                baseScaleY = targetBaseScaleY,
+                mouthOpen = false,
+                mouthCloseTimer = 0f,
+                asleep = false,
+                blinkTimer = BLINK_SKIP,
+                idlesTimer = RND_RANGE(5, 20),
+            });
 
             // Show greeting if needed (skip for night levels).
             // Skins with startWithGreeting already play greeting on init, so skip the delayed call.
             if (CTRRootController.IsShowGreeting())
             {
-                if (!nightLevel && !targetAnimationController.StartsWithGreeting)
+                if (!nightLevel && !controller.StartsWithGreeting)
                 {
                     dd.CallObjectSelectorParamafterDelay(new DelayedDispatcher.DispatchFunc(Selector_showGreeting), null, 1.3f);
                 }
@@ -70,7 +86,9 @@ namespace CutTheRopeDX.GameMain
                 CTRRootController.SetShowGreeting(false);
             }
 
-            idlesTimer = RND_RANGE(5, 20);
+            support = targets[0].support;
+            targetBaseScaleX = targets[0].baseScaleX;
+            targetBaseScaleY = targets[0].baseScaleY;
         }
     }
 }

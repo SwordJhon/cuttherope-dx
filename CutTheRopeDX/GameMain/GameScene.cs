@@ -105,12 +105,110 @@ namespace CutTheRopeDX.GameMain
         /// </summary>
         public void ShowGreeting()
         {
+            // On a two-Om-Nom level, randomly greet with the mutual chat instead of the wave.
+            // TryShowChatGreeting returns false for diagonal/coincident pairs, falling back here.
+            if (targets.Count == 2 && RND_RANGE(0, 1) == 0 && TryShowChatGreeting())
+            {
+                return;
+            }
+
+            // General greeting: the primary Om Nom waves.
             targetAnimationController?.PlayGreeting();
-            CTRSoundMgr.PlayOmNomSound(Resources.Snd.MonsterGreeting);
+            CTRSoundMgr.PlayOmNomSound(Resources.Snd.MonsterGreeting, targetAnimationController?.SkinDefinition);
             if (SpecialEvents.IsXmas && Preferences.GetIntForKey("PREFS_SELECTED_OMNOM") == 0)
             {
                 CTRSoundMgr.PlaySound(Resources.Snd.XmasBell);
             }
+        }
+
+        /// <summary>
+        /// Rolls for the two-Om-Nom chat greeting as a random idle reaction. Called when an
+        /// Om Nom's idle timer fires on an eligible level. When it starts a chat, both Om Noms'
+        /// idle timers are reset so the reaction is not re-triggered mid-hand-off.
+        /// </summary>
+        /// <returns><see langword="true"/> when a chat greeting was started; otherwise, <see langword="false"/>.</returns>
+        private bool TryStartChatReaction()
+        {
+            if (chatReactionActive
+                || targets.Count != 2
+                || targets[0].asleep
+                || targets[1].asleep
+                || RND_RANGE(0, ChatReactionOdds - 1) != 0)
+            {
+                return false;
+            }
+
+            if (!TryShowChatGreeting())
+            {
+                return false;
+            }
+
+            targets[0].idlesTimer = RND_RANGE(5, 20);
+            targets[1].idlesTimer = RND_RANGE(5, 20);
+            return true;
+        }
+
+        /// <summary>
+        /// Makes the two Om Noms turn their heads toward each other. A randomly chosen Om Nom
+        /// turns first; the other follows a fixed 1.0s later, matching Time Travel's chat
+        /// hand-off. Each Om Nom's direction is auto-detected from position; diagonal or
+        /// coincident pairs are skipped.
+        /// </summary>
+        /// <returns><see langword="true"/> when a chat greeting was started; otherwise, <see langword="false"/>.</returns>
+        private bool TryShowChatGreeting()
+        {
+            if (targets.Count != 2 || targets[0].targetObject == null || targets[1].targetObject == null)
+            {
+                return false;
+            }
+
+            (TargetAnimationState first, TargetAnimationState second)? states = ChatGreeting.ResolveStates(
+                targets[0].targetObject.x, targets[0].targetObject.y,
+                targets[1].targetObject.x, targets[1].targetObject.y);
+            if (!states.HasValue)
+            {
+                return false;
+            }
+
+            // Each Om Nom's direction is fixed by position; only the order is randomized.
+            int firstIndex = RND_RANGE(0, 1);
+            int secondIndex = 1 - firstIndex;
+            TargetAnimationState firstState = firstIndex == 0 ? states.Value.first : states.Value.second;
+            pendingChatGreetState = secondIndex == 0 ? states.Value.first : states.Value.second;
+            pendingChatGreetIndex = secondIndex;
+            chatReactionActive = true;
+
+            // Initiator turns now; the other follows a fixed beat later.
+            targets[firstIndex].controller?.PlayGreetingTurn(firstState);
+            CTRSoundMgr.PlayOmNomSound(Resources.Snd.MonsterGreeting, targets[firstIndex].controller?.SkinDefinition);
+
+            dd.CallObjectSelectorParamafterDelay(
+                new DelayedDispatcher.DispatchFunc(Selector_showSecondChatGreeting), null, ChatGreetingGapSeconds);
+            return true;
+        }
+
+        /// <summary>
+        /// Timeline selector callback that plays the second Om Nom's chat greeting one
+        /// fixed beat after the first.
+        /// </summary>
+        /// <param name="param">Unused timeline payload.</param>
+        private void Selector_showSecondChatGreeting(FrameworkTypes param)
+        {
+            chatReactionActive = false;
+
+            if (targets.Count != 2 || pendingChatGreetIndex >= targets.Count)
+            {
+                return;
+            }
+
+            TargetContext second = targets[pendingChatGreetIndex];
+            if (second?.targetObject == null)
+            {
+                return;
+            }
+
+            second.controller?.PlayGreetingTurn(pendingChatGreetState);
+            CTRSoundMgr.PlayOmNomSound(Resources.Snd.MonsterGreeting, second.controller?.SkinDefinition);
         }
 
         /// <inheritdoc />
@@ -126,14 +224,11 @@ namespace CutTheRopeDX.GameMain
                 waterLayer.Dispose();
                 waterLayer = null;
             }
-            splashes = false;
-            underwater = false;
             candyL = null;
             candyR = null;
             starL = null;
             starR = null;
             Lantern.RemoveAllLanterns();
-            isCandyInLantern = false;
         }
 
         /// <inheritdoc />
@@ -214,6 +309,7 @@ namespace CutTheRopeDX.GameMain
         private void Selector_gameWon(FrameworkTypes param)
         {
             CTRSoundMgr.EnableLoopedSounds(false);
+            outcomeTransitionActive = false;
             gameSceneDelegate?.GameWon();
         }
 
@@ -247,48 +343,57 @@ namespace CutTheRopeDX.GameMain
         /// <summary>
         /// Timeline selector callback that teleports the active object.
         /// </summary>
-        /// <param name="param">Unused timeline payload.</param>
+        /// <param name="param">Candy physics point payload.</param>
         private void Selector_teleport(FrameworkTypes param)
         {
-            Teleport();
+            Teleport(param is ConstraintedPoint p ? CandyForPoint(p) : candies[0]);
         }
 
         /// <summary>
-        /// Restores the candy transform and color after temporary visual effects.
+        /// Restores the candy transform and color after temporary visual effects (singleton = candies[0]).
         /// </summary>
         private void RestoreCandyProperties()
         {
-            candy.passTransformationsToChilds = false;
-            candyTop.scaleX = candyTop.scaleY = 0.71f;
-            candyMain.scaleX = candyMain.scaleY = 0.71f;
-            candy.scaleX = candy.scaleY = 0.71f;
-            candy.color = RGBAColor.solidOpaqueRGBA;
+            RestoreCandyProperties(candies[0]);
         }
 
         /// <summary>
-        /// Timeline selector callback that drops a light bulb from a sock when the payload contains one.
+        /// Restores a specific candy's transform and color after temporary visual effects.
         /// </summary>
-        /// <param name="param">The timeline payload that may contain a <see cref="LightBulb"/>.</param>
-        private void Selector_dropLightBulbFromSock(FrameworkTypes param)
+        private static void RestoreCandyProperties(CandyContext ctx)
         {
-            if (param is LightBulb bulb)
+            ctx.candy.passTransformationsToChilds = false;
+            foreach (BaseElement visual in ctx.HandCatchVisuals())
             {
-                DropLightBulbFromSock(bulb);
+                visual.scaleX = visual.scaleY = ctx.HandCatchScale;
             }
+            ctx.candy.color = RGBAColor.solidOpaqueRGBA;
+        }
+
+        /// <summary>
+        /// Resolves the candy whose physics point is <paramref name="point"/>; falls back to candies[0].
+        /// </summary>
+        private CandyContext CandyForPoint(ConstraintedPoint point)
+        {
+            for (int i = 0; i < candies.Count; i++)
+            {
+                if (candies[i].point == point)
+                {
+                    return candies[i];
+                }
+            }
+
+            return candies[0];
         }
 
         /// <summary>
         /// Timeline selector callback that restores the candy after it leaves a lantern.
         /// </summary>
-        /// <param name="param">Unused timeline payload.</param>
+        /// <param name="param">Released candy physics point.</param>
         private void Selector_revealCandyFromLantern(FrameworkTypes param)
         {
-            isCandyInLantern = false;
-            candy.color = RGBAColor.solidOpaqueRGBA;
-            candy.passTransformationsToChilds = false;
-            candy.scaleX = candy.scaleY = 0.71f;
-            candyMain.scaleX = candyMain.scaleY = 0.71f;
-            candyTop.scaleX = candyTop.scaleY = 0.71f;
+            ConstraintedPoint releasedPoint = param as ConstraintedPoint;
+            _ = LanternRelease.RestoreReleasedCandy(candies, releasedPoint);
         }
 
         /// <summary>
@@ -307,10 +412,11 @@ namespace CutTheRopeDX.GameMain
         /// <param name="r">The rocket that has exhausted its fuel.</param>
         public void Exhausted(Rocket r)
         {
-            if (activeRocket == r)
+            CandyContext ctx = RocketBoundCandy(r);
+            if (ctx != null)
             {
-                activeRocket = null;
-                star.disableGravity = false;
+                ctx.activeRocket = null;
+                ctx.point.disableGravity = false;
             }
         }
 
@@ -500,11 +606,6 @@ namespace CutTheRopeDX.GameMain
         private const float NightSleepSoundInterval = 4f;
 
         /// <summary>
-        /// The number of physics relaxation steps used for night levels.
-        /// </summary>
-        private const int NightConstraintRelaxationSteps = 30;
-
-        /// <summary>
         /// The interaction radius for remote-control objects.
         /// </summary>
         public const int RC_CONTROLLER_RADIUS = 90;
@@ -592,12 +693,14 @@ namespace CutTheRopeDX.GameMain
         /// <summary>
         /// The active Om Nom gameplay object.
         /// </summary>
-        private GameObject targetObject;
+#pragma warning disable IDE1006
+        private GameObject targetObject => targets.Count > 0 ? targets[0].targetObject : null;
 
         /// <summary>
         /// Controller for Om Nom animation state transitions.
         /// </summary>
-        private TargetAnimationController targetAnimationController;
+        private TargetAnimationController targetAnimationController => targets.Count > 0 ? targets[0].controller : null;
+#pragma warning restore IDE1006
 
         /// <summary>
         /// Support visual attached to certain level setups.
@@ -607,22 +710,23 @@ namespace CutTheRopeDX.GameMain
         /// <summary>
         /// The main candy gameplay object.
         /// </summary>
-        private GameObject candy;
+#pragma warning disable IDE1006
+        private GameObject candy => candies[0].candy;
 
         /// <summary>
         /// The base candy sprite for split or layered visuals.
         /// </summary>
-        private GameObject candyMain;
+        private GameObject candyMain => candies[0].candyMain;
 
         /// <summary>
         /// The top candy sprite for split or layered visuals.
         /// </summary>
-        private GameObject candyTop;
+        private GameObject candyTop => candies[0].candyTop;
 
         /// <summary>
         /// Animation used for the candy blink effect.
         /// </summary>
-        private Animation candyBlink;
+        private Animation candyBlink => candies[0].candyBlink;
 
         /// <summary>
         /// Animation used for the main candy bubble effect.
@@ -657,12 +761,50 @@ namespace CutTheRopeDX.GameMain
         /// <summary>
         /// The constrained point currently representing the candy anchor.
         /// </summary>
-        private ConstraintedPoint star;
+        private ConstraintedPoint star => candies[0].point;
+#pragma warning restore IDE1006
+
+        /// <summary>All independent candies in the level. Single-candy packs hold one element.</summary>
+        private readonly List<CandyContext> candies = [];
+
+        /// <summary>All Om Noms in the level. Single-target packs hold one element.</summary>
+#pragma warning disable IDE0052
+        private readonly List<TargetContext> targets = [];
+#pragma warning restore IDE0052
+
+        /// <summary>True once the first &lt;candy&gt; element has claimed the pre-built primary candy (candies[0]).</summary>
+        private bool primaryCandyClaimed;
 
         /// <summary>
         /// All active grab/bungee objects in the loaded level.
         /// </summary>
         private List<Grab> bungees;
+
+        /// <summary>The elastic rope joining the two candies in a candiesConnected level, or null.</summary>
+        private Bungee candyConnector;
+
+        /// <summary>Whether the level joins its two candies with the connecting elastic.</summary>
+        private bool candiesConnected;
+
+        /// <summary>Rest/limit length of the connecting elastic, already scaled.</summary>
+        private float candiesConnectedLength;
+
+        /// <summary>Fixed delay between the first and second Om Nom in a two-Om-Nom chat greeting (Time Travel hand-off).</summary>
+        private const float ChatGreetingGapSeconds = 1.0f;
+
+        /// <summary>
+        /// One-in-N odds that an idle reaction on a two-Om-Nom level becomes a chat greeting.
+        /// </summary>
+        private const int ChatReactionOdds = 3;
+
+        /// <summary>Greet state queued for the second Om Nom in a staggered two-Om-Nom chat greeting.</summary>
+        private TargetAnimationState pendingChatGreetState;
+
+        /// <summary>Target index queued to greet second in a staggered two-Om-Nom chat greeting.</summary>
+        private int pendingChatGreetIndex;
+
+        /// <summary>Whether a two-Om-Nom chat greeting hand-off is currently in progress.</summary>
+        private bool chatReactionActive;
 
         /// <summary>
         /// All active razor objects in the loaded level.
@@ -698,11 +840,6 @@ namespace CutTheRopeDX.GameMain
         /// All active bamboo tube objects in the loaded level.
         /// </summary>
         private List<BambooTube> bambooTubes;
-
-        /// <summary>
-        /// All active light bulb objects in the loaded level.
-        /// </summary>
-        private List<LightBulb> lightBulbs;
 
         /// <summary>
         /// All active sock objects in the loaded level.
@@ -755,11 +892,6 @@ namespace CutTheRopeDX.GameMain
         private List<Mouse> mice;
 
         /// <summary>
-        /// The rocket currently carrying the candy anchor, if any.
-        /// </summary>
-        private Rocket activeRocket;
-
-        /// <summary>
         /// Manager for composite mouse interactions.
         /// </summary>
         private MiceObject miceManager;
@@ -780,26 +912,6 @@ namespace CutTheRopeDX.GameMain
         private List<AntsPath> antsPaths;
 
         /// <summary>
-        /// The ant path segment currently carrying the candy.
-        /// </summary>
-        private AntsPathSegment antsPathSegmentWithCandy;
-
-        /// <summary>
-        /// The previous ant path segment that carried the candy.
-        /// </summary>
-        private AntsPathSegment lastAntsPathSegmentWithCandy;
-
-        /// <summary>
-        /// Cooldown before the candy can reattach to another ant segment.
-        /// </summary>
-        private float antsPathSegmentCooldown;
-
-        /// <summary>
-        /// Whether conveyor attachment is deferred until the candy finishes flying.
-        /// </summary>
-        private bool candyWaitForFlyBeforeAttachingToConveyor;
-
-        /// <summary>
         /// The left candy half when split mode is active.
         /// </summary>
         private GameObject candyL;
@@ -818,41 +930,6 @@ namespace CutTheRopeDX.GameMain
         /// The right constrained point when split mode is active.
         /// </summary>
         private ConstraintedPoint starR;
-
-        /// <summary>
-        /// Cached awake state for night-level Om Nom overlays.
-        /// </summary>
-        private bool? isNightTargetAwake;
-
-        /// <summary>
-        /// Whether the night sleep pulse overlay is active.
-        /// </summary>
-        private bool sleepPulseActive;
-
-        /// <summary>
-        /// Elapsed time within the current sleep pulse.
-        /// </summary>
-        private float sleepPulseTime;
-
-        /// <summary>
-        /// Delay remaining before the next sleep pulse starts.
-        /// </summary>
-        private float sleepPulseDelay;
-
-        /// <summary>
-        /// Base Y position used by the sleep pulse overlay.
-        /// </summary>
-        private float sleepPulseBaseY;
-
-        /// <summary>
-        /// Accumulator used to time repeated night sleep sounds.
-        /// </summary>
-        private float sleepSoundTimer;
-
-        /// <summary>
-        /// Whether the night sleep overlay is currently visible.
-        /// </summary>
-        private bool nightSleepOverlayVisible;
 
         /// <summary>
         /// The default horizontal scale applied to the Om Nom target.
@@ -900,9 +977,17 @@ namespace CutTheRopeDX.GameMain
         private WaterElement waterLayer;
 
         /// <summary>
-        /// The main candy bubble gameplay object.
+        /// The primary candy's bubble gameplay object. Sealed onto <c>candies[0]</c> so the primary
+        /// candy's bubble is stored like every other candy's (the split-half bubbles
+        /// <see cref="candyBubbleL"/>/<see cref="candyBubbleR"/> stay separate).
         /// </summary>
-        private GameObject candyBubble;
+#pragma warning disable IDE1006
+        private GameObject candyBubble
+        {
+            get => candies[0].bubble;
+            set => candies[0].bubble = value;
+        }
+#pragma warning restore IDE1006
 
         /// <summary>
         /// The left split candy bubble gameplay object.
@@ -945,29 +1030,9 @@ namespace CutTheRopeDX.GameMain
         private float mapOriginY;
 
         /// <summary>
-        /// Whether Om Nom's mouth is currently open.
-        /// </summary>
-        private bool mouthOpen;
-
-        /// <summary>
         /// Whether the main candy has been removed from play.
         /// </summary>
         private bool noCandy;
-
-        /// <summary>
-        /// Frame counter used for blink timing.
-        /// </summary>
-        private int blinkTimer;
-
-        /// <summary>
-        /// Frame counter used for idle animation timing.
-        /// </summary>
-        private int idlesTimer;
-
-        /// <summary>
-        /// Remaining time before the mouth closes.
-        /// </summary>
-        private float mouthCloseTimer;
 
         /// <summary>
         /// Cached rotation delta for the main candy.
@@ -1015,21 +1080,6 @@ namespace CutTheRopeDX.GameMain
         /// Whether the second ghost should be restored after a transition.
         /// </summary>
         private bool shouldRestoreSecondGhost;
-
-        /// <summary>
-        /// Cached sock speed used while overriding movement.
-        /// </summary>
-        private float savedSockSpeed;
-
-        /// <summary>
-        /// The sock currently interacting with the candy.
-        /// </summary>
-        private Sock targetSock;
-
-        /// <summary>
-        /// The bamboo tube currently interacting with the candy.
-        /// </summary>
-        private BambooTube targetBambooTube;
 
         /// <summary>
         /// The number of ropes cut within the active combo window.
@@ -1117,6 +1167,17 @@ namespace CutTheRopeDX.GameMain
         public bool gameLostTriggered;
 
         /// <summary>
+        /// Whether the game-won state has already been triggered (prevents the multi-candy win
+        /// check from re-invoking GameWon every frame, which would cancel the pending win dispatch).
+        /// </summary>
+        public bool gameWonTriggered;
+
+        /// <summary>
+        /// Whether a game win/loss scene transition is currently active.
+        /// </summary>
+        public bool outcomeTransitionActive;
+
+        /// <summary>
         /// Whether gravity is currently in the normal orientation.
         /// </summary>
         public bool gravityNormal;
@@ -1130,21 +1191,6 @@ namespace CutTheRopeDX.GameMain
         /// The touch index currently holding the gravity button, or an invalid marker.
         /// </summary>
         public int gravityTouchDown;
-
-        /// <summary>
-        /// Whether the candy is currently hidden inside a lantern.
-        /// </summary>
-        private bool isCandyInLantern;
-
-        /// <summary>
-        /// Whether splash effects are currently enabled.
-        /// </summary>
-        private bool splashes;
-
-        /// <summary>
-        /// Whether the scene is currently underwater.
-        /// </summary>
-        private bool underwater;
 
         /// <summary>
         /// The current split-candy state.

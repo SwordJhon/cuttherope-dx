@@ -37,10 +37,16 @@ namespace CutTheRopeDX.GameMain
         /// <summary>Gets the primary Om Nom gameplay object owned by the backend.</summary>
         public GameObject TargetObject => backend.TargetObject;
 
+        /// <summary>Gets the skin definition for this target's skin, or <see langword="null"/> for the classic skin.</summary>
+        public OmNomSkinDefinition SkinDefinition => backend.SkinDefinition;
+
         /// <summary>
         /// Whether the backend handles the sleep breathing pulse internally.
         /// </summary>
         public bool HandlesOwnSleepPulse => backend.HandlesOwnSleepPulse;
+
+        /// <summary>Whether the backend is driven by Flash XML animation exports.</summary>
+        public bool UsesFlashXmlAnimations => backend.UsesFlashXmlAnimations;
 
         /// <summary>Gets the backend-defined base horizontal scale for Om Nom.</summary>
         /// <returns>Default X scale for Om Nom.</returns>
@@ -71,6 +77,15 @@ namespace CutTheRopeDX.GameMain
         public void PlayGreeting()
         {
             backend.Play(TargetAnimationState.Greeting);
+        }
+
+        /// <summary>
+        /// Plays a directional chat greeting where Om Nom turns its head toward another Om Nom.
+        /// </summary>
+        /// <param name="direction">Directional greet state (<see cref="TargetAnimationState.GreetLeft"/> or <see cref="TargetAnimationState.GreetRight"/>).</param>
+        public void PlayGreetingTurn(TargetAnimationState direction)
+        {
+            backend.Play(direction);
         }
 
         /// <summary>
@@ -130,7 +145,15 @@ namespace CutTheRopeDX.GameMain
         /// </summary>
         public void PlaySleeping()
         {
-            backend.Play(TargetAnimationState.Sleeping);
+            backend.PlaySleeping(trimIdleToSleepTransition: true);
+        }
+
+        /// <summary>
+        /// Plays the sleeping animation without trimming the idle-to-sleep transition.
+        /// </summary>
+        public void PlaySleepingWithoutIdleToSleepTrim()
+        {
+            backend.PlaySleeping(trimIdleToSleepTransition: false);
         }
 
         /// <summary>

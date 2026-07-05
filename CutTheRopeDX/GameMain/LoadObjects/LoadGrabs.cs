@@ -1,4 +1,3 @@
-using System;
 using System.Xml.Linq;
 
 using CutTheRopeDX.Framework.Core;
@@ -39,6 +38,7 @@ namespace CutTheRopeDX.GameMain
             _ = bool.TryParse(xmlNode.Attribute("bindBulb")?.Value, out bool bindBulb);
             string bulbNumber = xmlNode.Attribute("bulbNumber")?.Value ?? string.Empty;
             _ = bool.TryParse(xmlNode.Attribute("gun")?.Value, out bool gun);
+            string grabCandyNumber = xmlNode.Attribute("candyNumber")?.Value;
             Grab grab = new();
             grab.initial_x = grab.x = hx;
             grab.initial_y = grab.y = hy;
@@ -76,24 +76,37 @@ namespace CutTheRopeDX.GameMain
             }
             if (grabRadius == -1f && !gun)
             {
-                grab.candyNumber = twoParts == 2 ? 0 : flag ? 1 : 2;
-                ConstraintedPoint constraintedPoint = star;
-                if (bindBulb)
+                ConstraintedPoint constraintedPoint;
+                CandyContext targetCandy = grabCandyNumber != null ? FindCandyByNumber(grabCandyNumber) : null;
+                if (targetCandy != null)
                 {
-                    LightBulb bulb = FindLightBulbForBinding(bulbNumber);
-                    if (bulb != null)
+                    // Multi-candy: bind to the candy named by candyNumber.
+                    grab.candyNumber = 0;
+                    constraintedPoint = targetCandy.point;
+                }
+                else
+                {
+                    // Single-candy / split-candy behavior.
+                    grab.candyNumber = twoParts == 2 ? 0 : flag ? 1 : 2;
+                    constraintedPoint = star;
+                    if (bindBulb)
                     {
-                        constraintedPoint = bulb.constraint;
+                        CandyContext bulb = FindLightEmitterByNumber(bulbNumber);
+                        if (bulb != null)
+                        {
+                            constraintedPoint = bulb.point;
+                        }
+                        else if (twoParts != 2)
+                        {
+                            constraintedPoint = flag ? starL : starR;
+                        }
                     }
                     else if (twoParts != 2)
                     {
                         constraintedPoint = flag ? starL : starR;
                     }
                 }
-                else if (twoParts != 2)
-                {
-                    constraintedPoint = flag ? starL : starR;
-                }
+
                 Bungee bungee = new Bungee().InitWithHeadAtXYTailAtTXTYandLength(null, hx, hy, constraintedPoint, constraintedPoint.pos.X, constraintedPoint.pos.Y, len);
                 bungee.bungeeAnchor.pin = bungee.bungeeAnchor.pos;
                 grab.SetRope(bungee);
@@ -118,29 +131,18 @@ namespace CutTheRopeDX.GameMain
             bungees.Add(grab);
         }
 
-        /// <summary>
-        /// Finds the light bulb that should be bound to a grab by bulb number.
-        /// </summary>
-        /// <param name="bulbNumber">The optional bulb identifier requested by the XML node.</param>
-        /// <returns>The matching light bulb, or the last loaded bulb when no explicit match exists.</returns>
-        private LightBulb FindLightBulbForBinding(string bulbNumber)
+        /// <summary>Finds the candy whose <c>candyNumber</c> matches, or null. See <see cref="CandyMatch"/>.</summary>
+        private CandyContext FindCandyByNumber(string number)
         {
-            if (lightBulbs.Count == 0)
+            for (int i = 0; i < candies.Count; i++)
             {
-                return null;
-            }
-            if (!string.IsNullOrEmpty(bulbNumber))
-            {
-                for (int i = 0; i < lightBulbs.Count; i++)
+                if (CandyMatch.Matches(candies[i].candyNumber, number))
                 {
-                    LightBulb bulb = lightBulbs[i];
-                    if (bulb != null && string.Equals(bulb.bulbNumber, bulbNumber, StringComparison.OrdinalIgnoreCase))
-                    {
-                        return bulb;
-                    }
+                    return candies[i];
                 }
             }
-            return lightBulbs[^1];
+            return null;
         }
+
     }
 }

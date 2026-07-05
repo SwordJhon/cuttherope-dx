@@ -44,7 +44,7 @@ namespace CutTheRopeDX.GameMain
             conveyors.ProcessItems(tubes);
             conveyors.ProcessItems(pumps);
             conveyors.ProcessItems(bungees);
-            conveyors.ProcessItems(lightBulbs);
+            conveyors.ProcessItems(LightEmitterVisuals());
 
             // Load two-parts candy bubble animations
             LoadCandyBubbleAnimations();
@@ -62,11 +62,13 @@ namespace CutTheRopeDX.GameMain
             candyBubble = null;
             candyBubbleL = null;
             candyBubbleR = null;
-            mouthOpen = false;
             noCandy = twoParts != 2;
             noCandyL = false;
             noCandyR = false;
-            targetAnimationController?.ResetBlink();
+            for (int ti = 0; ti < targets.Count; ti++)
+            {
+                targets[ti].controller?.ResetBlink();
+            }
             // spiderTookCandy = false;
             time = 0f;
             score = 0;
@@ -179,24 +181,43 @@ namespace CutTheRopeDX.GameMain
             {
                 return;
             }
-            if (nightLevel && isNightTargetAwake == false)
+            TargetContext owner = null;
+            for (int ti = 0; ti < targets.Count; ti++)
+            {
+                if (targets[ti].targetObject == t.element)
+                {
+                    owner = targets[ti];
+                    break;
+                }
+            }
+            if (owner == null)
+            {
+                return;
+            }
+            if (nightLevel && owner.isNightTargetAwake == false)
             {
                 return;
             }
             if (i == 1)
             {
-                blinkTimer--;
-                if (blinkTimer == 0)
+                owner.blinkTimer--;
+                if (owner.blinkTimer == 0)
                 {
-                    targetAnimationController?.TriggerBlink();
-                    blinkTimer = 3;
+                    owner.controller?.TriggerBlink();
+                    owner.blinkTimer = 3;
                 }
-                idlesTimer--;
-                if (idlesTimer == 0)
+                owner.idlesTimer--;
+                if (owner.idlesTimer == 0)
                 {
-                    targetAnimationController?.PlayRandomIdleVariant(RND_RANGE);
-                    idlesTimer = RND_RANGE(5, 20);
+                    // On two-Om-Nom levels the idle reaction may instead become a mutual chat
+                    // greeting (Time Travel). When it does, both timers are reset by the chat.
+                    if (!TryStartChatReaction())
+                    {
+                        owner.controller?.PlayRandomIdleVariant(RND_RANGE);
+                        owner.idlesTimer = RND_RANGE(5, 20);
+                    }
                 }
+                return;
             }
         }
 

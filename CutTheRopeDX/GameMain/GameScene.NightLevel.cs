@@ -1,12 +1,38 @@
 using System;
+using System.Collections.Generic;
 
 using CutTheRopeDX.Framework.Core;
-using CutTheRopeDX.Framework.Physics;
 
 namespace CutTheRopeDX.GameMain
 {
     internal sealed partial class GameScene
     {
+        /// <summary>
+        /// Whether any candy body is still in play. Night-level sleep and lights-out loss must
+        /// continue for split halves, while ignoring the inactive whole-candy slot during a split.
+        /// </summary>
+        private bool AnyNightCandyBodyPresent()
+        {
+            List<CandyView> candyViews = [];
+            for (int ci = 0; ci < candies.Count; ci++)
+            {
+                if (ci == 0 && twoParts != 2)
+                {
+                    continue;
+                }
+                candyViews.Add(candies[ci].ToView());
+            }
+
+            List<CandyView> splitCandyViews = [];
+            if (twoParts != 2)
+            {
+                splitCandyViews.Add(new CandyView(starL.pos, noCandyL));
+                splitCandyViews.Add(new CandyView(starR.pos, noCandyR));
+            }
+
+            return CandyDecisions.AnyCandyBodyPresent(candyViews, splitCandyViews);
+        }
+
         /// <summary>
         /// Calculates the Y offset for the sleep pulse animation pivot point.
         /// </summary>
@@ -18,95 +44,75 @@ namespace CutTheRopeDX.GameMain
         }
 
         /// <summary>
-        /// Updates physics simulation for all light bulbs in the level.
+        /// Per-frame upkeep for light emitters that the shared candy path does not cover.
         /// </summary>
-        /// <param name="delta">Time elapsed since the last frame in seconds.</param>
         /// <remarks>
-        /// This method handles:
+        /// Integration, the bulb visual's own Update, and whole-body collision are handled by the
+        /// shared candy path (main candy loop + <see cref="ResolveCandyCollisions"/>). This method
+        /// only handles:
         /// <list type="bullet">
-        ///   <item><description>Constraint physics and relaxation for each light bulb</description></item>
-        ///   <item><description>Collision between light bulbs and the candy</description></item>
-        ///   <item><description>Collision between multiple light bulbs</description></item>
-        ///   <item><description>Removal of light bulbs that fall off screen</description></item>
-        ///   <item><description>Game over trigger when all light bulbs are lost (night levels only)</description></item>
+        ///   <item><description>Syncing capture/sock state from the context onto the bulb visual</description></item>
+        ///   <item><description>Collision between light emitters and the legacy split-candy halves</description></item>
+        ///   <item><description>Removal of light emitters that fall off screen</description></item>
+        ///   <item><description>Game over trigger when all light emitters are lost (night levels only)</description></item>
         /// </list>
         /// </remarks>
-        private void UpdateLightBulbPhysics(float delta)
+        private void UpdateLightEmitterPhysics()
         {
-            if (lightBulbs.Count == 0)
+            // Integration, whole-body collision, and the bulb visual's own Update() are all owned by
+            // the shared candy path now: the main candy loop integrates the point and calls
+            // ctx.candy.Update(delta) (ctx.candy IS the bulb), and ResolveCandyCollisions() handles
+            // collision. Re-stepping the point here double-integrated it (erratic swing); calling
+            // Update() here too double-advanced the bulb's animations (bubble/firefly ran ~2x fast).
+            // This loop only syncs capture/sock state from the context onto the bulb visual.
+            foreach (CandyContext ctx in LightEmitters())
             {
-                return;
+                ctx.lightBulb?.SyncFromContext(ctx);
             }
 
-            float timeStep = delta * ropePhysicsSpeed;
-            foreach (LightBulb bulb in lightBulbs)
+            // Split candy halves are still legacy singleton points, so they need explicit
+            // collision with light emitters. Whole-body collisions use ResolveCandyCollisions().
+            if (twoParts != 2)
             {
-                bulb.constraint.Update(timeStep);
-                for (int i = 0; i < NightConstraintRelaxationSteps; i++)
+                foreach (CandyContext ctx in LightEmitters())
                 {
-                    ConstraintedPoint.SatisfyConstraints(bulb.constraint);
+                    if (!noCandyL)
+                    {
+                        HandleCandyIntersection(ctx.point, starL, ctx.collisionDistanceOverride ?? LightBulbDefinition.CollisionDistance);
+                    }
+                    if (!noCandyR)
+                    {
+                        HandleCandyIntersection(ctx.point, starR, ctx.collisionDistanceOverride ?? LightBulbDefinition.CollisionDistance);
+                    }
                 }
-                bulb.SyncToConstraint();
-                bulb.Update(delta);
             }
 
-            // Light bulb collision with candy and other light bulbs
-            float lightBulbCollisionDistance = 2.25f * STAR_RADIUS;
-            for (int i = 0; i < lightBulbs.Count; i++)
+            bool hasActiveLightEmitter = false;
+            for (int i = 0; i < candies.Count; i++)
             {
-                LightBulb bulb = lightBulbs[i];
-                if (bulb == null || bulb.attachedSock != null)
+                CandyContext ctx = candies[i];
+                if (!ctx.emitsLight)
                 {
                     continue;
                 }
-                // Resolve collision between light bulb and candy (skip if candy is being teleported by sock)
-                if (targetSock == null)
+                if (!ctx.noCandy && PointOutOfScreen(ctx.point))
                 {
-                    // Half candy mode: check collision with both candy halves
-                    if (twoParts != 2)
-                    {
-                        if (!noCandyL)
-                        {
-                            ResolveConstraintCollision(bulb.constraint, starL, lightBulbCollisionDistance);
-                        }
-                        if (!noCandyR)
-                        {
-                            ResolveConstraintCollision(bulb.constraint, starR, lightBulbCollisionDistance);
-                        }
-                    }
-                    // Full candy mode: check collision with the single candy
-                    else if (!noCandy)
-                    {
-                        ResolveConstraintCollision(bulb.constraint, star, lightBulbCollisionDistance);
-                    }
+                    ctx.noCandy = true;
+                    // A light emitter leaving the screen is a non-candy object escaping: release its
+                    // rope and exhaust its bound rocket, matching C's generic-object off-screen loop.
+                    ExhaustRocketForCandy(ctx);
+                    ReleaseRopesForPoint(ctx.point);
+                    ctx.lightBulb?.SyncFromContext(ctx);
                 }
-                for (int j = i + 1; j < lightBulbs.Count; j++)
-                {
-                    LightBulb other = lightBulbs[j];
-                    if (other == null || other.attachedSock != null)
-                    {
-                        continue;
-                    }
-                    ResolveConstraintCollision(bulb.constraint, other.constraint, lightBulbCollisionDistance);
-                }
+                // A bulb mid-teleport has noCandy == true for the brief transport window but is not
+                // lost: count it as active so a lone emitter in a bamboo tube or hat does not trip the
+                // lights-out loss the instant its light blinks out.
+                hasActiveLightEmitter = hasActiveLightEmitter || !ctx.noCandy || ctx.InTransport;
             }
 
-            foreach (LightBulb bulb in lightBulbs)
-            {
-                bulb.SyncToConstraint();
-            }
-
-            // Remove light bulbs that fall off screen
-            for (int i = lightBulbs.Count - 1; i >= 0; i--)
-            {
-                LightBulb bulb = lightBulbs[i];
-                if (bulb != null && PointOutOfScreen(bulb.constraint))
-                {
-                    _ = lightBulbs.Remove(bulb);
-                }
-            }
-
-            if (nightLevel && lightBulbs.Count == 0 && restartState != 0 && !noCandy)
+            // Multi-candy/split-aware presence: the primary noCandy flag can be true while another
+            // candy body is still in play.
+            if (nightLevel && !hasActiveLightEmitter && restartState != 0 && AnyNightCandyBodyPresent())
             {
                 GameLost();
             }
@@ -134,82 +140,87 @@ namespace CutTheRopeDX.GameMain
                 return;
             }
 
-            // Check if any light bulb is close enough to wake Om Nom
-            bool isAwake = false;
-            if (targetObject == null)
+            bool hasCandyPresent = AnyNightCandyBodyPresent();
+            for (int ti = 0; ti < targets.Count; ti++)
             {
-                return;
-            }
-
-            Vector targetPosition = Vect(targetObject.x, targetObject.y);
-            foreach (LightBulb bulb in lightBulbs)
-            {
-                if (VectDistance(bulb.constraint.pos, targetPosition) < bulb.lightRadius)
+                TargetContext t = targets[ti];
+                if (t.targetObject == null)
                 {
-                    isAwake = true;
-                    break;
+                    continue;
                 }
-            }
 
-            bool hasCandyPresent = twoParts == 2 ? !noCandy : (!noCandyL || !noCandyR);
-            if (hasCandyPresent)
-            {
-                UpdateNightTargetAwake(isAwake);
-            }
+                bool canUpdateSleepState = GameOutcomeTransition.CanReactToCandyOrLight(outcomeTransitionActive, t.asleep);
 
-            bool isSleeping = isNightTargetAwake == false && hasCandyPresent && !gameLostTriggered;
-            bool shouldShowSleepOverlay = isSleeping
-                && targetAnimationController != null
-                && targetAnimationController.IsSleepingAnimationPlaying();
-            SetNightSleepVisibility(shouldShowSleepOverlay);
-
-            if (shouldShowSleepOverlay)
-            {
-                targetAnimationController?.UpdateSleepOverlays(delta);
-                targetAnimationController?.SyncSleepOverlayPosition(targetObject.x, targetObject.y);
-            }
-
-            // Handle sleeping state animations and sounds
-            if (isSleeping)
-            {
-                // Wait for sleep animation to finish before starting pulse
-                if (!sleepPulseActive)
+                bool isAwake = false;
+                Vector targetPosition = Vect(t.targetObject.x, t.targetObject.y);
+                foreach (CandyContext light in LightEmitters())
                 {
-                    sleepPulseDelay = MathF.Max(0f, sleepPulseDelay - delta);
-                    if (sleepPulseDelay == 0f)
+                    if (LightProximity.IsWithinLight(targetPosition, light.point.pos, light.lightRadius))
                     {
-                        sleepPulseActive = true;
+                        isAwake = true;
+                        break;
                     }
                 }
 
-                // Apply breathing pulse effect using sine wave (classic backend only;
-                // the Flash backend has its own sleeping timeline that includes the pulse).
-                if (sleepPulseActive && targetAnimationController?.HandlesOwnSleepPulse != true)
+                if (hasCandyPresent && canUpdateSleepState)
                 {
-                    float sinValue = MathF.Sin(sleepPulseTime * 2f);
-                    float scaleY = 0.95f + ((sinValue + 1f) / 2f * 0.1f); // Scale between 0.95 and 1.05
+                    UpdateNightTargetAwake(t, isAwake);
+                }
 
-                    if (targetAnimationController?.IsSleepingAnimationPlaying() == true)
+                bool isSleeping = t.isNightTargetAwake == false && hasCandyPresent && canUpdateSleepState;
+                bool shouldShowSleepOverlay = isSleeping
+                    && t.controller?.IsSleepingAnimationPlaying() == true;
+                SetNightSleepVisibility(t, shouldShowSleepOverlay);
+
+                if (shouldShowSleepOverlay)
+                {
+                    t.controller?.UpdateSleepOverlays(delta);
+                    t.controller?.SyncSleepOverlayPosition(t.targetObject.x, t.targetObject.y);
+                }
+
+                // Handle sleeping state animations and sounds
+                if (isSleeping)
+                {
+                    // Wait for sleep animation to finish before starting pulse
+                    if (!t.sleepPulseActive)
                     {
-                        targetObject.rotationCenterY = 86f;
-                        targetObject.scaleX = targetBaseScaleX;
-                        targetObject.scaleY = targetBaseScaleY * scaleY;
+                        t.sleepPulseDelay = MathF.Max(0f, t.sleepPulseDelay - delta);
+                        if (t.sleepPulseDelay == 0f)
+                        {
+                            t.sleepPulseActive = true;
+                        }
                     }
-                    sleepPulseTime += delta;
-                }
-                else if (sleepPulseActive)
-                {
-                    sleepPulseTime += delta;
-                }
 
-                sleepSoundTimer += delta;
-                if (sleepSoundTimer > NightSleepSoundInterval)
-                {
-                    sleepSoundTimer = 0f;
-                    CTRSoundMgr.PlayRandomOmNomSound(
-                        Resources.Snd.MonsterSleep1,
-                        Resources.Snd.MonsterSleep2,
-                        Resources.Snd.MonsterSleep3);
+                    // Apply breathing pulse effect using sine wave (classic backend only;
+                    // the Flash backend has its own sleeping timeline that includes the pulse).
+                    if (t.sleepPulseActive && t.controller?.HandlesOwnSleepPulse != true)
+                    {
+                        float sinValue = MathF.Sin(t.sleepPulseTime * 2f);
+                        float scaleY = 0.95f + ((sinValue + 1f) / 2f * 0.1f); // Scale between 0.95 and 1.05
+
+                        if (t.controller?.IsSleepingAnimationPlaying() == true)
+                        {
+                            t.targetObject.rotationCenterY = 86f;
+                            t.targetObject.scaleX = t.baseScaleX;
+                            t.targetObject.scaleY = t.baseScaleY * scaleY;
+                        }
+                        t.sleepPulseTime += delta;
+                    }
+                    else if (t.sleepPulseActive)
+                    {
+                        t.sleepPulseTime += delta;
+                    }
+
+                    t.sleepSoundTimer += delta;
+                    if (t.sleepSoundTimer > NightSleepSoundInterval)
+                    {
+                        t.sleepSoundTimer = 0f;
+                        CTRSoundMgr.PlayRandomOmNomSound(
+                            t.controller?.SkinDefinition,
+                            Resources.Snd.MonsterSleep1,
+                            Resources.Snd.MonsterSleep2,
+                            Resources.Snd.MonsterSleep3);
+                    }
                 }
             }
 
@@ -221,9 +232,9 @@ namespace CutTheRopeDX.GameMain
                     continue;
                 }
                 bool lit = false;
-                foreach (LightBulb bulb in lightBulbs)
+                foreach (CandyContext light in LightEmitters())
                 {
-                    if (VectDistance(bulb.constraint.pos, Vect(star.x, star.y)) < bulb.lightRadius)
+                    if (LightProximity.IsWithinLight(Vect(star.x, star.y), light.point.pos, light.lightRadius))
                     {
                         lit = true;
                         break;
@@ -237,158 +248,76 @@ namespace CutTheRopeDX.GameMain
         /// <summary>
         /// Handles transitions between Om Nom's awake and sleeping states.
         /// </summary>
+        /// <param name="t">The Om Nom target context to update.</param>
         /// <param name="isAwake">Whether Om Nom should be awake (illuminated by a light bulb).</param>
         /// <remarks>
         /// When waking up, resets all sleep animation state and plays the wake animation.
         /// When falling asleep, starts the sleep animation and prepares the breathing pulse effect.
         /// </remarks>
-        private void UpdateNightTargetAwake(bool isAwake)
+        private void UpdateNightTargetAwake(TargetContext t, bool isAwake)
         {
-            if (isNightTargetAwake == isAwake)
+            if (t.isNightTargetAwake == isAwake)
             {
                 return;
             }
 
-            isNightTargetAwake = isAwake;
+            t.isNightTargetAwake = isAwake;
 
             // Waking up: reset sleep state and play wake animation
             if (isAwake)
             {
-                sleepPulseActive = false;
-                sleepPulseTime = 0f;
-                sleepPulseDelay = 0f;
-                sleepSoundTimer = 0f;
-                sleepPulseBaseY = 0f;
-                if (targetObject != null && targetAnimationController?.HandlesOwnSleepPulse != true)
+                t.sleepPulseActive = false;
+                t.sleepPulseTime = 0f;
+                t.sleepPulseDelay = 0f;
+                t.sleepSoundTimer = 0f;
+                t.sleepPulseBaseY = 0f;
+                if (t.targetObject != null && t.controller?.HandlesOwnSleepPulse != true)
                 {
-                    targetObject.scaleX = targetBaseScaleX;
-                    targetObject.scaleY = targetBaseScaleY;
-                    targetObject.rotationCenterX = 0f;
-                    targetObject.rotationCenterY = 0f;
+                    t.targetObject.scaleX = t.baseScaleX;
+                    t.targetObject.scaleY = t.baseScaleY;
+                    t.targetObject.rotationCenterX = 0f;
+                    t.targetObject.rotationCenterY = 0f;
                 }
-                SetNightSleepVisibility(false);
-                targetAnimationController?.PlayExcited();
+                SetNightSleepVisibility(t, false);
+                t.controller?.PlayExcited();
                 return;
             }
 
-            bool hasCandyPresent = twoParts == 2 ? !noCandy : (!noCandyL || !noCandyR);
+            bool hasCandyPresent = AnyNightCandyBodyPresent();
             if (!hasCandyPresent)
             {
                 return;
             }
 
             // Falling asleep: start sleep animation and prepare pulse effect
-            sleepPulseActive = false;
-            sleepPulseTime = 0f;
-            sleepPulseDelay = targetAnimationController?.GetSleepPulseDelaySeconds() ?? 0f;
-            sleepSoundTimer = 0.9f;
-            SetNightSleepVisibility(false);
-            targetAnimationController?.PlaySleeping();
-            if (targetObject != null && targetAnimationController?.HandlesOwnSleepPulse != true)
+            t.sleepPulseActive = false;
+            t.sleepPulseTime = 0f;
+            t.sleepPulseDelay = t.controller?.GetSleepPulseDelaySeconds() ?? 0f;
+            t.sleepSoundTimer = 0.9f;
+            SetNightSleepVisibility(t, false);
+            t.controller?.PlaySleeping();
+            if (t.targetObject != null && t.controller?.HandlesOwnSleepPulse != true)
             {
-                sleepPulseBaseY = GetSleepPulsePivotOffsetY(targetObject.height);
-                targetObject.rotationCenterY = sleepPulseBaseY;
+                t.sleepPulseBaseY = GetSleepPulsePivotOffsetY(t.targetObject.height);
+                t.targetObject.rotationCenterY = t.sleepPulseBaseY;
             }
         }
 
         /// <summary>
         /// Controls the visibility and playback of zzz animations.
         /// </summary>
+        /// <param name="t">The Om Nom target context that owns the zzz animations.</param>
         /// <param name="visible">Whether the zzz animations should be visible.</param>
-        private void SetNightSleepVisibility(bool visible)
+        private static void SetNightSleepVisibility(TargetContext t, bool visible)
         {
-            if (nightSleepOverlayVisible == visible)
+            if (t.nightSleepOverlayVisible == visible)
             {
                 return;
             }
 
-            nightSleepOverlayVisible = visible;
-            targetAnimationController?.SetSleepOverlayVisible(visible);
+            t.nightSleepOverlayVisible = visible;
+            t.controller?.SetSleepOverlayVisible(visible);
         }
 
-        /// <summary>
-        /// Resolves collision between two constraint points by separating them
-        /// and exchanging velocities.
-        /// </summary>
-        /// <param name="a">The first constraint point.</param>
-        /// <param name="b">The second constraint point.</param>
-        /// <param name="minDistance">The minimum allowed distance between the points.</param>
-        /// <remarks>
-        /// Uses an elastic collision model that conserves momentum. For slow-moving
-        /// or stationary objects, simply separates them without velocity exchange.
-        /// For fast collisions, calculates proper velocity exchange based on
-        /// collision normal and tangent components.
-        /// </remarks>
-        private static void ResolveConstraintCollision(ConstraintedPoint a, ConstraintedPoint b, float minDistance)
-        {
-            Vector delta = VectSub(a.pos, b.pos);
-            float dist = VectLength(delta);
-
-            if (dist >= minDistance)
-            {
-                return;
-            }
-
-            // Handle overlapping points by using arbitrary separation direction
-            if (dist == 0f)
-            {
-                delta = Vect(1f, 0f);
-                dist = 1f;
-            }
-
-            float overlap = minDistance - dist;
-            float speedSum = VectLength(a.v) + VectLength(b.v);
-
-            // For slow collisions, just separate without velocity exchange
-            if (speedSum <= 0f || overlap < 1000f / speedSum * 2f)
-            {
-                float normX = delta.X / dist;
-                float normY = delta.Y / dist;
-                float offset = overlap / 2f;
-                a.pos.X += normX * offset;
-                a.pos.Y += normY * offset;
-                b.pos.X -= normX * offset;
-                b.pos.Y -= normY * offset;
-                return;
-            }
-
-            // Fast collision: calculate elastic velocity exchange
-            Vector g = VectSub(b.pos, a.pos);
-            float h = -g.Y;
-            float m = g.X;
-            float f = ((a.v.X * g.X) + (a.v.Y * g.Y)) / minDistance;
-            float e = ((a.v.X * h) + (a.v.Y * m)) / minDistance;
-            h = ((b.v.X * h) + (a.v.X * m)) / minDistance;
-            m = f;
-            f = ((b.v.X * g.X) + (b.v.Y * g.Y)) / minDistance;
-
-            float nx = g.X / minDistance;
-            float ny = g.Y / minDistance;
-
-            // Compute new velocities by exchanging normal components
-            float aVx = (f * nx) - (e * ny);
-            float aVy = (f * ny) + (e * nx);
-            float bVx = (m * nx) - (h * ny);
-            float bVy = (m * ny) + (h * nx);
-
-            a.v.X = aVx;
-            a.v.Y = aVy;
-            b.v.X = bVx;
-            b.v.Y = bVy;
-
-            // Separate the points to eliminate overlap
-            float sepX = overlap / 2f * (delta.X / dist);
-            float sepY = overlap / 2f * (delta.Y / dist);
-            a.pos.X += sepX;
-            a.pos.Y += sepY;
-            b.pos.X -= sepX;
-            b.pos.Y -= sepY;
-
-            // Update previous positions to maintain velocity in Verlet integration
-            a.prevPos.X = a.pos.X - (a.v.X / 60f);
-            a.prevPos.Y = a.pos.Y - (a.v.Y / 60f);
-            b.prevPos.X = b.pos.X - (b.v.X / 60f);
-            b.prevPos.Y = b.pos.Y - (b.v.Y / 60f);
-        }
     }
 }

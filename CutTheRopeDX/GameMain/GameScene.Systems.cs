@@ -186,37 +186,28 @@ namespace CutTheRopeDX.GameMain
                 return true;
             }
 
-            if (twoParts == 2)
+            // Lift every candy in the steam column in one pass. candies[0] keeps its split-candy
+            // carve-out (starL/starR halves); non-split candies[0] and index 1+ run the generic body.
+            for (int ci = 0; ci < candies.Count; ci++)
             {
-                if (!noCandy)
+                CandyContext ctx = candies[ci];
+                if (ci == 0 && twoParts != 2)
                 {
-                    _ = ApplyImpulse(star);
+                    if (!noCandyL)
+                    {
+                        _ = ApplyImpulse(starL);
+                    }
+                    if (!noCandyR)
+                    {
+                        _ = ApplyImpulse(starR);
+                    }
                 }
-            }
-            else
-            {
-                if (!noCandyL)
+                else if (!CandyGone(ci, ctx))
                 {
-                    _ = ApplyImpulse(starL);
-                }
-                if (!noCandyR)
-                {
-                    _ = ApplyImpulse(starR);
+                    _ = ApplyImpulse(ctx.point);
                 }
             }
 
-            if (lightBulbs.Count > 0)
-            {
-                for (int i = 0; i < lightBulbs.Count; i++)
-                {
-                    LightBulb bulb = lightBulbs[i];
-                    if (bulb == null || bulb.attachedSock != null)
-                    {
-                        continue;
-                    }
-                    _ = ApplyImpulse(bulb.constraint);
-                }
-            }
         }
 
         /// <summary>
@@ -237,30 +228,25 @@ namespace CutTheRopeDX.GameMain
             pumpDirt.y = v.Y;
             pumpDirt.StartSystem(5);
             _ = aniPool.AddChild(pumpDirt);
-            if (!noCandy)
+            // Pump every candy in the flow in one pass. candies[0] keeps its split-candy carve-out
+            // (starL/starR halves); non-split candies[0] and index 1+ run the generic body.
+            for (int ci = 0; ci < candies.Count; ci++)
             {
-                HandlePumpFlowPtSkin(p, star, candy);
-            }
-            if (twoParts != 2)
-            {
-                if (!noCandyL)
+                CandyContext ctx = candies[ci];
+                if (ci == 0 && twoParts != 2)
                 {
-                    HandlePumpFlowPtSkin(p, starL, candyL);
-                }
-                if (!noCandyR)
-                {
-                    HandlePumpFlowPtSkin(p, starR, candyR);
-                }
-            }
-            if (lightBulbs.Count > 0)
-            {
-                for (int i = 0; i < lightBulbs.Count; i++)
-                {
-                    LightBulb bulb = lightBulbs[i];
-                    if (bulb != null && bulb.attachedSock == null)
+                    if (!noCandyL)
                     {
-                        HandlePumpFlowPtSkin(p, bulb.constraint, bulb);
+                        HandlePumpFlowPtSkin(p, starL, candyL);
                     }
+                    if (!noCandyR)
+                    {
+                        HandlePumpFlowPtSkin(p, starR, candyR);
+                    }
+                }
+                else if (!CandyGone(ci, ctx))
+                {
+                    HandlePumpFlowPtSkin(p, ctx.point, ctx.candy);
                 }
             }
             foreach (object bungee in bungees)
@@ -274,44 +260,46 @@ namespace CutTheRopeDX.GameMain
         }
 
         /// <summary>
-        /// Starts bamboo tube teleport sequence for the main candy.
+        /// Starts bamboo tube teleport sequence for a specific candy.
         /// </summary>
-        /// <param name="bambooTube">Bamboo tube that receives the candy.</param>
-        public void OperateBambooTube(BambooTube bambooTube)
+        public void OperateBambooTube(BambooTube bambooTube, CandyContext ctx)
         {
-            if (bambooTube == null || targetBambooTube != null || twoParts != PARTS_NONE || noCandy)
+            bool isPrimary = ctx == candies[0];
+            if (bambooTube == null || ctx.targetBambooTube != null || (isPrimary && twoParts != PARTS_NONE) || ctx.noCandy)
             {
                 return;
             }
 
-            ReleaseAllRopes(false);
-            DetachActiveHands();
-            targetBambooTube = bambooTube;
-            dd.CallObjectSelectorParamafterDelay(new DelayedDispatcher.DispatchFunc(Selector_teleport), null, 0.15f);
-            noCandy = true;
-            star.disableGravity = true;
-            candy.passTransformationsToChilds = true;
-            candyMain.scaleX = candyMain.scaleY = 1f;
-            candyTop.scaleX = candyTop.scaleY = 1f;
-
-            if (candy.GetTimeline(1) != null)
+            ReleaseRopesForPoint(ctx.point);
+            DetachHandsForPoint(ctx.point);
+            ctx.targetBambooTube = bambooTube;
+            dd.CallObjectSelectorParamafterDelay(new DelayedDispatcher.DispatchFunc(Selector_teleport), ctx.point, 0.15f);
+            ctx.noCandy = true;
+            ctx.point.disableGravity = true;
+            ctx.candy.passTransformationsToChilds = true;
+            foreach (BaseElement visual in ctx.TransformChildVisuals())
             {
-                candy.RemoveTimeline(1);
+                visual.scaleX = visual.scaleY = 1f;
+            }
+
+            if (ctx.candy.GetTimeline(1) != null)
+            {
+                ctx.candy.RemoveTimeline(1);
             }
 
             Timeline timeline = new Timeline().InitWithMaxKeyFramesOnTrack(2);
-            timeline.AddKeyFrame(KeyFrame.MakePos((int)candy.x, (int)candy.y, KeyFrame.TransitionType.FRAME_TRANSITION_IMMEDIATE, 0f));
-            float towardTubeX = candy.x + ((bambooTube.x - candy.x) * 0.3f);
-            float towardTubeY = candy.y + ((bambooTube.y - candy.y) * 0.3f);
+            timeline.AddKeyFrame(KeyFrame.MakePos((int)ctx.candy.x, (int)ctx.candy.y, KeyFrame.TransitionType.FRAME_TRANSITION_IMMEDIATE, 0f));
+            float towardTubeX = ctx.candy.x + ((bambooTube.x - ctx.candy.x) * 0.3f);
+            float towardTubeY = ctx.candy.y + ((bambooTube.y - ctx.candy.y) * 0.3f);
             timeline.AddKeyFrame(KeyFrame.MakePos((int)towardTubeX, (int)towardTubeY, KeyFrame.TransitionType.FRAME_TRANSITION_LINEAR, 0.1f));
-            timeline.AddKeyFrame(KeyFrame.MakeScale(candy.scaleX, candy.scaleY, KeyFrame.TransitionType.FRAME_TRANSITION_IMMEDIATE, 0f));
+            timeline.AddKeyFrame(KeyFrame.MakeScale(ctx.candy.scaleX, ctx.candy.scaleY, KeyFrame.TransitionType.FRAME_TRANSITION_IMMEDIATE, 0f));
             timeline.AddKeyFrame(KeyFrame.MakeScale(0f, 0f, KeyFrame.TransitionType.FRAME_TRANSITION_LINEAR, 0.1f));
             timeline.AddKeyFrame(KeyFrame.MakeColor(RGBAColor.solidOpaqueRGBA, KeyFrame.TransitionType.FRAME_TRANSITION_IMMEDIATE, 0f));
             timeline.AddKeyFrame(KeyFrame.MakeColor(RGBAColor.transparentRGBA, KeyFrame.TransitionType.FRAME_TRANSITION_LINEAR, 0.1f));
-            candy.AddTimelinewithID(timeline, 1);
-            candy.PlayTimeline(1);
+            ctx.candy.AddTimelinewithID(timeline, 1);
+            ctx.candy.PlayTimeline(1);
             timeline.delegateTimelineDelegate = aniPool;
-            _ = aniPool.AddChild(candy);
+            _ = aniPool.AddChild(ctx.candy);
         }
 
         /// <summary>
@@ -377,6 +365,51 @@ namespace CutTheRopeDX.GameMain
                             }
                             return ropesCutCount;
                         }
+                    }
+                }
+            }
+            // candiesConnected elastic: not in `bungees`, so test it with the same per-segment cut.
+            if (candyConnector != null && candyConnector.cut == -1)
+            {
+                for (int j = 0; j < candyConnector.parts.Count - 1; j++)
+                {
+                    ConstraintedPoint a = candyConnector.parts[j];
+                    ConstraintedPoint b = candyConnector.parts[j + 1];
+                    bool hit;
+                    if (r == null)
+                    {
+                        hit = LineInLine(v1.X, v1.Y, v2.X, v2.Y, a.pos.X, a.pos.Y, b.pos.X, b.pos.Y);
+                    }
+                    else if (a.prevPos.X != UNDEFINED_COORDINATE)
+                    {
+                        float minX = MinOf4(a.pos.X, a.prevPos.X, b.pos.X, b.prevPos.X);
+                        float minY = MinOf4(a.pos.Y, a.prevPos.Y, b.pos.Y, b.prevPos.Y);
+                        float maxX = MaxOf4(a.pos.X, a.prevPos.X, b.pos.X, b.prevPos.X);
+                        float maxY = MaxOf4(a.pos.Y, a.prevPos.Y, b.pos.Y, b.prevPos.Y);
+                        hit = RectInRect(minX, minY, maxX, maxY, r.drawX, r.drawY, r.drawX + r.width, r.drawY + r.height);
+                    }
+                    else
+                    {
+                        hit = false;
+                    }
+                    if (hit)
+                    {
+                        ropesCutCount++;
+                        string ropeSound = candyConnector.relaxed switch
+                        {
+                            0 => Resources.Snd.RopeBleak1,
+                            1 => Resources.Snd.RopeBleak2,
+                            2 => Resources.Snd.RopeBleak3,
+                            _ => Resources.Snd.RopeBleak4
+                        };
+                        CTRSoundMgr.PlaySound(ropeSound);
+                        candyConnector.SetCut(j);
+                        if (im)
+                        {
+                            candyConnector.cutTime = 0f;
+                            candyConnector.RemovePart(j);
+                        }
+                        return ropesCutCount;
                     }
                 }
             }
@@ -501,15 +534,11 @@ namespace CutTheRopeDX.GameMain
             image.anchor = 18;
             timeline.delegateTimelineDelegate = aniPool;
             _ = aniPool.AddChild(image);
-            if (activeRocket != null)
-            {
-                activeRocket.state = Rocket.STATE_ROCKET_EXAUST;
-                activeRocket.StopAnimation();
-            }
-            DetachActiveSnails();
+            ExhaustRocketForCandy(candies[0]);
+            DetachSnailsForPoint(capturedStar);
             if (restartState != 0)
             {
-                dd.CallObjectSelectorParamafterDelay(new DelayedDispatcher.DispatchFunc(Selector_gameLost), null, 2);
+                ScheduleGameLost(2);
             }
         }
 

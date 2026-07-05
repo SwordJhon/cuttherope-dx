@@ -164,6 +164,9 @@ namespace CutTheRopeDX.GameMain
         /// <inheritdoc />
         public GameObject TargetObject => target;
 
+        /// <summary>The classic skin has no XML skin definition.</summary>
+        public OmNomSkinDefinition SkinDefinition => null;
+
         /// <inheritdoc />
         public float GetTargetBaseScaleX()
         {
@@ -247,9 +250,22 @@ namespace CutTheRopeDX.GameMain
                         target.PlayAnimationtimeline(Resources.Img.CharAnimations2, GreetingTimeline);
                     }
                     break;
+                case TargetAnimationState.GreetLeft:
+                case TargetAnimationState.GreetRight:
+                case TargetAnimationState.GreetUp:
+                case TargetAnimationState.GreetDown:
+                    // The classic (non-Flash) Om Nom has no directional chat animations.
+                    break;
                 default:
                     break;
             }
+        }
+
+        /// <inheritdoc />
+        public void PlaySleeping(bool trimIdleToSleepTransition)
+        {
+            _ = trimIdleToSleepTransition;
+            Play(TargetAnimationState.Sleeping);
         }
 
         /// <inheritdoc />
@@ -269,6 +285,9 @@ namespace CutTheRopeDX.GameMain
         public bool StartsWithGreeting => false;
 
         /// <inheritdoc />
+        public bool UsesFlashXmlAnimations => false;
+
+        /// <inheritdoc />
         public bool IsPlaying(TargetAnimationState state)
         {
             return state switch
@@ -283,7 +302,11 @@ namespace CutTheRopeDX.GameMain
                 or TargetAnimationState.Chewing
                 or TargetAnimationState.Sad
                 or TargetAnimationState.IdleToSleep
-                or TargetAnimationState.Greeting => false,
+                or TargetAnimationState.Greeting
+                or TargetAnimationState.GreetLeft
+                or TargetAnimationState.GreetRight
+                or TargetAnimationState.GreetUp
+                or TargetAnimationState.GreetDown => false,
                 TargetAnimationState.Sleeping => isNightLevel
                     && target.GetAnimation(Resources.Img.CharAnimationsSleeping)?.GetCurrentTimelineIndex() == SleepingTimeline,
                 _ => false

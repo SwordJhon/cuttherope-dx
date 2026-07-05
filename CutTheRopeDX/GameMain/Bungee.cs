@@ -359,7 +359,10 @@ namespace CutTheRopeDX.GameMain
                 tail.SetWeight(1f);
                 ownsTail = true;
             }
-            bungeeAnchor.SetWeight(0.02f);
+            if (ownsAnchor)
+            {
+                bungeeAnchor.SetWeight(0.02f);
+            }
             bungeeAnchor.pos = Vect(hx, hy);
             tail.pos = Vect(tx, ty);
             AddPart(bungeeAnchor);
@@ -530,7 +533,10 @@ namespace CutTheRopeDX.GameMain
             for (int j = 0; j < parts.Count; j++)
             {
                 ConstraintedPoint constraintedPoint4 = parts[j];
-                if (constraintedPoint4 != tail)
+                // Don't weaken an endpoint the rope doesn't own: tail is always external, and a
+                // non-owned head (a candy point in a candiesConnected link) must keep its mass.
+                // Owned anchors (normal/kicked grabs) still go limp, as before.
+                if (constraintedPoint4 != tail && (constraintedPoint4 != bungeeAnchor || ownsAnchor))
                 {
                     constraintedPoint4.SetWeight(1E-05f);
                 }
@@ -600,7 +606,10 @@ namespace CutTheRopeDX.GameMain
             for (int i = 0; i < count; i++)
             {
                 ConstraintedPoint constraintedPoint = parts[i];
-                if (constraintedPoint != tail)
+                // Don't integrate an endpoint the rope doesn't own: tail is always external,
+                // and a non-owned head (a candy point in a candiesConnected link) is integrated
+                // by the candy system. Owned anchors (normal/kicked grabs) still integrate.
+                if (constraintedPoint != tail && (constraintedPoint != bungeeAnchor || ownsAnchor))
                 {
                     ConstraintedPoint.Qcpupdate(constraintedPoint, delta, koeff);
                 }

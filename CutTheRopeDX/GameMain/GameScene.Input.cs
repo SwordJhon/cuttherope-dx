@@ -22,40 +22,41 @@ namespace CutTheRopeDX.GameMain
             if (PointInRect(tx + camera.pos.X, ty + camera.pos.Y, s.pos.X - 60f, s.pos.Y - 60f, 120f, 120f))
             {
                 PopCandyBubble(s == starL);
-                int bubblesPoppedCount = Preferences.GetIntForKey("PREFS_BUBBLES_POPPED") + 1;
-                Preferences.SetIntForKey(bubblesPoppedCount, "PREFS_BUBBLES_POPPED", false);
-                if (bubblesPoppedCount == 50)
-                {
-                    CTRRootController.PostAchievementName("681513183", ACHIEVEMENT_STRING("\"Bubble Popper\""));
-                }
-                if (bubblesPoppedCount == 300)
-                {
-                    CTRRootController.PostAchievementName("1058345234", ACHIEVEMENT_STRING("\"Bubble Master\""));
-                }
+                RegisterBubblePopped();
                 return true;
             }
             return false;
         }
 
-        /// <summary>
-        /// Handles tapping a bubble captured by a light bulb.
-        /// </summary>
-        /// <param name="bulb">Light bulb that may currently hold a bubble.</param>
-        /// <param name="tx">Touch x-coordinate in screen space.</param>
-        /// <param name="ty">Touch y-coordinate in screen space.</param>
-        /// <returns><see langword="true"/> when the captured bubble was touched and popped; otherwise, <see langword="false"/>.</returns>
-        private bool HandleLightBulbBubbleTouch(LightBulb bulb, float tx, float ty)
+        /// <summary>Bumps the bubbles-popped counter and posts the related achievements.</summary>
+        private static void RegisterBubblePopped()
         {
-            if (bulb?.capturingBubble == null)
+            int bubblesPoppedCount = Preferences.GetIntForKey("PREFS_BUBBLES_POPPED") + 1;
+            Preferences.SetIntForKey(bubblesPoppedCount, "PREFS_BUBBLES_POPPED", false);
+            if (bubblesPoppedCount == 50)
             {
-                return false;
+                CTRRootController.PostAchievementName("681513183", ACHIEVEMENT_STRING("\"Bubble Popper\""));
             }
-            if (PointInRect(tx + camera.pos.X, ty + camera.pos.Y, bulb.constraint.pos.X - BUBBLE_RADIUS, bulb.constraint.pos.Y - BUBBLE_RADIUS, BUBBLE_RADIUS * 2f, BUBBLE_RADIUS * 2f))
+            if (bubblesPoppedCount == 300)
             {
-                PopLightBulbBubble(bulb);
-                return true;
+                CTRRootController.PostAchievementName("1058345234", ACHIEVEMENT_STRING("\"Bubble Master\""));
             }
-            return false;
+        }
+
+        /// <summary>
+        /// Ends any in-progress rope-cut finger traces so they fade out instead of lingering
+        /// (used when a win/loss transition interrupts an active drag). Mirrors the touch-up cleanup.
+        /// </summary>
+        public void EndActiveFingerTraces()
+        {
+            for (int i = 0; i < fingerTraces.Length; i++)
+            {
+                if (fingerTraceDragging[i])
+                {
+                    fingerTraces[i]?.End();
+                    fingerTraceDragging[i] = false;
+                }
+            }
         }
 
         /// <summary>
@@ -73,6 +74,11 @@ namespace CutTheRopeDX.GameMain
                 {
                     fastenCamera = true;
                 }
+                return true;
+            }
+            // Suppress all gameplay interactions while a win/loss transition is running.
+            if (outcomeTransitionActive)
+            {
                 return true;
             }
             if (ti >= 5)
@@ -105,30 +111,22 @@ namespace CutTheRopeDX.GameMain
                     }
                 }
             }
-            if (snailobjects != null
-                && twoParts == 2
-                && PointInRect(worldX, worldY, star.pos.X - 30f, star.pos.Y - 30f, 60f, 60f)
-                && star.weight > 1f)
+            if (snailobjects != null && twoParts == 2)
             {
-                star.SetWeight(star.weight - 3f);
-                if (star.weight <= 1f)
+                for (int ci = 0; ci < candies.Count; ci++)
                 {
-                    star.SetWeight(1f);
-                    for (int i = 0; i < snailobjects.Count; i++)
+                    ConstraintedPoint p = candies[ci].point;
+                    if (PointInRect(worldX, worldY, p.pos.X - 30f, p.pos.Y - 30f, 60f, 60f) && p.weight > 1f)
                     {
-                        Snail snail = snailobjects[i];
-                        if (snail != null && snail.state == Snail.SNAIL_STATE_ACTIVE)
+                        p.SetWeight(p.weight - 3f);
+                        if (p.weight <= 1f)
                         {
-                            snail.Detach();
-                            break;
+                            p.SetWeight(1f);
+                            DetachSnailsForPoint(p);
                         }
+                        return true;
                     }
                 }
-                return true;
-            }
-            if (candyBubble != null && HandleBubbleTouchXY(star, tx, ty))
-            {
-                return true;
             }
             if (twoParts != 2)
             {
@@ -141,14 +139,26 @@ namespace CutTheRopeDX.GameMain
                     return true;
                 }
             }
-            if (lightBulbs.Count > 0)
+            for (int ci = 0; ci < candies.Count; ci++)
             {
-                foreach (LightBulb bulb in lightBulbs)
+                CandyContext ctx = candies[ci];
+                if (ci == 0)
                 {
-                    if (HandleLightBulbBubbleTouch(bulb, tx, ty))
+                    if (candyBubble != null && HandleBubbleTouchXY(star, tx, ty))
                     {
                         return true;
                     }
+                    continue;
+                }
+                if (ctx.bubble == null)
+                {
+                    continue;
+                }
+                if (PointInRect(tx + camera.pos.X, ty + camera.pos.Y, ctx.point.pos.X - 60f, ctx.point.pos.Y - 60f, 120f, 120f))
+                {
+                    PopCandyBubble(ctx);
+                    RegisterBubblePopped();
+                    return true;
                 }
             }
             if (!dragging[ti])
@@ -270,13 +280,13 @@ namespace CutTheRopeDX.GameMain
 
                     if (hand.state == MechanicalHand.STATE_HAND_CANDY && VectDistance(world, hand.ClawPosition()) < MechanicalHand.MH_CLAW_TOUCH_RADIUS)
                     {
-                        hand.cPoint.RemoveConstraint(star);
+                        CandyContext held = HandHeldCandy(hand);
+                        hand.cPoint.RemoveConstraint(held?.point ?? star);
                         hand.state = MechanicalHand.STATE_HAND_RELEASE;
                         hand.doRotateCandy = false;
                         hand.releaseSoundPlayed = true;
                         hand.AnimateReleaseWithAnimationsPool(aniPool);
-                        ResetConveyor();
-                        UnblockConveyor();
+                        _ = (held?.capturingHand = null);
                         CTRSoundMgr.PlaySound(Resources.Snd.ExpHandDrop);
                         return true;
                     }
@@ -306,16 +316,25 @@ namespace CutTheRopeDX.GameMain
                 return true;
             }
 
-            if (HandleConveyorTouchConstraintedPointXY(star, tx, ty))
+            for (int ci = 0; ci < candies.Count; ci++)
             {
-                return true;
+                CandyContext ctx = candies[ci];
+                if ((ci != 0 && ctx.noCandy) || ctx.point == null)
+                {
+                    continue;
+                }
+
+                if (HandleConveyorTouchConstraintedPointXY(ctx.point, tx, ty))
+                {
+                    return true;
+                }
             }
 
             foreach (Lantern lantern in Lantern.GetAllLanterns())
             {
-                if (lantern != null && lantern.OnTouchDown(tx + camera.pos.X, ty + camera.pos.Y))
+                if (lantern != null && lantern.OnTouchDown(tx + camera.pos.X, ty + camera.pos.Y, out ConstraintedPoint releasedCandyPoint))
                 {
-                    dd.CallObjectSelectorParamafterDelay(new DelayedDispatcher.DispatchFunc(Selector_revealCandyFromLantern), null, Lantern.LanternCandyRevealTime);
+                    dd.CallObjectSelectorParamafterDelay(new DelayedDispatcher.DispatchFunc(Selector_revealCandyFromLantern), releasedCandyPoint, Lantern.LanternCandyRevealTime);
                     return true;
                 }
             }
@@ -454,6 +473,11 @@ namespace CutTheRopeDX.GameMain
         public bool TouchUpXYIndex(float tx, float ty, int ti)
         {
             if (ignoreTouches)
+            {
+                return true;
+            }
+            // Suppress all gameplay interactions while a win/loss transition is running.
+            if (outcomeTransitionActive)
             {
                 return true;
             }
@@ -618,6 +642,11 @@ namespace CutTheRopeDX.GameMain
             {
                 return true;
             }
+            // Suppress all gameplay interactions while a win/loss transition is running.
+            if (outcomeTransitionActive)
+            {
+                return true;
+            }
             Vector vector = Vect(tx, ty);
             if (ti >= 5)
             {
@@ -762,11 +791,15 @@ namespace CutTheRopeDX.GameMain
                                 bubble.y = vector5.Y;
                             }
                         }
-                        if (targetObject != null && PointInRect(targetObject.x, targetObject.y, rotatedCircle.x - rotatedCircle.size, rotatedCircle.y - rotatedCircle.size, 2f * rotatedCircle.size, 2f * rotatedCircle.size))
+                        for (int targetIndex = 0; targetIndex < targets.Count; targetIndex++)
                         {
-                            Vector vector6 = VectRotateAround(Vect(targetObject.x, targetObject.y), rotationDelta, rotatedCircle.x, rotatedCircle.y);
-                            targetObject.x = vector6.X;
-                            targetObject.y = vector6.Y;
+                            GameObject to = targets[targetIndex].targetObject;
+                            if (to != null && PointInRect(to.x, to.y, rotatedCircle.x - rotatedCircle.size, rotatedCircle.y - rotatedCircle.size, 2f * rotatedCircle.size, 2f * rotatedCircle.size))
+                            {
+                                Vector vector6 = VectRotateAround(Vect(to.x, to.y), rotationDelta, rotatedCircle.x, rotatedCircle.y);
+                                to.x = vector6.X;
+                                to.y = vector6.Y;
+                            }
                         }
                         rotatedCircle.lastTouch = vector2;
                         return true;
@@ -907,6 +940,11 @@ namespace CutTheRopeDX.GameMain
             if (index > 5)
             {
                 return false;
+            }
+            // Suppress all gameplay interactions while a win/loss transition is running.
+            if (outcomeTransitionActive)
+            {
+                return true;
             }
             slastTouch = Vect(tx, ty);
             return true;
