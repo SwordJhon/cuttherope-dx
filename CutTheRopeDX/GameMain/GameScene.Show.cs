@@ -58,7 +58,7 @@ namespace CutTheRopeDX.GameMain
             tummyTeasers = 0;
             starsCollected = 0;
             // Update RPC with current level info (on start/restart)
-            Game1.RPC?.SetLevelPresence(cTRRootController.GetPack(), cTRRootController.GetLevel(), starsCollected, false);
+            Game1.RPC?.SetLevelPresence(cTRRootController.GetPack(), cTRRootController.GetLevel(), starsCollected, false, levelName);
             candyBubble = null;
             candyBubbleL = null;
             candyBubbleR = null;
@@ -79,16 +79,18 @@ namespace CutTheRopeDX.GameMain
             ropesCutAtOnce = 0;
             ropeAtOnceTimer = 0f;
             dd.CallObjectSelectorParamafterDelay(new DelayedDispatcher.DispatchFunc(Selector_doCandyBlink), null, 1);
-            Text text = Text.CreateWithFontandString(Resources.Fnt.BigFont, (cTRRootController.GetPack() + 1).ToString(CultureInfo.InvariantCulture) + " - " + (cTRRootController.GetLevel() + 1).ToString(CultureInfo.InvariantCulture));
+            string packAndLevelNumbers = (cTRRootController.GetPack() + 1).ToString(CultureInfo.InvariantCulture) + " - " + (cTRRootController.GetLevel() + 1).ToString(CultureInfo.InvariantCulture);
+            bool useCustomLevelName = levelName != null && Application.GetString(levelName) != string.Empty;
+            Text text = Text.CreateWithFontandString(Resources.Fnt.BigFont, useCustomLevelName ? Application.GetString(levelName) : packAndLevelNumbers);
+            Text text2 = Text.CreateWithFontandString(Resources.Fnt.BigFont, useCustomLevelName ? Application.GetString("LEVEL") + " " + packAndLevelNumbers : Application.GetString("LEVEL"));
             text.anchor = 33;
-            Text text2 = Text.CreateWithFontandString(Resources.Fnt.BigFont, Application.GetString("LEVEL"));
             text2.anchor = 33;
             text2.parentAnchor = 9;
             text.SetName("levelLabel");
             text.x = 15f + Canvas.xOffsetScaled;
-            text.y = SCREEN_HEIGHT + 15f;
             bool isChinese = LanguageHelper.IsCurrentAny(Language.LANGZH, Language.LANGZHTW);
-            text2.y = isChinese ? 20f : 30f; // the "Level" label in game
+            text.y = isChinese ? SCREEN_HEIGHT : SCREEN_HEIGHT + 15f; // the box and level number or level name in game
+            text2.y = isChinese ? 3f : 30f; // the "Level" label in game
             text2.rotationCenterX -= text2.width / 2f;
             text2.scaleX = text2.scaleY = 0.7f;
             _ = text.AddChild(text2);
