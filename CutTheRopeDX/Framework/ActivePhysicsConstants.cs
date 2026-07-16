@@ -150,14 +150,39 @@ namespace CutTheRopeDX.Framework
         public static float SockSpeedKoeff => SelectRaw(PhysicsConstants.SockSpeedKoeff, MobilePhysicsConstants.SockSpeedKoeff);
 
         /// <summary>
+        /// Half-size of the candy collision box used when a sock catches the candy.
+        /// </summary>
+        public static float SockCatchHalfSize => SelectScaled(PhysicsConstants.SockCatchHalfSize, MobilePhysicsConstants.SockCatchHalfSize);
+
+        /// <summary>
+        /// Vertical offset applied to the candy when it exits a sock.
+        /// </summary>
+        public static float SockExitOffsetY => SelectScaled(PhysicsConstants.SockExitOffsetY, MobilePhysicsConstants.SockExitOffsetY);
+
+        /// <summary>
         /// Maximum rope roll length used by grab mechanics.
         /// </summary>
         public static float GrabRopeRollMaxLength => SelectScaled(PhysicsConstants.GrabRopeRollMaxLength, MobilePhysicsConstants.GrabRopeRollMaxLength);
 
         /// <summary>
-        /// Maximum wheel rotation delta used by grab mechanics.
+        /// Maximum rope length rolled per wheel rotate event.
         /// </summary>
-        public static float GrabWheelRotateDeltaMax => SelectRaw(PhysicsConstants.GrabWheelRotateDeltaMax, MobilePhysicsConstants.GrabWheelRotateDeltaMax);
+        public static float GrabWheelRotateDeltaMax => SelectScaled(PhysicsConstants.GrabWheelRotateDeltaMax, MobilePhysicsConstants.GrabWheelRotateDeltaMax);
+
+        /// <summary>
+        /// Minimum rope length rolled per wheel rotate event.
+        /// </summary>
+        public static float GrabWheelRotateDeltaMin => SelectScaled(PhysicsConstants.GrabWheelRotateDeltaMin, MobilePhysicsConstants.GrabWheelRotateDeltaMin);
+
+        /// <summary>
+        /// Speed at which a rocket reels the candy in before flying.
+        /// </summary>
+        public static float RocketReelSpeed => SelectScaled(PhysicsConstants.RocketReelSpeed, MobilePhysicsConstants.RocketReelSpeed);
+
+        /// <summary>
+        /// Speed at which two candy halves converge while merging.
+        /// </summary>
+        public static float CandyPartsMergeSpeed => SelectScaled(PhysicsConstants.CandyPartsMergeSpeed, MobilePhysicsConstants.CandyPartsMergeSpeed);
 
         /// <summary>
         /// Height band used for detecting the water surface.
@@ -285,9 +310,103 @@ namespace CutTheRopeDX.Framework
         public static float SteamTubeOppositeGravityDivisor => SelectRaw(PhysicsConstants.SteamTubeOppositeGravityDivisor, MobilePhysicsConstants.SteamTubeOppositeGravityDivisor);
 
         /// <summary>
+        /// Exponent (per world unit) of the steam force falloff beyond the column top.
+        /// </summary>
+        public static float SteamTubeFalloffExponent => SelectRaw(PhysicsConstants.SteamTubeFalloffExponent, MobilePhysicsConstants.SteamTubeFalloffExponent);
+
+        /// <summary>
+        /// Horizontal velocity below which the steam column cancels velocity outright.
+        /// </summary>
+        public static float SteamTubeVelocityDeadzone => SelectScaled(PhysicsConstants.SteamTubeVelocityDeadzone, MobilePhysicsConstants.SteamTubeVelocityDeadzone);
+
+        /// <summary>
+        /// Distance from a lantern at which it captures the candy.
+        /// </summary>
+        public static float LanternCaptureRadius => SelectScaled(PhysicsConstants.LanternCaptureRadius, MobilePhysicsConstants.LanternCaptureRadius);
+
+        /// <summary>
+        /// Length of the pump's air flow column.
+        /// </summary>
+        public static float PumpFlowLength => SelectScaled(PhysicsConstants.PumpFlowLength, MobilePhysicsConstants.PumpFlowLength);
+
+        /// <summary>
         /// Spider's traversal speed.
         /// </summary>
         public static float SpiderTraversalSpeed => SelectRaw(PhysicsConstants.SpiderTraversalSpeed, MobilePhysicsConstants.SpiderTraversalSpeed);
+
+        /// <summary>
+        /// Distance from Om Nom at which the candy makes him open his mouth.
+        /// </summary>
+        public static float MouthOpenDistance => SelectScaled(PhysicsConstants.MouthOpenDistance, MobilePhysicsConstants.MouthOpenDistance);
+
+        /// <summary>
+        /// Half-height of the spikes collision band around the spike line.
+        /// </summary>
+        public static float SpikesCollisionBandHalfHeight => SelectScaled(PhysicsConstants.SpikesCollisionBandHalfHeight, MobilePhysicsConstants.SpikesCollisionBandHalfHeight);
+
+        /// <summary>
+        /// Amount subtracted from an electro spike's width to get the active zap segment length.
+        /// </summary>
+        public static float ElectroSpikesWidthReduction => SelectScaled(PhysicsConstants.ElectroSpikesWidthReduction, MobilePhysicsConstants.ElectroSpikesWidthReduction);
+
+        /// <summary>
+        /// Full collision line width for a non-electro spike, table-driven from the original
+        /// XML quad. Never read from
+        /// the live texture: the JSON atlas trim differs from both originals, so atlas-derived
+        /// widths silently change collision whenever art is re-packed.
+        /// </summary>
+        /// <param name="rotatable">Whether the spike belongs to a rotate-toggle group.</param>
+        /// <param name="widthIndex">Spike width/type index (1-4).</param>
+        public static float SpikesCollisionLineWidth(bool rotatable, int widthIndex)
+        {
+            float[] table = UseMobilePhysicsModel
+                ? rotatable ? MobilePhysicsConstants.RotatableSpikesQuadWidths : MobilePhysicsConstants.SpikesQuadWidths
+                : rotatable ? PhysicsConstants.RotatableSpikesQuadWidths : PhysicsConstants.SpikesQuadWidths;
+            int index = System.Math.Clamp(widthIndex - 1, 0, table.Length - 1);
+            return UseMobilePhysicsModel ? ToWorld(table[index]) : table[index];
+        }
+
+        /// <summary>
+        /// Effective electro spike object width the zap length is derived from
+        /// (zap = this minus <see cref="ElectroSpikesWidthReduction"/>).
+        /// </summary>
+        public static float ElectroSpikesCollisionObjectWidth()
+        {
+            return SelectScaled(PhysicsConstants.ElectroSpikesObjectWidth, MobilePhysicsConstants.ElectroSpikesObjectWidth);
+        }
+
+        /// <summary>
+        /// Full collision width of a bouncer, pinned from the original XML first quad (see
+        /// <see cref="SpikesCollisionLineWidth"/>).
+        /// </summary>
+        /// <param name="large">Whether this is the large (type 2) bouncer.</param>
+        public static float BouncerCollisionWidth(bool large)
+        {
+            return large
+                ? SelectScaled(PhysicsConstants.BouncerLargeCollisionWidth, MobilePhysicsConstants.BouncerLargeCollisionWidth)
+                : SelectScaled(PhysicsConstants.BouncerSmallCollisionWidth, MobilePhysicsConstants.BouncerSmallCollisionWidth);
+        }
+
+        /// <summary>
+        /// Width of the rocket's catch-slat bounding box (0.6 x the rocket body quad width),
+        /// pinned from the original XML quads rather than the live atlas.
+        /// </summary>
+        public static float RocketCatchBoxWidth => SelectScaled(PhysicsConstants.RocketCatchBoxWidth, MobilePhysicsConstants.RocketCatchBoxWidth);
+
+        /// <summary>
+        /// Height of the rocket's catch-slat bounding box (0.05 x the rocket body quad height).
+        /// </summary>
+        public static float RocketCatchBoxHeight => SelectScaled(PhysicsConstants.RocketCatchBoxHeight, MobilePhysicsConstants.RocketCatchBoxHeight);
+
+        /// <summary>
+        /// X offset of the catch-slat box center from the rocket object's center.
+        /// </summary>
+        public static float RocketCatchBoxCenterOffsetX => SelectScaled(PhysicsConstants.RocketCatchBoxCenterOffsetX, MobilePhysicsConstants.RocketCatchBoxCenterOffsetX);
+
+        /// <summary>
+        /// Y offset of the catch-slat box center from the rocket object's center.
+        /// </summary>
+        public static float RocketCatchBoxCenterOffsetY => SelectScaled(PhysicsConstants.RocketCatchBoxCenterOffsetY, MobilePhysicsConstants.RocketCatchBoxCenterOffsetY);
 
         /// <summary>
         /// Number of sample points drawn for each bungee segment.

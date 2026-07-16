@@ -59,11 +59,26 @@ namespace CutTheRopeDX.Framework
         /// <inheritdoc cref="ActivePhysicsConstants.SockSpeedKoeff" />
         public const float SockSpeedKoeff = 0.9f;
 
+        /// <inheritdoc cref="ActivePhysicsConstants.SockCatchHalfSize" />
+        public const float SockCatchHalfSize = 10f;
+
+        /// <inheritdoc cref="ActivePhysicsConstants.SockExitOffsetY" />
+        public const float SockExitOffsetY = -8f;
+
         /// <inheritdoc cref="ActivePhysicsConstants.GrabRopeRollMaxLength" />
         public const float GrabRopeRollMaxLength = 500f;
 
         /// <inheritdoc cref="ActivePhysicsConstants.GrabWheelRotateDeltaMax" />
         public const float GrabWheelRotateDeltaMax = 2f;
+
+        /// <inheritdoc cref="ActivePhysicsConstants.GrabWheelRotateDeltaMin" />
+        public const float GrabWheelRotateDeltaMin = 1f;
+
+        /// <inheritdoc cref="ActivePhysicsConstants.RocketReelSpeed" />
+        public const float RocketReelSpeed = 200f;
+
+        /// <inheritdoc cref="ActivePhysicsConstants.CandyPartsMergeSpeed" />
+        public const float CandyPartsMergeSpeed = 200f;
 
         /// <inheritdoc cref="ActivePhysicsConstants.WaterSurfaceDetectionHeight" />
         public const float WaterSurfaceDetectionHeight = 2f;
@@ -131,8 +146,69 @@ namespace CutTheRopeDX.Framework
         /// <inheritdoc cref="ActivePhysicsConstants.SteamTubeOppositeGravityDivisor" />
         public const float SteamTubeOppositeGravityDivisor = 2f;
 
+        /// <inheritdoc cref="ActivePhysicsConstants.SteamTubeFalloffExponent" />
+        public const float SteamTubeFalloffExponent = -2f / 3f; // WP7 -2 per mobile unit
+
+        /// <inheritdoc cref="ActivePhysicsConstants.SteamTubeVelocityDeadzone" />
+        public const float SteamTubeVelocityDeadzone = 1f;
+
+        /// <inheritdoc cref="ActivePhysicsConstants.LanternCaptureRadius" />
+        public const float LanternCaptureRadius = 32f;
+
+        /// <inheritdoc cref="ActivePhysicsConstants.PumpFlowLength" />
+        public const float PumpFlowLength = 200f;
+
         /// <inheritdoc cref="ActivePhysicsConstants.SpiderTraversalSpeed" />
         public const float SpiderTraversalSpeed = 135f; // 45 * 3
+
+        /// <inheritdoc cref="ActivePhysicsConstants.MouthOpenDistance" />
+        public const float MouthOpenDistance = 100f;
+
+        /// <inheritdoc cref="ActivePhysicsConstants.SpikesCollisionBandHalfHeight" />
+        public const float SpikesCollisionBandHalfHeight = 5f;
+
+        /// <inheritdoc cref="ActivePhysicsConstants.ElectroSpikesWidthReduction" />
+        public const float ElectroSpikesWidthReduction = 130f;
+
+        /// <summary>
+        /// WP7 base-asset quad widths for static spikes 1-4 (obj_spikes_01..04). The desktop
+        /// atlas is trimmed differently (214/335/455/568 at 3x), so mobile physics reads these.
+        /// </summary>
+        public static readonly float[] SpikesQuadWidths = [68f, 106f, 146f, 181f];
+
+        /// <inheritdoc cref="ActivePhysicsConstants.SpikesCollisionLineWidth" />
+        public static readonly float[] RotatableSpikesQuadWidths = [68f, 118f, 142f, 178f];
+
+        /// <summary>
+        /// WP7 pre-cut width of obj_electrodes; the electro zap length is this minus
+        /// <see cref="ElectroSpikesWidthReduction"/>. The JSON electrodes sheet is 833 wide, not 267x3.
+        /// </summary>
+        public const float ElectroSpikesObjectWidth = 267f;
+
+        /// <summary>
+        /// WP7 first-quad width of the small bouncer (obj_bouncer_01, quad 0), subtract 20.
+        /// </summary>
+        public const float BouncerSmallCollisionWidth = 46f;
+
+        /// <inheritdoc cref="ActivePhysicsConstants.BouncerCollisionWidth" />
+        /// <remarks>obj_bouncer_02 quad 0, subtract 20</remarks>
+        public const float BouncerLargeCollisionWidth = 91f;
+
+        /// <summary>
+        /// Rocket catch-slat box from the Experiments base assets: quad 10 is 116x58 centered
+        /// at (91,67) on the 199x134 obj_rocket sheet; the engine takes 0.6 x width and
+        /// 0.05 x height of that quad.
+        /// </summary>
+        public const float RocketCatchBoxWidth = 69.6f; // 116 * 0.6
+
+        /// <inheritdoc cref="ActivePhysicsConstants.RocketCatchBoxHeight" />
+        public const float RocketCatchBoxHeight = 2.9f; // 58 * 0.05
+
+        /// <inheritdoc cref="ActivePhysicsConstants.RocketCatchBoxCenterOffsetX" />
+        public const float RocketCatchBoxCenterOffsetX = -8.5f; // 91 - 199/2
+
+        /// <inheritdoc cref="ActivePhysicsConstants.RocketCatchBoxCenterOffsetY" />
+        public const float RocketCatchBoxCenterOffsetY = 0f; // 67 - 134/2
 
         /// <summary>
         /// Maximum rope length used by the mobile bungee renderer.

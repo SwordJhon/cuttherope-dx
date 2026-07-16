@@ -59,11 +59,26 @@ namespace CutTheRopeDX.Framework
         /// <inheritdoc cref="ActivePhysicsConstants.SockSpeedKoeff" />
         public const float SockSpeedKoeff = 0.9f;
 
+        /// <inheritdoc cref="ActivePhysicsConstants.SockCatchHalfSize" />
+        public const float SockCatchHalfSize = 20f;
+
+        /// <inheritdoc cref="ActivePhysicsConstants.SockExitOffsetY" />
+        public const float SockExitOffsetY = -16f;
+
         /// <inheritdoc cref="ActivePhysicsConstants.GrabRopeRollMaxLength" />
         public const float GrabRopeRollMaxLength = 1650f;
 
         /// <inheritdoc cref="ActivePhysicsConstants.GrabWheelRotateDeltaMax" />
         public const float GrabWheelRotateDeltaMax = 4.5f;
+
+        /// <inheritdoc cref="ActivePhysicsConstants.GrabWheelRotateDeltaMin" />
+        public const float GrabWheelRotateDeltaMin = 1f;
+
+        /// <inheritdoc cref="ActivePhysicsConstants.RocketReelSpeed" />
+        public const float RocketReelSpeed = 200f;
+
+        /// <inheritdoc cref="ActivePhysicsConstants.CandyPartsMergeSpeed" />
+        public const float CandyPartsMergeSpeed = 200f;
 
         /// <inheritdoc cref="ActivePhysicsConstants.WaterSurfaceDetectionHeight" />
         public const float WaterSurfaceDetectionHeight = 2f;
@@ -131,8 +146,69 @@ namespace CutTheRopeDX.Framework
         /// <inheritdoc cref="ActivePhysicsConstants.SteamTubeOppositeGravityDivisor" />
         public const float SteamTubeOppositeGravityDivisor = 2f;
 
+        /// <inheritdoc cref="ActivePhysicsConstants.SteamTubeFalloffExponent" />
+        public const float SteamTubeFalloffExponent = -2f;
+
+        /// <inheritdoc cref="ActivePhysicsConstants.SteamTubeVelocityDeadzone" />
+        public const float SteamTubeVelocityDeadzone = 1f;
+
+        /// <inheritdoc cref="ActivePhysicsConstants.LanternCaptureRadius" />
+        public const float LanternCaptureRadius = 82f;
+
+        /// <inheritdoc cref="ActivePhysicsConstants.PumpFlowLength" />
+        public const float PumpFlowLength = 624f;
+
         /// <inheritdoc cref="ActivePhysicsConstants.SpiderTraversalSpeed" />
         public const float SpiderTraversalSpeed = 117f;
+
+        /// <inheritdoc cref="ActivePhysicsConstants.MouthOpenDistance" />
+        public const float MouthOpenDistance = 200f;
+
+        /// <inheritdoc cref="ActivePhysicsConstants.SpikesCollisionBandHalfHeight" />
+        public const float SpikesCollisionBandHalfHeight = 5f;
+
+        /// <inheritdoc cref="ActivePhysicsConstants.ElectroSpikesWidthReduction" />
+        public const float ElectroSpikesWidthReduction = 400f;
+
+        /// <summary>
+        /// Original XML quad widths for static spikes 1-4 (obj_spikes_01..04). The JSON atlas is
+        /// re-trimmed (+2 px per frame), so collision reads these instead of the live texture.
+        /// </summary>
+        public static readonly float[] SpikesQuadWidths = [212f, 333f, 453f, 566f];
+
+        /// <inheritdoc cref="ActivePhysicsConstants.SpikesCollisionLineWidth" />
+        public static readonly float[] RotatableSpikesQuadWidths = [202f, 319f, 444f, 559f];
+
+        /// <summary>
+        /// Original XML pre-cut width of obj_electrodes; the electro zap length is this minus
+        /// <see cref="ElectroSpikesWidthReduction"/>.
+        /// </summary>
+        public const float ElectroSpikesObjectWidth = 833f;
+
+        /// <summary>
+        /// Original XML first-quad width of the small bouncer (obj_bouncer_01, quad 0).
+        /// </summary>
+        public const float BouncerSmallCollisionWidth = 194f;
+
+        /// <inheritdoc cref="ActivePhysicsConstants.BouncerCollisionWidth" />
+        /// <remarks>obj_bouncer_02 quad 0.</remarks>
+        public const float BouncerLargeCollisionWidth = 302f;
+
+        /// <summary>
+        /// Rocket catch-slat box frozen from the JSON atlas: quad 10 is 358x179 centered at
+        /// (288, 208.5) on the 619x418 obj_rocket sheet; the engine takes 0.6 x width and
+        /// 0.05 x height of that quad.
+        /// </summary>
+        public const float RocketCatchBoxWidth = 214.8f; // 358 * 0.6
+
+        /// <inheritdoc cref="ActivePhysicsConstants.RocketCatchBoxHeight" />
+        public const float RocketCatchBoxHeight = 8.95f; // 179 * 0.05
+
+        /// <inheritdoc cref="ActivePhysicsConstants.RocketCatchBoxCenterOffsetX" />
+        public const float RocketCatchBoxCenterOffsetX = -21.5f; // 288 - 619/2
+
+        /// <inheritdoc cref="ActivePhysicsConstants.RocketCatchBoxCenterOffsetY" />
+        public const float RocketCatchBoxCenterOffsetY = -0.5f; // 208.5 - 418/2
 
         /// <summary>
         /// Maximum rope length used to size rope drawing buffers.

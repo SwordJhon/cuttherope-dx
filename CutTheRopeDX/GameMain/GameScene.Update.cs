@@ -528,7 +528,7 @@ namespace CutTheRopeDX.GameMain
                         partsDist = 0f;
                         twoParts = 0;
                     }
-                    else if (Mover.MoveVariableToTarget(ref partsDist, 0, 200, delta))
+                    else if (Mover.MoveVariableToTarget(ref partsDist, 0, ActivePhysicsConstants.CandyPartsMergeSpeed, delta))
                     {
                         CTRSoundMgr.PlaySound(Resources.Snd.CandyLink);
                         twoParts = 2;
@@ -1009,7 +1009,7 @@ namespace CutTheRopeDX.GameMain
                     {
                         continue;
                     }
-                    bool inRange = VectDistance(ctx.point.pos, Vect(lantern.x, lantern.y)) < 82f;
+                    bool inRange = VectDistance(ctx.point.pos, Vect(lantern.x, lantern.y)) < ActivePhysicsConstants.LanternCaptureRadius;
                     if (!LanternCapture.ShouldCapture(lanternInactive, groupOccupied, !ctx.noCandy, ctx.inLantern, inRange))
                     {
                         continue;
@@ -1125,7 +1125,7 @@ namespace CutTheRopeDX.GameMain
                     candies[ci].carriedByMouse = carried != null && candies[ci].point == carried;
                 }
             }
-            float collisionHalfSize = RTPD(20);
+            float collisionHalfSize = ActivePhysicsConstants.SockCatchHalfSize;
             foreach (object obj11 in socks)
             {
                 Sock sock3 = (Sock)obj11;
@@ -1291,7 +1291,7 @@ namespace CutTheRopeDX.GameMain
                     }
                     if (rocket.state == Rocket.STATE_ROCKET_DIST)
                     {
-                        if (handHoldingCandy || Mover.MoveVariableToTarget(ref dist, 0f, 200f, delta))
+                        if (handHoldingCandy || Mover.MoveVariableToTarget(ref dist, 0f, ActivePhysicsConstants.RocketReelSpeed, delta))
                         {
                             rocket.state = Rocket.STATE_ROCKET_FLY;
                         }
@@ -1720,7 +1720,7 @@ namespace CutTheRopeDX.GameMain
 
                 if (!t.mouthOpen && canInteractWithTarget)
                 {
-                    if (CandyDecisions.ShouldOpenMouth(targetPos, candyViews, 200f))
+                    if (CandyDecisions.ShouldOpenMouth(targetPos, candyViews, ActivePhysicsConstants.MouthOpenDistance))
                     {
                         t.mouthOpen = true;
                         t.controller?.PlayMouthOpening();
@@ -1735,7 +1735,7 @@ namespace CutTheRopeDX.GameMain
                     t.mouthCloseTimer = timer;
                     if (t.mouthCloseTimer <= 0)
                     {
-                        if (!CandyDecisions.ShouldOpenMouth(targetPos, candyViews, 200f))
+                        if (!CandyDecisions.ShouldOpenMouth(targetPos, candyViews, ActivePhysicsConstants.MouthOpenDistance))
                         {
                             t.mouthOpen = false;
                             t.controller?.PlayMouthClosing();
