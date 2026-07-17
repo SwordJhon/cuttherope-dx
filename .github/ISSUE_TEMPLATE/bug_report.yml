@@ -4,10 +4,14 @@ labels: ["bug"]
 body:
     - type: checkboxes
       attributes:
-          label: Duplicated issue check
-          description: Please make sure that this issue has not been reported before.
+          label: Required agreements
+          description: Please confirm the following before submitting your issue. Issues that do not meet these requirements may be closed.
           options:
               - label: I confirm that I have searched the existing issue(s)
+                required: true
+              - label: I confirm that I have read the FAQ - https://github.com/yell0wsuit/cuttherope-dx/wiki/Frequently-Asked-Questions
+                required: true
+              - label: I understand that repeatedly submitting duplicate issues may result in being blocked from the repository.
                 required: true
     - type: input
       id: version
@@ -58,14 +62,14 @@ body:
           label: CPU spec
           description: What type of CPU are you using? (Intel i9-14900, etc.)
       validations:
-           required: true
+          required: true
     - type: input
       id: gpuspec
       attributes:
           label: GPU spec
           description: What GPU vendor are you using? (NVIDIA, Intel Arc, AMD, integrated GPU, etc.)
       validations:
-           required: true
+          required: true
     - type: input
       attributes:
           label: RAM spec

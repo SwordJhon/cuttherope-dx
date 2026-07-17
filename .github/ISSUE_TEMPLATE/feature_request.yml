@@ -2,6 +2,17 @@ name: Feature request
 description: Suggest an idea for Cut the Rope DX
 labels: ["enhancement", "feat"]
 body:
+    - type: checkboxes
+      attributes:
+          label: Required agreements
+          description: Please confirm the following before submitting your feature request. Feature request that do not meet these requirements may be closed.
+          options:
+              - label: I confirm that I have searched the existing issue(s)
+                required: true
+              - label: I confirm that I have read the FAQ - https://github.com/yell0wsuit/cuttherope-dx/wiki/Frequently-Asked-Questions
+                required: true
+              - label: I understand that repeatedly submitting duplicate feature requests may result in being blocked from the repository.
+                required: true
     - type: textarea
       id: problem
       attributes:
