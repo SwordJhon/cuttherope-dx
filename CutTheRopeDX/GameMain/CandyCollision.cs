@@ -27,6 +27,13 @@ namespace CutTheRopeDX.GameMain
             return !noCandy && !inLantern;
         }
 
+        public static bool ShouldParticipate(CandyContext ctx)
+        {
+            return ctx != null
+                && ShouldParticipate(ctx.noCandy, ctx.inLantern)
+                && ctx.Capabilities.CanCollideWithCandyBodies;
+        }
+
         public static float PairDistance(CandyContext a, CandyContext b)
         {
             return a.collisionDistanceOverride.HasValue || b.collisionDistanceOverride.HasValue

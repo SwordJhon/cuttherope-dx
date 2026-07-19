@@ -280,6 +280,10 @@ namespace CutTheRopeDX.GameMain
                                 {
                                     Bungee bungee = new Bungee().InitWithHeadAtXYTailAtTXTYandLength(null, grab.x, grab.y, starL, starL.pos.X, starL.pos.Y, grab.radius + ActivePhysicsConstants.CandyGrabPadding);
                                     bungee.bungeeAnchor.pin = bungee.bungeeAnchor.pos;
+                                    if (grab.cutOnlyByAxe)
+                                    {
+                                        bungee.SetCutOnlyByAxe();
+                                    }
                                     grab.hideRadius = true;
                                     grab.SetRope(bungee);
 
@@ -299,6 +303,10 @@ namespace CutTheRopeDX.GameMain
                                 {
                                     Bungee bungee2 = new Bungee().InitWithHeadAtXYTailAtTXTYandLength(null, grab.x, grab.y, starR, starR.pos.X, starR.pos.Y, grab.radius + ActivePhysicsConstants.CandyGrabPadding);
                                     bungee2.bungeeAnchor.pin = bungee2.bungeeAnchor.pos;
+                                    if (grab.cutOnlyByAxe)
+                                    {
+                                        bungee2.SetCutOnlyByAxe();
+                                    }
                                     grab.hideRadius = true;
                                     grab.SetRope(bungee2);
 
@@ -1387,6 +1395,11 @@ namespace CutTheRopeDX.GameMain
                 razor.Update(delta);
                 _ = CutWithRazorOrLine1Line2Immediate(razor, vectZero, vectZero, false);
             }
+            CutAxeOnlyChainsWithAxes();
+            if (BreakCandyTouchedByAxes())
+            {
+                return;
+            }
             foreach (object obj14 in spikes)
             {
                 Spikes spike = (Spikes)obj14;
@@ -2010,6 +2023,10 @@ namespace CutTheRopeDX.GameMain
 
             Bungee bungee = new Bungee().InitWithHeadAtXYTailAtTXTYandLength(null, grab.x, grab.y, ctx.point, ctx.point.pos.X, ctx.point.pos.Y, grab.radius + ActivePhysicsConstants.CandyGrabPadding);
             bungee.bungeeAnchor.pin = bungee.bungeeAnchor.pos;
+            if (grab.cutOnlyByAxe)
+            {
+                bungee.SetCutOnlyByAxe();
+            }
             grab.hideRadius = true;
             grab.SetRope(bungee);
             if (ctx.HasActiveRocket)
