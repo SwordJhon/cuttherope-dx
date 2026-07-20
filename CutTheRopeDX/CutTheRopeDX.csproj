@@ -54,7 +54,7 @@
     <OutputType>Exe</OutputType>
   </PropertyGroup>
 
-  <!-- DesktopGL publish defaults -->
+  <!-- Publish defaults -->
   <PropertyGroup Condition="'$(RuntimeIdentifier)' != ''">
     <SelfContained>true</SelfContained>
     <PublishSingleFile>true</PublishSingleFile>
@@ -118,25 +118,8 @@
 
   <!-- FFmpeg for cross-platform -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'net10.0'">
-    <DefineConstants>$(DefineConstants);DESKTOPGL_FFMPEG</DefineConstants>
+    <DefineConstants>$(DefineConstants);DESKTOPVK_FFMPEG</DefineConstants>
   </PropertyGroup>
-
-  <!-- macOS app bundle: use BundleResource for content files -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-macos'">
-    <BundleResource Include="..\content\**" Exclude="..\content\sounds\**;..\content\bin\**\*.*;..\content\obj\**\*.*;..\content\**\*.png;..\content\sounds\sfx\*.wav">
-      <Link>content\%(RecursiveDir)%(Filename)%(Extension)</Link>
-    </BundleResource>
-  </ItemGroup>
-
-  <!-- macOS app bundle: sound files as BundleResource -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-macos'">
-    <BundleResource Include="..\content\sounds\*.xnb" Exclude="..\content\sounds\*_windows.xnb">
-      <Link>content\sounds\%(Filename)%(Extension)</Link>
-    </BundleResource>
-    <BundleResource Include="..\content\sounds\*.ogg">
-      <Link>content\sounds\%(Filename)%(Extension)</Link>
-    </BundleResource>
-  </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="../distribution/icons/CutTheRopeDXIcon.bmp">
@@ -157,8 +140,7 @@
   -->
   <Target Name="CodesignMacOSBundle" AfterTargets="Build" Condition="'$(TargetFramework)' == 'net10.0-macos' AND '$(RuntimeIdentifier)' != '' AND $([MSBuild]::IsOsPlatform('OSX'))">
     <PropertyGroup>
-      <AppBundlePath>
-        $([MSBuild]::NormalizePath($([MSBuild]::EnsureTrailingSlash('$(OutputPath)'))$(AssemblyName).app))</AppBundlePath>
+      <AppBundlePath>$([MSBuild]::NormalizePath($([MSBuild]::EnsureTrailingSlash('$(OutputPath)'))$(AssemblyName).app))</AppBundlePath>
     </PropertyGroup>
 
     <Message Text="Codesigning dylibs in $(AppBundlePath)..." Importance="High" />
@@ -183,10 +165,8 @@
   <Target Name="MoveMacOSAppToPublish" AfterTargets="Publish" Condition="'$(TargetFramework)' == 'net10.0-macos' AND '$(RuntimeIdentifier)' != '' AND $([MSBuild]::IsOsPlatform('OSX'))">
     <PropertyGroup>
       <AppBundleName>$(AssemblyName).app</AppBundleName>
-      <AppSourcePath>
-        $([MSBuild]::NormalizePath($([MSBuild]::EnsureTrailingSlash('$(OutputPath)'))$(AppBundleName)))</AppSourcePath>
-      <AppPublishPath>
-        $([MSBuild]::NormalizePath($([MSBuild]::EnsureTrailingSlash('$(PublishDir)'))$(AppBundleName)))</AppPublishPath>
+      <AppSourcePath>$([MSBuild]::NormalizePath($([MSBuild]::EnsureTrailingSlash('$(OutputPath)'))$(AppBundleName)))</AppSourcePath>
+      <AppPublishPath>$([MSBuild]::NormalizePath($([MSBuild]::EnsureTrailingSlash('$(PublishDir)'))$(AppBundleName)))</AppPublishPath>
     </PropertyGroup>
 
     <Message Text="Relocating macOS .app to publish directory" Importance="High" />
