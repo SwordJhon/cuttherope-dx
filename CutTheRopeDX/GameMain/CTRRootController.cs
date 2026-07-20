@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -123,6 +124,17 @@ namespace CutTheRopeDX.GameMain
             ctrresourceMgr.InitLoading();
             ctrresourceMgr.LoadPack(PackStartup);
             ctrresourceMgr.LoadImmediately();
+
+            if (CustomLevelSession.IsActive)
+            {
+                pack = 0;
+                level = 0;
+                LoadingController customLoading = new(this);
+                AddChildwithID(customLoading, 2);
+                viewTransition = -1;
+                return;
+            }
+
             StartupController startupController = new(this);
             AddChildwithID(startupController, 0);
             viewTransition = -1;
@@ -133,10 +145,70 @@ namespace CutTheRopeDX.GameMain
         {
             _ = CTRPreferences.IsFirstLaunch();
             base.Activate();
-            ActivateChild(0);
+
+            if (CustomLevelSession.IsActive)
+            {
+                BeginCustomLevelLoad();
+            }
+            else
+            {
+                ActivateChild(0);
+            }
+
             Application.SharedCanvas().BeforeRender();
             ActiveChild().ActiveView().Draw();
             GLCanvas.AfterRender();
+        }
+
+        /// <summary>
+        /// Gets the resources loaded for the current gameplay session.
+        /// </summary>
+        /// <returns>The set of resource identifiers tracked for this session.</returns>
+        public ISet<string> GetSessionResources()
+        {
+            return sessionResources;
+        }
+
+        /// <summary>
+        /// Frees the previous level's resources, loads the edited level's resources through the
+        /// loading screen, and re-enters gameplay.
+        /// </summary>
+        /// <param name="resourceMgr">Shared resource manager.</param>
+        private void ReloadCustomLevelThroughLoadingScreen(CTRResourceMgr resourceMgr)
+        {
+            DeleteChild(3);
+
+            string[] levelResources = LevelResourceScanner.GetRequiredResources(loadedMap);
+            resourceMgr.FreePack([.. sessionResources]);
+            sessionResources.Clear();
+            TrackSessionResources(levelResources);
+
+            resourceMgr.resourcesDelegate = (LoadingController)GetChild(2);
+            resourceMgr.InitLoading();
+            resourceMgr.LoadPack(levelResources);
+            resourceMgr.StartLoading();
+            ((LoadingController)GetChild(2)).nextController = 0;
+            ActivateChild(2);
+        }
+
+        /// <summary>
+        /// Loads gameplay resources for the externally supplied level and enters the loading screen.
+        /// </summary>
+        private void BeginCustomLevelLoad()
+        {
+            CTRResourceMgr resourceMgr = Application.SharedResourceMgr();
+            resourceMgr.resourcesDelegate = (LoadingController)GetChild(2);
+            ResetGameplayResourceSession();
+            EnsureCurrentMapLoaded();
+            string[] levelResources = LevelResourceScanner.GetRequiredResources(loadedMap);
+            TrackSessionResources(levelResources);
+            resourceMgr.InitLoading();
+            resourceMgr.LoadPack(PackGame);
+            resourceMgr.LoadPack(PackConfig.GetBoxBackgrounds(pack));
+            resourceMgr.LoadPack(levelResources);
+            resourceMgr.StartLoading();
+            ((LoadingController)GetChild(2)).nextController = 0;
+            ActivateChild(2);
         }
 
         /// <summary>Removes the menu child controller and frees menu resources.</summary>
@@ -284,6 +356,13 @@ namespace CutTheRopeDX.GameMain
                         GameController gameController = (GameController)GetChild(3);
                         int exitCode = gameController.exitCode;
                         _ = (GameScene)gameController.GetView(0).GetChild(0);
+
+                        if (exitCode == GameController.EXIT_CODE_CUSTOM_RELOAD)
+                        {
+                            ReloadCustomLevelThroughLoadingScreen(resourceMgr);
+                            return;
+                        }
+
                         if (exitCode <= 2)
                         {
                             StopGameplayPrefetch();
@@ -466,6 +545,21 @@ namespace CutTheRopeDX.GameMain
         {
             if (loadedMap != null)
             {
+                return;
+            }
+
+            if (CustomLevelSession.IsActive)
+            {
+                if (CustomLevelFile.TryLoad(CustomLevelSession.LevelPath, out XElement customMap, out string error))
+                {
+                    loadedMap = customMap;
+                    mapName = CustomLevelSession.LevelPath;
+                }
+                else
+                {
+                    Console.Error.WriteLine(error);
+                }
+
                 return;
             }
 
