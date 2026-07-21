@@ -26,6 +26,47 @@ namespace CutTheRopeDX.GameMain
                 OnButtonPressed(GameControllerButtonId.Restart);
             }
             base.Update(t);
+
+            if (levelWatcher != null && levelWatcher.TryConsumeChange(DateTime.UtcNow))
+            {
+                ApplyCustomLevelChange();
+            }
+        }
+
+        /// <summary>
+        /// Applies an external edit to the custom level, reloading in place when possible.
+        /// </summary>
+        private void ApplyCustomLevelChange()
+        {
+            if (!CustomLevelFile.TryLoad(CustomLevelSession.LevelPath, out System.Xml.Linq.XElement map, out string error))
+            {
+                Console.Error.WriteLine(error);
+                return;
+            }
+
+            CTRRootController root = (CTRRootController)Application.SharedRootController();
+            string[] required = LevelResourceScanner.GetRequiredResources(map);
+            CustomLevelReloadKind kind = CustomLevelReloadDecision.Decide(required, root.GetSessionResources());
+
+            if (kind == CustomLevelReloadKind.Instant)
+            {
+                GameScene scene = (GameScene)GetView(0).GetChild(0);
+                if (!scene.IsEnabled())
+                {
+                    LevelStart();
+                }
+                // Flash the restart dim, matching what the restart button does, so an
+                // external edit reads as a deliberate restart rather than a glitch.
+                scene.animateRestartDim = true;
+                scene.Reload();
+                SetPaused(false);
+                return;
+            }
+
+            root.SetMap(map);
+            exitCode = EXIT_CODE_CUSTOM_RELOAD;
+            CTRSoundMgr.StopAll();
+            Deactivate();
         }
 
         /// <summary>
@@ -48,6 +89,24 @@ namespace CutTheRopeDX.GameMain
             PlayMusic();
             InitGameView();
             ShowView(0);
+
+            if (CustomLevelSession.IsActive && levelWatcher == null)
+            {
+                levelWatcher = new CustomLevelWatcher(
+                    CustomLevelSession.LevelPath,
+                    TimeSpan.FromMilliseconds(100));
+            }
+        }
+
+        /// <inheritdoc />
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                levelWatcher?.Dispose();
+                levelWatcher = null;
+            }
+            base.Dispose(disposing);
         }
 
         /// <summary>
@@ -94,11 +153,15 @@ namespace CutTheRopeDX.GameMain
             VBox vBox = new VBox().InitWithOffsetAlignWidth(5, 2, SCREEN_WIDTH);
             Button c = MenuController.CreateButtonWithTextIDDelegate(Application.GetString("CONTINUE"), GameControllerButtonId.Continue, this);
             _ = vBox.AddChild(c);
-            Button c2 = MenuController.CreateButtonWithTextIDDelegate(Application.GetString("SKIP_LEVEL"), GameControllerButtonId.SkipLevel, this);
-            _ = vBox.AddChild(c2);
-            Button c3 = MenuController.CreateButtonWithTextIDDelegate(Application.GetString("LEVEL_SELECT"), GameControllerButtonId.LevelSelect, this);
-            _ = vBox.AddChild(c3);
-            Button c4 = MenuController.CreateButtonWithTextIDDelegate(Application.GetString("MAIN_MENU"), GameControllerButtonId.MainMenu, this);
+            if (!CustomLevelSession.IsActive)
+            {
+                Button c2 = MenuController.CreateButtonWithTextIDDelegate(Application.GetString("SKIP_LEVEL"), GameControllerButtonId.SkipLevel, this);
+                _ = vBox.AddChild(c2);
+                Button c3 = MenuController.CreateButtonWithTextIDDelegate(Application.GetString("LEVEL_SELECT"), GameControllerButtonId.LevelSelect, this);
+                _ = vBox.AddChild(c3);
+            }
+            string exitLabel = CustomLevelSession.IsActive ? "QUIT_BUTTON" : "MAIN_MENU";
+            Button c4 = MenuController.CreateButtonWithTextIDDelegate(Application.GetString(exitLabel), GameControllerButtonId.MainMenu, this);
             _ = vBox.AddChild(c4);
             vBox.anchor = vBox.parentAnchor = 10;
             ToggleButton toggleButton = MenuController.CreateAudioButtonWithQuadDelegateIDiconOffset(3, this, GameControllerButtonId.ToggleMusic);
@@ -299,7 +362,7 @@ namespace CutTheRopeDX.GameMain
             int scoreForPackLevel = CTRPreferences.GetScoreForPackLevel(box, pack, level);
             int starsForPackLevel = CTRPreferences.GetStarsForPackLevel(box, pack, level);
             boxOpenClose.shouldShowImprovedResult = false;
-            if (gameScene.score > scoreForPackLevel)
+            if (LevelProgressPersistence.ShouldPersist(CustomLevelSession.IsActive, gameScene.score, scoreForPackLevel))
             {
                 CTRPreferences.SetScoreForPackLevel(box, gameScene.score, pack, level);
                 if (scoreForPackLevel > 0)
@@ -307,7 +370,7 @@ namespace CutTheRopeDX.GameMain
                     boxOpenClose.shouldShowImprovedResult = true;
                 }
             }
-            if (gameScene.starsCollected > starsForPackLevel)
+            if (LevelProgressPersistence.ShouldPersist(CustomLevelSession.IsActive, gameScene.starsCollected, starsForPackLevel))
             {
                 CTRPreferences.SetStarsForPackLevel(box, gameScene.starsCollected, pack, level);
                 if (starsForPackLevel > 0)
@@ -337,7 +400,10 @@ namespace CutTheRopeDX.GameMain
             CTRRootController ctrRoot = (CTRRootController)Application.SharedRootController();
             Game1.RPC.SetLevelPresence(ctrRoot.GetPack(), ctrRoot.GetLevel(), gameScene.starsCollected, true, gameScene.levelName, gameScene.score, (int)gameScene.time);
 
-            UnlockNextLevel();
+            if (!CustomLevelSession.IsActive)
+            {
+                UnlockNextLevel();
+            }
         }
 
         /// <summary>
@@ -434,6 +500,12 @@ namespace CutTheRopeDX.GameMain
                     CTRRootController.LogEvent("IM_LEVEL_SELECT_PRESSED");
                     return;
                 case var id when id == GameControllerButtonId.MainMenu:
+                    if (CustomLevelSession.IsActive)
+                    {
+                        CTRSoundMgr.StopAll();
+                        Global.XnaGame.Exit();
+                        return;
+                    }
                     exitCode = 0;
                     CTRSoundMgr.StopAll();
                     LevelQuit();
@@ -872,6 +944,12 @@ namespace CutTheRopeDX.GameMain
 
         /// <summary>Exit code for returning to level select and advancing to the next pack.</summary>
         public const int EXIT_CODE_FROM_PAUSE_MENU_LEVEL_SELECT_NEXT_PACK = 2;
+
+        /// <summary>Exit code: reload the custom level through the loading screen.</summary>
+        public const int EXIT_CODE_CUSTOM_RELOAD = 3;
+
+        /// <summary>Watches the custom level file for external edits, or <see langword="null"/> in normal play.</summary>
+        private CustomLevelWatcher levelWatcher;
 
         /// <summary>Whether gameplay is currently paused.</summary>
         private bool isGamePaused;

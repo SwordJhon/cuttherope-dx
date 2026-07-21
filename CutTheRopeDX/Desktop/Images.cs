@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 
-using CutTheRopeDX.Helpers;
-
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -23,7 +21,7 @@ namespace CutTheRopeDX.Desktop
             _ = _contentManagers.TryGetValue(imgName, out ContentManager value);
             if (value == null)
             {
-                value = new ContentManager(Global.XnaGame.Services, ContentPaths.RootDirectory);
+                value = new DesktopContentManager(Global.XnaGame.Services);
                 _contentManagers.Add(imgName, value);
             }
             return value;
@@ -37,18 +35,15 @@ namespace CutTheRopeDX.Desktop
         public static Texture2D Get(string imgName)
         {
             ContentManager contentManager = GetContentManager(imgName);
-            Texture2D result = null;
-            Texture2D texture2D;
             try
             {
-                result = contentManager.Load<Texture2D>(imgName);
-                texture2D = result;
+                return contentManager.Load<Texture2D>(imgName);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                texture2D = result;
+                Console.WriteLine($"[Images] Failed to load '{imgName}': {ex}");
+                return null;
             }
-            return texture2D;
         }
 
         /// <summary>
