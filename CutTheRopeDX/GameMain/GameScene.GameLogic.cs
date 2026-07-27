@@ -105,6 +105,7 @@ namespace CutTheRopeDX.GameMain
                 ctx.candy.PlayTimeline(2);
                 if (ctx.HasActiveRocket)
                 {
+                    ctx.activeRocket.visible = true;
                     Vector holeOut = ctx.targetBambooTube.HoleOut;
                     Vector tubeCenter = Vect(ctx.targetBambooTube.x, ctx.targetBambooTube.y);
                     ctx.activeRocket.rotation = RADIANS_TO_DEGREES(VectAngleNormalized(VectSub(tubeCenter, holeOut)));
@@ -145,6 +146,7 @@ namespace CutTheRopeDX.GameMain
 
                 if (ctx.HasActiveRocket)
                 {
+                    ctx.activeRocket.visible = true;
                     ctx.activeRocket.point.pos = ctx.point.pos;
                     ctx.activeRocket.point.prevPos = ctx.point.prevPos;
                     ctx.activeRocket.point.v = ctx.point.v;
@@ -1022,6 +1024,19 @@ namespace CutTheRopeDX.GameMain
                 {
                     snail.Detach();
                 }
+            }
+        }
+
+        /// <summary>
+        /// Forces the active mouse to drop its candy only when that candy is <paramref name="point"/>.
+        /// Capture devices (hand grab, sock, bamboo, lantern) strip the mouse per-candy; a mouse
+        /// carrying a different candy keeps it.
+        /// </summary>
+        public void DropMouseCandyForPoint(ConstraintedPoint point)
+        {
+            if (MouseOwnership.CarriesCandy(miceManager?.ActiveMouseCarriedStar(), point))
+            {
+                miceManager.ForceDropCandy();
             }
         }
 
