@@ -393,6 +393,7 @@ namespace CutTheRopeDX.GameMain
             public const string FingerTraceGlow = "traces_ctr2_glow";
             public const string ObjHookChain = "obj_hook_chain";
             public const string ObjHookAutoChain = "obj_hook_auto_chain";
+            public const string ObjSpikeOrigins = "obj_spike_origins";
 
             // Candies
             public const string ObjCandyFx = "candies/obj_candy_fx";
