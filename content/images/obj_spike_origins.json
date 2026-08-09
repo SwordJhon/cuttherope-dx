@@ -1,0 +1,90 @@
+{
+  "frames": [
+    {
+      "filename": "spike_left.png",
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 37,
+        "h": 87
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 37,
+        "h": 87
+      },
+      "sourceSize": {
+        "w": 37,
+        "h": 87
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "spike_mid.png",
+      "frame": {
+        "x": 37,
+        "y": 0,
+        "w": 153,
+        "h": 87
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 153,
+        "h": 87
+      },
+      "sourceSize": {
+        "w": 153,
+        "h": 87
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "spike_right.png",
+      "frame": {
+        "x": 190,
+        "y": 0,
+        "w": 37,
+        "h": 87
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 37,
+        "h": 87
+      },
+      "sourceSize": {
+        "w": 37,
+        "h": 87
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  ],
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "obj_spike_origins.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 227,
+      "h": 87
+    },
+    "scale": 1
+  }
+}
