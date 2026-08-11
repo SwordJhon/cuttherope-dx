@@ -1,0 +1,25 @@
+<map>
+    <layer name="Settings">
+        <map gridSize="24" width="320" height="480" />
+        <gameDesign ropePhysicsSpeed="1" useMobilePhysics="true" />
+        <originsMeta level="7" area="2" max="3" />
+    </layer>
+    <layer name="Objects">
+        <candy x="304" y="456" />
+        <grab x="160" y="144" length="0" radius="100" radiusLength="100" />
+        <grab x="16" y="456" length="384" radius="-1" spider="true" spiderSpeed="0.5" />
+        <grab x="160" y="456" length="120" radius="-1" />
+        <star x="280" y="144" timeout="-1" />
+        <star x="208" y="302" timeout="15" />
+        <star x="40" y="144" timeout="15" />
+        <target x="40" y="384" />
+        <spikeOrigins x="160" y="336" angle="90" spikesAmount="5" />
+        <spikeOrigins x="160" y="144" angle="0" spikesAmount="7" />
+        <pump x="280" y="240" angle="180" />
+        <pump x="40" y="48" angle="0" />
+        <bubble x="304" y="456" />
+    </layer>
+    <!--
+        <decal x="262" y="48" texture="obj_stickers_kitchen" quad="4" angle="0" scaleX="0.703125" scaleY="0.703125" flipX="true" flipY="false" />
+    -->
+</map>
