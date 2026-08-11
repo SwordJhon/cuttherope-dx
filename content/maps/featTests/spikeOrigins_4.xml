@@ -1,0 +1,21 @@
+<map>
+    <layer name="settings">
+        <map width="640" height="480" levelName="Spike combinations" />
+        <gameDesign ropePhysicsSpeed="1" useMobilePhysics="true" />
+    </layer>
+    <layer name="objects">
+        <grab x="320" y="20" length="40" radius="-1" moveLength="640" moveOffset="320" />
+        <candy x="321" y="80" />
+        <target x="320" y="440" />
+    </layer>
+    <layer name="tests">
+        <spike x="040" y="240" angle="90" size="3" />
+        <spike x="120" y="240" angle="90" size="3" toggled="1" />
+        <spike x="200" y="240" angle="90" size="0" spikesAmount="7" />
+        <spike x="280" y="240" angle="90" size="0" spikesAmount="7" toggled="1" />
+        <spike x="360" y="240" angle="90" electro="true" initialDelay="0" offTime="2" onTime="2" />
+        <spike x="440" y="240" angle="90" electro="true" initialDelay="0" offTime="2" onTime="2" toggled="1" />
+        <spike x="520" y="240" angle="90" electro="true" initialDelay="0" offTime="2" onTime="2" spikesAmount="7" />
+        <spike x="600" y="240" angle="90" electro="true" initialDelay="0" offTime="2" onTime="2" spikesAmount="7" toggled="1" />
+    </layer>
+</map>

@@ -46,6 +46,19 @@ namespace CutTheRopeDX.GameMain
             {
                 SetDrawQuad(spikeQuad);
             }
+            if (origins)
+            {
+                originsSpikeWidth = originsCapWidth + (originsMidWidth * spa / 2f);
+                spikeTiledVisual = HorizontallyTiledImage.HorizontallyTiledImage_createWithResID(Resources.Img.ObjSpikeOrigins);
+                spikeTiledVisual.SetTileHorizontallyLeftCenterRight(0, 1, 2);
+                spikeTiledVisual.width = (int)(originsSpikeWidth + originsCapWidth);
+                spikeTiledVisual.rotationCenterX = 0f;
+                spikeTiledVisual.rotationCenterY = 0f;
+                spikeTiledVisual.anchor = spikeTiledVisual.parentAnchor = 18;
+                _ = AddChild(spikeTiledVisual);
+                spikeTiledVisual.scaleX = originsScale;
+                spikeTiledVisual.scaleY = originsScale;
+            }
             if (t > 0)
             {
                 DoRestoreCutTransparency();
@@ -70,26 +83,6 @@ namespace CutTheRopeDX.GameMain
             x = px;
             y = py;
             widthIndex = w;
-
-            if (origins)
-            {
-                originsSpikeWidth = (originsCapWidth * 2f) + (originsMidWidth * spa / 2f);
-
-                scaleX = originsScale;
-                scaleY = originsScale;
-
-                spikeTiledVisual = HorizontallyTiledImage.HorizontallyTiledImage_createWithResID(Resources.Img.ObjSpikeOrigins);
-                spikeTiledVisual.SetTileHorizontallyLeftCenterRight(0, 1, 2);
-
-                spikeTiledVisual.width = (int)originsSpikeWidth;
-
-                spikeTiledVisual.rotationCenterX = 0f;
-                spikeTiledVisual.rotationCenterY = 0f;
-                spikeTiledVisual.anchor = spikeTiledVisual.parentAnchor = 18;
-
-                _ = AddChild(spikeTiledVisual);
-            }
-
             SetToggled(t);
             UpdateRotation();
             if (electro)
@@ -217,21 +210,6 @@ namespace CutTheRopeDX.GameMain
                 {
                     TurnElectroOn();
                 }
-            }
-        }
-
-        /// <inheritdoc />
-        public override void Draw()
-        {
-            if (origins)
-            {
-                PreDraw();
-                spikeTiledVisual?.Draw();
-                PostDraw();
-            }
-            else
-            {
-                base.Draw();
             }
         }
 
@@ -373,13 +351,13 @@ namespace CutTheRopeDX.GameMain
         /// <returns>The texture resource name and quad index, or <see langword="null"/> texture when invalid.</returns>
         private static (string texture, int quad) GetSpikeTextureAndQuad(int width, bool rotatable, bool isElectro, bool isOrigins)
         {
-            if (isOrigins)
-            {
-                return (Resources.Img.ObjSpikeOrigins, 0);
-            }
             if (isElectro)
             {
                 return (Resources.Img.ObjElectrodes, 0);
+            }
+            if (isOrigins)
+            {
+                return (Resources.Img.ObjSpikeOrigins, 0);
             }
             int index = width - 1;
             if (index is < 0 or >= 4)
