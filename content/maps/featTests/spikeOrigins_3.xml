@@ -1,0 +1,22 @@
+<map>
+    <layer name="Settings">
+        <map gridSize="24" width="320" height="480" />
+        <gameDesign ropePhysicsSpeed="1" useMobilePhysics="true" />
+        <originsMeta level="3" area="3" max="3" />
+    </layer>
+    <layer name="Objects">
+        <candy x="160" y="96" />
+        <grab x="232" y="24" length="72" radius="-1" />
+        <grab x="88" y="24" length="72" radius="-1" />
+        <grab x="232" y="192" length="0" radius="65" radiusLength="65" />
+        <grab x="232" y="312" length="0" radius="65" radiusLength="65" />
+        <grab x="88" y="312" length="0" radius="65" radiusLength="65" />
+        <grab x="88" y="192" length="0" radius="65" radiusLength="65" />
+        <star x="160" y="152" timeout="-1" />
+        <star x="160" y="256" timeout="-1" />
+        <star x="160" y="364" timeout="6" />
+        <target x="160" y="456" />
+        <spikeOrigins x="46" y="256" angle="90" spikesAmount="16" />
+        <spikeOrigins x="274" y="256" angle="90" spikesAmount="16" />
+    </layer>
+</map>
