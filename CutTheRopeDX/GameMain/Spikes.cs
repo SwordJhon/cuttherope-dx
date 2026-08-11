@@ -14,6 +14,13 @@ namespace CutTheRopeDX.GameMain
     /// </summary>
     internal sealed class Spikes : CTRGameObject, ITimelineDelegate, IButtonDelegation
     {
+
+        private const float originsScale = 68f / 87f;
+        private const float originsCapWidth = 37f;
+        private const float originsMidWidth = 153f;
+        private float originsSpikeWidth;
+        public HorizontallyTiledImage spikeTiledVisual;
+
         /// <summary>
         /// Initializes spikes at a level position with the configured width, angle, and toggle group.
         /// </summary>
@@ -22,10 +29,15 @@ namespace CutTheRopeDX.GameMain
         /// <param name="w">Spike width/type index.</param>
         /// <param name="an">Initial rotation angle in degrees.</param>
         /// <param name="t">Toggle group id, or -1 for non-rotatable spikes.</param>
+        /// <param name="spa">Spike amount.</param>
+        /// <param name="isElectro">Uses the electro variant.</param>
+        /// <param name="isOrigins">Uses the origins variant.</param>
         /// <returns>The initialized spikes, or <see langword="null"/> if the type or texture is invalid.</returns>
-        public Spikes InitWithPosXYWidthAndAngleToggled(float px, float py, int w, float an, int t)
+        public Spikes InitWithPosXYWidthAndAngleToggled(float px, float py, int w, float an, int t, int spa, bool isElectro, bool isOrigins)
         {
-            (string textureName, int spikeQuad) = GetSpikeTextureAndQuad(w, t != -1);
+            electro = isElectro;
+            origins = isOrigins;
+            (string textureName, int spikeQuad) = GetSpikeTextureAndQuad(w, t != -1, electro, origins);
             if (textureName == null || InitWithTexture(Application.GetTexture(textureName)) == null)
             {
                 return null;
@@ -58,9 +70,29 @@ namespace CutTheRopeDX.GameMain
             x = px;
             y = py;
             widthIndex = w;
+
+            if (origins)
+            {
+                originsSpikeWidth = (originsCapWidth * 2f) + (originsMidWidth * spa / 2f);
+
+                scaleX = originsScale;
+                scaleY = originsScale;
+
+                spikeTiledVisual = HorizontallyTiledImage.HorizontallyTiledImage_createWithResID(Resources.Img.ObjSpikeOrigins);
+                spikeTiledVisual.SetTileHorizontallyLeftCenterRight(0, 1, 2);
+
+                spikeTiledVisual.width = (int)originsSpikeWidth;
+
+                spikeTiledVisual.rotationCenterX = 0f;
+                spikeTiledVisual.rotationCenterY = 0f;
+                spikeTiledVisual.anchor = spikeTiledVisual.parentAnchor = 18;
+
+                _ = AddChild(spikeTiledVisual);
+            }
+
             SetToggled(t);
             UpdateRotation();
-            if (w == ElectrodesWidthIndex)
+            if (electro)
             {
                 AddAnimationWithIDDelayLoopFirstLast(0, 0.05f, Timeline.LoopType.TIMELINE_REPLAY, 0, 0);
                 AddAnimationWithIDDelayLoopFirstLast(1, 0.05f, Timeline.LoopType.TIMELINE_REPLAY, 1, 4);
@@ -79,6 +111,10 @@ namespace CutTheRopeDX.GameMain
                 ? ActivePhysicsConstants.SpikesCollisionLineWidth(toggled != -1, widthIndex)
                 : ActivePhysicsConstants.ElectroSpikesCollisionObjectWidth() - ActivePhysicsConstants.ElectroSpikesWidthReduction;
             halfWidth /= 2f;
+            if (origins)
+            {
+                halfWidth = originsSpikeWidth / 2f * originsScale;
+            }
             float bandHalfHeight = ActivePhysicsConstants.SpikesCollisionBandHalfHeight;
             t1.X = x - halfWidth;
             t2.X = x + halfWidth;
@@ -184,6 +220,32 @@ namespace CutTheRopeDX.GameMain
             }
         }
 
+        /// <inheritdoc />
+        public override void Draw()
+        {
+            if (origins)
+            {
+                PreDraw();
+                spikeTiledVisual?.Draw();
+                PostDraw();
+            }
+            else
+            {
+                base.Draw();
+            }
+        }
+
+        /// <inheritdoc />
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                spikeTiledVisual?.Dispose();
+                spikeTiledVisual = null;
+            }
+            base.Dispose(disposing);
+        }
+
         public static void TimelineReachedKeyFramewithIndex(Timeline _, KeyFrame _1, int _2)
         {
         }
@@ -244,6 +306,9 @@ namespace CutTheRopeDX.GameMain
         /// <summary>Bottom-right rotated collision point.</summary>
         public Vector b2;
 
+        /// <summary>Whether these spikes use the origins variant.</summary>
+        public bool origins;
+
         /// <summary>Whether these spikes use the electrified variant.</summary>
         public bool electro;
 
@@ -292,9 +357,6 @@ namespace CutTheRopeDX.GameMain
         /// <summary>First texture quad index for static spike variants.</summary>
         private const int StaticSpikeFirstQuad = 8;
 
-        /// <summary>Width/type index used by the electrified spike variant.</summary>
-        private const int ElectrodesWidthIndex = 5;
-
         /// <summary>Number of button frames per toggle group.</summary>
         private const int ButtonFramesPerToggle = 2;
 
@@ -306,10 +368,16 @@ namespace CutTheRopeDX.GameMain
         /// </summary>
         /// <param name="width">Spike width/type index.</param>
         /// <param name="rotatable">Whether the spike uses rotatable visuals.</param>
+        /// <param name="isElectro">Whether the spike uses the electrified variant.</param>
+        /// <param name="isOrigins">Whether the spike uses the origins variant.</param>
         /// <returns>The texture resource name and quad index, or <see langword="null"/> texture when invalid.</returns>
-        private static (string texture, int quad) GetSpikeTextureAndQuad(int width, bool rotatable)
+        private static (string texture, int quad) GetSpikeTextureAndQuad(int width, bool rotatable, bool isElectro, bool isOrigins)
         {
-            if (width == ElectrodesWidthIndex)
+            if (isOrigins)
+            {
+                return (Resources.Img.ObjSpikeOrigins, 0);
+            }
+            if (isElectro)
             {
                 return (Resources.Img.ObjElectrodes, 0);
             }
