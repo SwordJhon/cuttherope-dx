@@ -24,6 +24,7 @@ namespace CutTheRopeDX.GameMain
             float an = ParseIntOrZero(xmlNode.Attribute("angle")?.Value);
             string toggledAttribute = xmlNode.Attribute("toggled")?.Value ?? string.Empty;
             int toggledState = -1;
+            _ = bool.TryParse(xmlNode.Attribute($"reversed")?.Value, out bool reversed);
             bool isElectro = GetBoolAttribute(xmlNode, "electro", defaultValue: xmlNode.Name.LocalName == "electro");
             int spikesAmount = ParseIntOrZero(xmlNode.Attribute("spikesAmount")?.Value);
             bool isOrigins = spikesAmount > 0 || xmlNode.Name.LocalName is "spikeOrigins" or "spikeo";
@@ -31,7 +32,7 @@ namespace CutTheRopeDX.GameMain
             {
                 toggledState = toggledAttribute == "false" ? -1 : ParseIntOrZero(toggledAttribute);
             }
-            Spikes spikes = new Spikes().InitWithPosXYWidthAndAngleToggled(px, py, w, an, toggledState, spikesAmount, isElectro, isOrigins);
+            Spikes spikes = new Spikes().InitWithPosXYWidthAndAngleToggled(px, py, w, an, toggledState, reversed, spikesAmount, isElectro, isOrigins);
             spikes.ParseMover(xmlNode);
             if (toggledState != 0)
             {
