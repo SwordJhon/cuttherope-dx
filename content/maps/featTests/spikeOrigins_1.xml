@@ -1,12 +1,14 @@
 <map>
     <layer name="settings">
-        <map width="640" height="480" />
+        <map width="640" height="480" levelName="Spike from Origins" />
         <gameDesign ropePhysicsSpeed="1" useMobilePhysics="true" />
     </layer>
-    <layer name="Objects">
+    <layer name="objects">
+        <grab x="320" y="20" length="40" radius="-1" moveLength="640" moveOffset="320" />
+        <candy x="321" y="80" />
         <target x="320" y="440" />
-        <hand x="320" y="-40" segmentsCount="1" segment1Angle="90" segment1Length="100" segment1Rotatable="false" />
-        <candy x="320" y="40" />
+    </layer>
+    <layer name="tests">
         <spikeOrigins x="080" y="220" angle="000" spikesAmount="2" path="0,40" moveSpeed="50" />
         <spikeOrigins x="160" y="240" angle="045" spikesAmount="3" />
         <spikeOrigins x="240" y="240" angle="090" spikesAmount="5" />
