@@ -86,6 +86,10 @@ namespace CutTheRopeDX.GameMain
                         _ = resources.Add(Resources.Snd.Electric);
                         AddSpikeRotationSounds(resources);
                         break;
+                    case "spikeOrigins":
+                    case "spikeo":
+                        _ = resources.Add(Resources.Img.ObjSpikeOrigins);
+                        break;
                     case "bouncer1":
                     case "bouncer2":
                         _ = resources.Add(Resources.Img.ObjBouncer);
