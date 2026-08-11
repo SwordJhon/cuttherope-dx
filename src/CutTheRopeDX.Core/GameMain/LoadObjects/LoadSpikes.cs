@@ -8,7 +8,7 @@ namespace CutTheRopeDX.GameMain
     {
         /// <summary>
         /// Loads a spike object from XML node data
-        /// Supports regular spikes (spike1-4) and electro spikes
+        /// Supports regular spikes (spike1-4), electro spikes and origins spikes
         /// </summary>
         /// <param name="xmlNode">The XML node describing the spikes.</param>
         /// <param name="scale">The level scale factor applied to object coordinates.</param>
@@ -24,19 +24,21 @@ namespace CutTheRopeDX.GameMain
             float an = ParseIntOrZero(xmlNode.Attribute("angle")?.Value);
             string toggledAttribute = xmlNode.Attribute("toggled")?.Value ?? string.Empty;
             int toggledState = -1;
+            bool isElectro = GetBoolAttribute(xmlNode, "electro", defaultValue: xmlNode.Name.LocalName == "electro");
+            int spikesAmount = ParseIntOrZero(xmlNode.Attribute("spikesAmount")?.Value);
+            bool isOrigins = (spikesAmount > 0 || xmlNode.Name.LocalName is "spikeOrigins" or "spikeo") && !isElectro;
             if (toggledAttribute.Length > 0)
             {
                 toggledState = toggledAttribute == "false" ? -1 : ParseIntOrZero(toggledAttribute);
             }
-            Spikes spikes = new Spikes().InitWithPosXYWidthAndAngleToggled(px, py, w, an, toggledState);
+            Spikes spikes = new Spikes().InitWithPosXYWidthAndAngleToggled(px, py, w, an, toggledState, spikesAmount, isElectro, isOrigins);
             spikes.ParseMover(xmlNode);
             if (toggledState != 0)
             {
                 spikes.delegateRotateAllSpikesWithID = new Spikes.rotateAllSpikesWithID(RotateAllSpikesWithID);
             }
-            if (xmlNode.Name.LocalName == "electro")
+            if (isElectro)
             {
-                spikes.electro = true;
                 spikes.initialDelay = ParseFloatOrZero(xmlNode.Attribute("initialDelay")?.Value);
                 spikes.onTime = ParseFloatOrZero(xmlNode.Attribute("onTime")?.Value);
                 spikes.offTime = ParseFloatOrZero(xmlNode.Attribute("offTime")?.Value);
@@ -44,10 +46,6 @@ namespace CutTheRopeDX.GameMain
                 spikes.TurnElectroOff();
                 spikes.electroTimer += spikes.initialDelay;
                 spikes.UpdateRotation();
-            }
-            else
-            {
-                spikes.electro = false;
             }
             this.spikes.Add(spikes);
         }
