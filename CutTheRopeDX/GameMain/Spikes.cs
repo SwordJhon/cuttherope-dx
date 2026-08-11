@@ -19,7 +19,7 @@ namespace CutTheRopeDX.GameMain
         private const float originsCapWidth = 37f;
         private const float originsMidWidth = 153f;
         private float originsSpikeWidth;
-        public HorizontallyTiledImage spikeTiledVisual;
+        private HorizontallyTiledImage spikeTiledVisual;
 
         /// <summary>
         /// Initializes spikes at a level position with the configured width, angle, and toggle group.
@@ -29,12 +29,14 @@ namespace CutTheRopeDX.GameMain
         /// <param name="w">Spike width/type index.</param>
         /// <param name="an">Initial rotation angle in degrees.</param>
         /// <param name="t">Toggle group id, or -1 for non-rotatable spikes.</param>
+        /// <param name="r">Rotates counterclockwise.</param>
         /// <param name="spa">Spike amount.</param>
         /// <param name="isElectro">Uses the electro variant.</param>
         /// <param name="isOrigins">Uses the origins variant.</param>
         /// <returns>The initialized spikes, or <see langword="null"/> if the type or texture is invalid.</returns>
-        public Spikes InitWithPosXYWidthAndAngleToggled(float px, float py, int w, float an, int t, int spa, bool isElectro, bool isOrigins)
+        public Spikes InitWithPosXYWidthAndAngleToggled(float px, float py, int w, float an, int t, bool r, int spa, bool isElectro, bool isOrigins)
         {
+            reversed = r;
             electro = isElectro;
             origins = isOrigins;
             (string textureName, int spikeQuad) = GetSpikeTextureAndQuad(w, t != -1, electro, origins);
@@ -52,8 +54,6 @@ namespace CutTheRopeDX.GameMain
                 spikeTiledVisual = HorizontallyTiledImage.HorizontallyTiledImage_createWithResID(Resources.Img.ObjSpikeOrigins);
                 spikeTiledVisual.SetTileHorizontallyLeftCenterRight(0, 1, 2);
                 spikeTiledVisual.width = (int)(originsSpikeWidth + originsCapWidth);
-                spikeTiledVisual.rotationCenterX = 0f;
-                spikeTiledVisual.rotationCenterY = 0f;
                 spikeTiledVisual.anchor = spikeTiledVisual.parentAnchor = 18;
                 _ = AddChild(spikeTiledVisual);
                 spikeTiledVisual.scaleX = originsScale;
@@ -72,6 +72,7 @@ namespace CutTheRopeDX.GameMain
                 rotateButton.delegateButtonDelegate = this;
                 rotateButton.anchor = rotateButton.parentAnchor = 18;
                 _ = AddChild(rotateButton);
+                rotateButton.scaleX = reversed ? -1f : 1f;
                 Vector quadOffset = GetQuadOffset(Resources.Img.ObjSpikes, buttonQuad);
                 Vector quadSize = GetQuadSize(Resources.Img.ObjSpikes, buttonQuad);
                 Vector vector = VectSub(Vect(image.texture.preCutSize.X, image.texture.preCutSize.Y), VectAdd(quadSize, quadOffset));
@@ -152,7 +153,7 @@ namespace CutTheRopeDX.GameMain
         {
             spikesNormal = !spikesNormal;
             RemoveTimeline(2);
-            float rotationOffset = spikesNormal ? DEG_90 : 0;
+            float rotationOffset = spikesNormal ? (reversed ? -DEG_90 : DEG_90) : 0;
             float targetRotation = origRotation + rotationOffset;
             Timeline timeline = new Timeline().InitWithMaxKeyFramesOnTrack(2);
             timeline.AddKeyFrame(KeyFrame.MakeRotation((int)rotation, KeyFrame.TransitionType.FRAME_TRANSITION_LINEAR, 0f));
@@ -304,6 +305,9 @@ namespace CutTheRopeDX.GameMain
 
         /// <summary>Timer for the current electrified spike on/off phase.</summary>
         public float electroTimer;
+
+        /// <summary>Whether these rotatable spikes go counterclockwise.</summary>
+        public bool reversed;
 
         /// <summary>Whether rotated collision points need to be refreshed during rotation animation.</summary>
         private bool updateRotationFlag;
