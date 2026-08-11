@@ -26,7 +26,7 @@ namespace CutTheRopeDX.GameMain
             int toggledState = -1;
             bool isElectro = GetBoolAttribute(xmlNode, "electro", defaultValue: xmlNode.Name.LocalName == "electro");
             int spikesAmount = ParseIntOrZero(xmlNode.Attribute("spikesAmount")?.Value);
-            bool isOrigins = (spikesAmount > 0 || xmlNode.Name.LocalName is "spikeOrigins" or "spikeo") && !isElectro;
+            bool isOrigins = spikesAmount > 0 || xmlNode.Name.LocalName is "spikeOrigins" or "spikeo";
             if (toggledAttribute.Length > 0)
             {
                 toggledState = toggledAttribute == "false" ? -1 : ParseIntOrZero(toggledAttribute);
