@@ -1,0 +1,17 @@
+<map>
+    <layer name="settings">
+        <map width="640" height="480" levelName="Mirrored saws" />
+        <gameDesign ropePhysicsSpeed="1" useMobilePhysics="true" />
+    </layer>
+    <layer name="objects">
+        <grab x="320" y="20" length="40" radius="-1" moveLength="640" moveOffset="320" />
+        <candy x="321" y="80" />
+        <target x="320" y="440" />
+    </layer>
+    <layer name="tests">
+        <spike x="245" y="165" angle="0" size="3" toggled="1" reversed="false" />
+        <spike x="395" y="165" angle="0" size="3" toggled="1" reversed="true" />
+        <spike x="245" y="315" angle="0" size="3" toggled="2" reversed="false" />
+        <spike x="395" y="315" angle="0" size="3" toggled="2" reversed="true" />
+    </layer>
+</map>
