@@ -90,6 +90,11 @@ namespace CutTheRopeDX.GameMain
                     case "spikeo":
                         _ = resources.Add(Resources.Img.ObjSpikeOrigins);
                         break;
+                    case "spike":
+                        _ = resources.Add(Resources.Img.ObjSpikes);
+                        _ = resources.Add(Resources.Img.ObjElectrodes);
+                        _ = resources.Add(Resources.Img.ObjSpikeOrigins);
+                        break;
                     case "bouncer1":
                     case "bouncer2":
                         _ = resources.Add(Resources.Img.ObjBouncer);

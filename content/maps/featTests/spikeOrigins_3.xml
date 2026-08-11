@@ -1,6 +1,6 @@
 <map>
     <layer name="Settings">
-        <map gridSize="24" width="320" height="480" />
+        <map gridSize="24" width="320" height="480" levelName="Day 3: • • o" />
         <gameDesign ropePhysicsSpeed="1" useMobilePhysics="true" />
         <originsMeta level="3" area="3" max="3" />
     </layer>
