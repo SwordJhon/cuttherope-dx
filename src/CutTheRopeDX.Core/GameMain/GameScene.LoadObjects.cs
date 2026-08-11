@@ -90,6 +90,8 @@ namespace CutTheRopeDX.GameMain
                         case "spike3":
                         case "spike4":
                         case "electro":
+                        case "spikeOrigins":
+                        case "spikeo":
                             LoadSpike(item3, scale, offsetX + mapOffsetX, offsetY + mapOffsetY, 0, 0);
                             break;
                         case "rotatedCircle":
