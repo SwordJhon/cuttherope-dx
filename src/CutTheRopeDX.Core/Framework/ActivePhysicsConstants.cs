@@ -19,13 +19,6 @@ namespace CutTheRopeDX.Framework
         public static bool UseTimeTravelRocketModel { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the loaded map uses Cut the Rope: Time Travel's
-        /// rocket, rather than the Experiments rocket the rest of the port descends from. Set once
-        /// per level load, alongside <see cref="UseMobilePhysicsModel"/>.
-        /// </summary>
-        public static bool UseTimeTravelRocketModel { get; set; }
-
-        /// <summary>
         /// Scale factor between Windows Phone coordinate units and desktop world units.
         /// </summary>
         public const float Wp7ToWorldScale = 3f;
@@ -275,7 +268,11 @@ namespace CutTheRopeDX.Framework
 
         /// <summary>
         /// Velocity damping applied by the Cut the Rope: Experiments rocket implementation.
+        /// Velocity damping applied by the Cut the Rope: Experiments rocket implementation.
         /// </summary>
+        public static float ExperimentsRocketVelocityDamping => SelectRaw(
+            PhysicsConstants.ExperimentsRocketVelocityDamping,
+            MobilePhysicsConstants.ExperimentsRocketVelocityDamping);
         public static float ExperimentsRocketVelocityDamping => SelectRaw(
             PhysicsConstants.ExperimentsRocketVelocityDamping,
             MobilePhysicsConstants.ExperimentsRocketVelocityDamping);
@@ -283,12 +280,7 @@ namespace CutTheRopeDX.Framework
         /// <summary>
         /// Impulse scale applied to rocket thrust. Time Travel and mobile Experiments author their
         /// impulse values in level coordinates; desktop Experiments values are already world-tuned.
-        /// Impulse scale applied to rocket thrust. Time Travel and mobile Experiments author their
-        /// impulse values in level coordinates; desktop Experiments values are already world-tuned.
         /// </summary>
-        public static float RocketImpulseScale => UseTimeTravelRocketModel || UseMobilePhysicsModel
-            ? Wp7ToWorldScale
-            : 1f;
         public static float RocketImpulseScale => UseTimeTravelRocketModel || UseMobilePhysicsModel
             ? Wp7ToWorldScale
             : 1f;
@@ -423,12 +415,8 @@ namespace CutTheRopeDX.Framework
 
         /// <summary>
         /// Width of the rocket's catch-slat bounding box (0.65 x the rocket body quad width),
-        /// Width of the rocket's catch-slat bounding box (0.65 x the rocket body quad width),
         /// pinned from the original XML quads rather than the live atlas.
         /// </summary>
-        public static float RocketCatchBoxWidth => UseTimeTravelRocketModel
-            ? PhysicsConstants.TimeTravelRocketCatchBoxWidth
-            : SelectScaled(PhysicsConstants.RocketCatchBoxWidth, MobilePhysicsConstants.RocketCatchBoxWidth);
         public static float RocketCatchBoxWidth => UseTimeTravelRocketModel
             ? PhysicsConstants.TimeTravelRocketCatchBoxWidth
             : SelectScaled(PhysicsConstants.RocketCatchBoxWidth, MobilePhysicsConstants.RocketCatchBoxWidth);
@@ -439,9 +427,6 @@ namespace CutTheRopeDX.Framework
         public static float RocketCatchBoxHeight => UseTimeTravelRocketModel
             ? PhysicsConstants.TimeTravelRocketCatchBoxHeight
             : SelectScaled(PhysicsConstants.RocketCatchBoxHeight, MobilePhysicsConstants.RocketCatchBoxHeight);
-        public static float RocketCatchBoxHeight => UseTimeTravelRocketModel
-            ? PhysicsConstants.TimeTravelRocketCatchBoxHeight
-            : SelectScaled(PhysicsConstants.RocketCatchBoxHeight, MobilePhysicsConstants.RocketCatchBoxHeight);
 
         /// <summary>
         /// X offset of the catch-slat box center from the rocket object's center.
@@ -449,13 +434,20 @@ namespace CutTheRopeDX.Framework
         public static float RocketCatchBoxCenterOffsetX => UseTimeTravelRocketModel
             ? PhysicsConstants.TimeTravelRocketCatchBoxCenterOffsetX
             : SelectScaled(PhysicsConstants.RocketCatchBoxCenterOffsetX, MobilePhysicsConstants.RocketCatchBoxCenterOffsetX);
-        public static float RocketCatchBoxCenterOffsetX => UseTimeTravelRocketModel
-            ? PhysicsConstants.TimeTravelRocketCatchBoxCenterOffsetX
-            : SelectScaled(PhysicsConstants.RocketCatchBoxCenterOffsetX, MobilePhysicsConstants.RocketCatchBoxCenterOffsetX);
 
         /// <summary>
         /// Y offset of the catch-slat box center from the rocket object's center.
         /// </summary>
+        public static float RocketCatchBoxCenterOffsetY => UseTimeTravelRocketModel
+            ? PhysicsConstants.TimeTravelRocketCatchBoxCenterOffsetY
+            : SelectScaled(PhysicsConstants.RocketCatchBoxCenterOffsetY, MobilePhysicsConstants.RocketCatchBoxCenterOffsetY);
+
+        /// <summary>
+        /// Draw scale applied to the rocket body, matching the sheet each game's quad came from.
+        /// </summary>
+        public static float RocketBodyScale => UseTimeTravelRocketModel
+            ? PhysicsConstants.TimeTravelRocketBodyScale
+            : PhysicsConstants.RocketBodyScale;
         public static float RocketCatchBoxCenterOffsetY => UseTimeTravelRocketModel
             ? PhysicsConstants.TimeTravelRocketCatchBoxCenterOffsetY
             : SelectScaled(PhysicsConstants.RocketCatchBoxCenterOffsetY, MobilePhysicsConstants.RocketCatchBoxCenterOffsetY);

@@ -103,7 +103,6 @@ namespace CutTheRopeDX.GameMain
             base.Update(delta);
             point.Update(delta);
             SyncPointToMover();
-            SyncPointToMover();
             container.Update(delta);
             container.rotation = rotation;
             container.x = x;
@@ -129,6 +128,47 @@ namespace CutTheRopeDX.GameMain
                 cloudParticles.angle = rotation;
                 cloudParticles.initialAngle = exhaustAngle;
                 cloudParticles.speed = movementSpeed * 40f;
+            }
+        }
+
+        /// <inheritdoc />
+        /// <remarks>
+        /// A frozen rocket still travels its authored path, but neither its physics point nor its
+        /// timelines and exhaust presentation advance. Exhausted rockets keep their full update so
+        /// the burnt-out animation plays out.
+        /// </remarks>
+        public override void Update(float delta, bool timeFrozen)
+        {
+            if (!timeFrozen)
+            {
+                Update(delta);
+                return;
+            }
+
+            if (state == STATE_ROCKET_EXAUST)
+            {
+                base.Update(delta);
+            }
+            else
+            {
+                EnsureTopLeftCalculated();
+                AdvanceMover(delta);
+            }
+            SyncPointToMover();
+        }
+
+        /// <summary>Keeps the physics point and the object position on whichever one leads.</summary>
+        private void SyncPointToMover()
+        {
+            if (mover != null && !mover.IsPaused)
+            {
+                point.pos.X = x;
+                point.pos.Y = y;
+            }
+            else
+            {
+                x = point.pos.X;
+                y = point.pos.Y;
             }
         }
 
