@@ -19,6 +19,13 @@ namespace CutTheRopeDX.Framework
         public static bool UseTimeTravelRocketModel { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the loaded map uses Cut the Rope: Time Travel's
+        /// rocket, rather than the Experiments rocket the rest of the port descends from. Set once
+        /// per level load, alongside <see cref="UseMobilePhysicsModel"/>.
+        /// </summary>
+        public static bool UseTimeTravelRocketModel { get; set; }
+
+        /// <summary>
         /// Scale factor between Windows Phone coordinate units and desktop world units.
         /// </summary>
         public const float Wp7ToWorldScale = 3f;
@@ -267,17 +274,21 @@ namespace CutTheRopeDX.Framework
             : SelectRaw(PhysicsConstants.RocketPointWeight, MobilePhysicsConstants.RocketPointWeight);
 
         /// <summary>
-        /// Velocity damping applied while a rocket is active. Time Travel populates no force slot
-        /// on any point, so it damps nothing - see <see cref="RocketDampsCandyVelocity"/>.
+        /// Velocity damping applied by the Cut the Rope: Experiments rocket implementation.
         /// </summary>
-        public static float RocketActiveVelocityDamping => SelectRaw(
-            PhysicsConstants.RocketActiveVelocityDamping,
-            MobilePhysicsConstants.RocketActiveVelocityDamping);
+        public static float ExperimentsRocketVelocityDamping => SelectRaw(
+            PhysicsConstants.ExperimentsRocketVelocityDamping,
+            MobilePhysicsConstants.ExperimentsRocketVelocityDamping);
 
         /// <summary>
         /// Impulse scale applied to rocket thrust. Time Travel and mobile Experiments author their
         /// impulse values in level coordinates; desktop Experiments values are already world-tuned.
+        /// Impulse scale applied to rocket thrust. Time Travel and mobile Experiments author their
+        /// impulse values in level coordinates; desktop Experiments values are already world-tuned.
         /// </summary>
+        public static float RocketImpulseScale => UseTimeTravelRocketModel || UseMobilePhysicsModel
+            ? Wp7ToWorldScale
+            : 1f;
         public static float RocketImpulseScale => UseTimeTravelRocketModel || UseMobilePhysicsModel
             ? Wp7ToWorldScale
             : 1f;
@@ -412,8 +423,12 @@ namespace CutTheRopeDX.Framework
 
         /// <summary>
         /// Width of the rocket's catch-slat bounding box (0.65 x the rocket body quad width),
+        /// Width of the rocket's catch-slat bounding box (0.65 x the rocket body quad width),
         /// pinned from the original XML quads rather than the live atlas.
         /// </summary>
+        public static float RocketCatchBoxWidth => UseTimeTravelRocketModel
+            ? PhysicsConstants.TimeTravelRocketCatchBoxWidth
+            : SelectScaled(PhysicsConstants.RocketCatchBoxWidth, MobilePhysicsConstants.RocketCatchBoxWidth);
         public static float RocketCatchBoxWidth => UseTimeTravelRocketModel
             ? PhysicsConstants.TimeTravelRocketCatchBoxWidth
             : SelectScaled(PhysicsConstants.RocketCatchBoxWidth, MobilePhysicsConstants.RocketCatchBoxWidth);
@@ -424,10 +439,16 @@ namespace CutTheRopeDX.Framework
         public static float RocketCatchBoxHeight => UseTimeTravelRocketModel
             ? PhysicsConstants.TimeTravelRocketCatchBoxHeight
             : SelectScaled(PhysicsConstants.RocketCatchBoxHeight, MobilePhysicsConstants.RocketCatchBoxHeight);
+        public static float RocketCatchBoxHeight => UseTimeTravelRocketModel
+            ? PhysicsConstants.TimeTravelRocketCatchBoxHeight
+            : SelectScaled(PhysicsConstants.RocketCatchBoxHeight, MobilePhysicsConstants.RocketCatchBoxHeight);
 
         /// <summary>
         /// X offset of the catch-slat box center from the rocket object's center.
         /// </summary>
+        public static float RocketCatchBoxCenterOffsetX => UseTimeTravelRocketModel
+            ? PhysicsConstants.TimeTravelRocketCatchBoxCenterOffsetX
+            : SelectScaled(PhysicsConstants.RocketCatchBoxCenterOffsetX, MobilePhysicsConstants.RocketCatchBoxCenterOffsetX);
         public static float RocketCatchBoxCenterOffsetX => UseTimeTravelRocketModel
             ? PhysicsConstants.TimeTravelRocketCatchBoxCenterOffsetX
             : SelectScaled(PhysicsConstants.RocketCatchBoxCenterOffsetX, MobilePhysicsConstants.RocketCatchBoxCenterOffsetX);
@@ -445,59 +466,6 @@ namespace CutTheRopeDX.Framework
         public static float RocketBodyScale => UseTimeTravelRocketModel
             ? PhysicsConstants.TimeTravelRocketBodyScale
             : PhysicsConstants.RocketBodyScale;
-
-        /// <summary>
-        /// Floor applied to the per-frame rocket travel distance that drives exhaust particle speed.
-        /// </summary>
-        public static float RocketExhaustSpeedFloor => UseTimeTravelRocketModel
-            ? PhysicsConstants.TimeTravelRocketExhaustSpeedFloor
-            : PhysicsConstants.RocketExhaustSpeedFloor;
-
-        /// <summary>
-        /// Gets a value indicating whether the rocket and candy points are relaxed while the rocket
-        /// is already flying. Time Travel relaxes them only during the reel-in
-        /// (<c>STATE_ROCKET_DIST</c>) phase.
-        /// </summary>
-        public static bool RocketRelaxDuringFlight => !UseTimeTravelRocketModel;
-
-        /// <summary>
-        /// Gets a value indicating whether a held candy suppresses rope-perpendicular steering.
-        /// Time Travel steers off any uncut, relaxed rope regardless of who holds the candy.
-        /// </summary>
-        public static bool RocketRopeAlignRequiresFreeCandy => !UseTimeTravelRocketModel;
-
-        /// <summary>
-        /// Gets a value indicating whether catching a candy in a bubble pops it. Time Travel's
-        /// bind bursts the bubble before it takes the candy.
-        /// </summary>
-        public static bool RocketBindPopsCandyBubble => UseTimeTravelRocketModel;
-
-        /// <summary>
-        /// Gets a value indicating whether a rocket binds straight into flight when something is
-        /// already holding the candy. Time Travel always reels in from wherever the rocket caught
-        /// it, no matter who is holding it.
-        /// </summary>
-        public static bool RocketBindsDirectlyToFlightWhenHeld => !UseTimeTravelRocketModel;
-
-        /// <summary>
-        /// Gets a value indicating whether binding a rocket cancels the candy's velocity outright.
-        /// Time Travel snaps <c>prevPos</c> onto <c>pos</c>; Experiments bleeds off a fraction.
-        /// </summary>
-        public static bool RocketBindClearsCandyVelocity => UseTimeTravelRocketModel;
-
-        /// <summary>
-        /// Gets a value indicating whether a rocket-bound candy has its velocity damped every frame.
-        /// Time Travel populates no force slot on any point, so its thrust builds unopposed.
-        /// </summary>
-        public static bool RocketDampsCandyVelocity => !UseTimeTravelRocketModel;
-
-        /// <summary>
-        /// Gets a value indicating whether each candy point is relaxed immediately after it is
-        /// integrated, and the candy connector's own endpoints once every candy has moved. Time
-        /// Travel does both in its simulation step; the Experiments path leaves that to the
-        /// bungee's own relaxation pass.
-        /// </summary>
-        public static bool RelaxCandyPointsAfterIntegration => UseTimeTravelRocketModel;
 
         /// <summary>
         /// Number of sample points drawn for each bungee segment.

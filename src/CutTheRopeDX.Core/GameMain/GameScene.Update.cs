@@ -335,12 +335,6 @@ namespace CutTheRopeDX.GameMain
                 {
                     body.Point.Update(delta * ropePhysicsSpeed);
                 }
-                if (ActivePhysicsConstants.RelaxCandyPointsAfterIntegration)
-                {
-                    // Time Travel relaxes each candy point the moment it has moved - and does so
-                    // whether or not time is frozen, unlike the integration above.
-                    ConstraintedPoint.SatisfyConstraints(body.Point);
-                }
                 body.Visual.x = body.Point.pos.X;
                 body.Visual.y = body.Point.pos.Y;
                 if (body.Visual is Axe axe)
@@ -1436,7 +1430,19 @@ namespace CutTheRopeDX.GameMain
             {
                 CandyContext ctx = candies[ci];
                 ConstraintedPoint rocketPoint = ctx.WholeBody.Point;
-                if (ctx.Lifecycle.Attachments.Rocket != null)
+                if (ActivePhysicsConstants.UseTimeTravelRocketModel)
+                {
+                    if (ctx.Lifecycle.Attachments.Rocket != null)
+                    {
+                        // Time Travel owns force slot zero while a rocket is attached.
+                        rocketPoint.SetForcewithID(Vect(-rocketPoint.v.X, -rocketPoint.v.Y), 0);
+                    }
+                    else
+                    {
+                        rocketPoint.DeleteForce(0);
+                    }
+                }
+                else if (ctx.Lifecycle.Attachments.Rocket != null)
                 {
                     // Experiments applies velocity damping as an impulse each frame instead.
                     bool inWater = waterLayer != null
@@ -1450,7 +1456,7 @@ namespace CutTheRopeDX.GameMain
                             candyRadius);
                     float damping = inWater
                         ? waterRocketDamping
-                        : ActivePhysicsConstants.RocketActiveVelocityDamping;
+                        : ActivePhysicsConstants.ExperimentsRocketVelocityDamping;
                     rocketPoint.ApplyImpulseDelta(
                         Vect(-rocketPoint.v.X / damping, -rocketPoint.v.Y / damping),
                         delta);

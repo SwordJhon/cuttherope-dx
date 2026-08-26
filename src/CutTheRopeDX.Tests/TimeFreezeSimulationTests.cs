@@ -10,8 +10,6 @@ using CutTheRopeDX.Tests.Interactions;
 
 using Xunit;
 
-using static CutTheRopeDX.Framework.Helpers.CTRMathHelper;
-
 namespace CutTheRopeDX.Tests
 {
     public class TimeFreezeSimulationTests
@@ -277,11 +275,8 @@ namespace CutTheRopeDX.Tests
         }
 
         [Fact]
-        public void RocketControlPointKeepsTheDesktopWeightWithoutTheTimeTravelFlag()
+        public void RocketControlPointUsesTheIosWeightInTheDefaultPhysicsModel()
         {
-            // The originals use 0.5, but desktop deliberately runs the point heavier so constraint
-            // forces from connected rope points cannot drift the rocket off its mount. A map only
-            // gets the original weight by asking for it through useTimeTravelRocketPhysics.
             GameScene scene = Scenario.New()
                 .Candy(60, 100)
                 .OmNom(160, 440)
@@ -291,7 +286,7 @@ namespace CutTheRopeDX.Tests
 
             Rocket rocket = Assert.Single(scene.Rockets());
 
-            Assert.Equal(2.5f, rocket.point.weight);
+            Assert.Equal(0.5f, rocket.point.weight);
         }
 
         [Fact]
@@ -304,7 +299,7 @@ namespace CutTheRopeDX.Tests
                 .Build();
 
             Assert.False(ActivePhysicsConstants.UseMobilePhysicsModel);
-            Assert.Equal(200f, ActivePhysicsConstants.RocketReelSpeed);
+            Assert.Equal(600f, ActivePhysicsConstants.RocketReelSpeed);
             Assert.False(ActivePhysicsConstants.UseTimeTravelRocketModel);
             Assert.Equal(1f, ActivePhysicsConstants.RocketImpulseScale);
         }
@@ -342,11 +337,8 @@ namespace CutTheRopeDX.Tests
         }
 
         [Fact]
-        public void ActiveRocketLeavesItsCandysForceSlotsEmpty()
+        public void ActiveRocketStoresTheIosVelocityOpposingForceOnItsCandy()
         {
-            // Time Travel never writes a force slot on any point - setForcewithID has no call site
-            // in the binary - so a rocket's thrust builds unopposed rather than settling at the
-            // terminal speed a velocity-opposing force would impose.
             GameScene scene = Scenario.New()
                 .Design("useTimeTravelRocketPhysics", "true")
                 .Candy(160, 200)
@@ -360,33 +352,25 @@ namespace CutTheRopeDX.Tests
 
             HeadlessGame.StepFrames(scene, 1);
 
-            Assert.Equal(default, candyPoint.GetForce(0));
+            Assert.Equal(new Vector(-candyPoint.v.X, -candyPoint.v.Y), candyPoint.GetForce(0));
         }
 
         [Fact]
-        public void TimeTravelThrustKeepsAccelerating()
+        public void CandyWithoutARocketClearsTheRocketForceSlot()
         {
             GameScene scene = Scenario.New()
                 .Design("useTimeTravelRocketPhysics", "true")
                 .Candy(160, 200)
                 .OmNom(160, 440)
-                .Rocket(160, 200, angle: 90f, impulse: 5f, time: -1f)
+                .Rocket(260, 200)
                 .PauseSwitcher(60, 440)
                 .Build();
-            _ = Act.BindRocket(scene, scene.Candy());
             ConstraintedPoint candyPoint = scene.Candy().WholeBody.Point;
+            candyPoint.SetForcewithID(new Vector(10f, 20f), 0);
 
-            HeadlessGame.StepFrames(scene, 15);
-            float earlyStep = VectLength(candyPoint.posDelta);
-            HeadlessGame.StepFrames(scene, 25);
-            float lateStep = VectLength(candyPoint.posDelta);
+            HeadlessGame.StepFrames(scene, 1);
 
-            // Undamped thrust adds exactly one impulse-step of displacement per frame, forever.
-            // A velocity-opposing force would bend that into a curve flattening at a terminal
-            // speed, so the late gain would fall short of the early one.
-            float gainPerFrame = (lateStep - earlyStep) / 25f;
-            float impulseStep = 5f * ActivePhysicsConstants.RocketImpulseScale * 0.016f;
-            Assert.Equal(impulseStep, gainPerFrame, 2);
+            Assert.Equal(default, candyPoint.GetForce(0));
         }
 
         [Fact]
@@ -409,16 +393,16 @@ namespace CutTheRopeDX.Tests
         }
 
         [Fact]
-        public void ExperimentsRocketKeepsItsOwnVelocityDampingDivisors()
+        public void ExperimentsRocketUsesRecoveredVelocityDampingDivisors()
         {
             bool previous = ActivePhysicsConstants.UseMobilePhysicsModel;
             try
             {
                 ActivePhysicsConstants.UseMobilePhysicsModel = false;
-                Assert.Equal(40f, ActivePhysicsConstants.RocketActiveVelocityDamping);
+                Assert.Equal(14f, ActivePhysicsConstants.ExperimentsRocketVelocityDamping);
 
                 ActivePhysicsConstants.UseMobilePhysicsModel = true;
-                Assert.Equal(20f, ActivePhysicsConstants.RocketActiveVelocityDamping);
+                Assert.Equal(14f, ActivePhysicsConstants.ExperimentsRocketVelocityDamping);
             }
             finally
             {

@@ -103,6 +103,7 @@ namespace CutTheRopeDX.GameMain
             base.Update(delta);
             point.Update(delta);
             SyncPointToMover();
+            SyncPointToMover();
             container.Update(delta);
             container.rotation = rotation;
             container.x = x;
@@ -133,12 +134,9 @@ namespace CutTheRopeDX.GameMain
 
         /// <inheritdoc />
         /// <remarks>
-        /// A frozen rocket still travels its authored path, but its physics point stops
-        /// integrating and its timelines, container and exhaust hold. Exhausted rockets keep their
-        /// full update so the burnt-out animation plays out. Because this override never delegates
-        /// to the base overload, the rocket's mover is never the held kind - route it through the
-        /// base and a frozen rocket would stop on its path. The position sync runs either way, so
-        /// a mover still drags the point along with it.
+        /// A frozen rocket still travels its authored path, but neither its physics point nor its
+        /// timelines and exhaust presentation advance. Exhausted rockets keep their full update so
+        /// the burnt-out animation plays out.
         /// </remarks>
         public override void Update(float delta, bool timeFrozen)
         {
@@ -176,11 +174,6 @@ namespace CutTheRopeDX.GameMain
         }
 
         /// <inheritdoc />
-        /// <remarks>
-        /// Unlike every other object, the rocket keeps the rotation the loader gave it instead of
-        /// re-reading the <c>angle</c> attribute: its launch heading is the authored angle turned
-        /// half a circle, which the loader has already applied.
-        /// </remarks>
         public override void ParseMover(XElement xml)
         {
             string path = xml.Attribute("path")?.Value ?? string.Empty;
