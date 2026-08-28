@@ -1,0 +1,24 @@
+<map>
+  <layer name="settings">
+    <map gridSize="10" width="640" height="480" levelName="Ghostly Bouncers" />
+    <gameDesign ropePhysicsSpeed="1" special="0" twoParts="false" nightLevel="false" />
+  </layer>
+  <layer name="Objects">
+    <target x="70" y="400" />
+    <candy x="90" y="100" candyNumber="0" />
+    <grab x="140" y="30" length="50" radius="-1" />
+    <grab x="40" y="30" length="50" radius="-1" />
+    <bouncer2 x="10" y="120" size="2" angle="60" />
+    <bouncer2 x="100" y="170" size="2" angle="0" />
+    <bouncer2 x="210" y="170" size="2" angle="0" />
+    <ghost x="320" y="170" bubble="true" bouncer="true" ghost="true" size="2" angle="0" />
+    <ghost x="320" y="260" bubble="true" bouncer="true" size="1" angle="0" />
+    <bouncer2 x="630" y="120" size="2" angle="-60" />
+    <bouncer2 x="430" y="170" size="2" angle="0" />
+    <bouncer2 x="540" y="170" size="2" angle="0" />
+    <ghost x="480" y="70" bouncer="true" ghost="true" size="1" angle="0" />
+    <star x="480" y="30" timeout="-1" />
+    <ghost x="270" y="110" bouncer="true" ghost="true" size="2" angle="90" />
+    <ghost x="380" y="110" bouncer="true" ghost="true" size="2" angle="90" />
+  </layer>
+</map>

@@ -283,7 +283,9 @@ namespace CutTheRopeDX.Tests
                 bubbles,
                 grabs,
                 bouncers,
-                null);
+                null,
+                1,
+                false);
             return (ghost, bubbles, grabs, bouncers);
         }
     }

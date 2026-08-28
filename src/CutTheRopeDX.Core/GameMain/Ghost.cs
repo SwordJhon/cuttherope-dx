@@ -24,6 +24,8 @@ namespace CutTheRopeDX.GameMain
         /// <param name="bungees">Scene grab collection that receives ghost-created grabs.</param>
         /// <param name="bouncers">Scene bouncer collection that receives ghost-created bouncers.</param>
         /// <param name="owner">Owning game scene.</param>
+        /// <param name="bouncerSize">Bouncer size used when the ghost morphs into a bouncer.</param>
+        /// <param name="returnsToIdle">Whether this ghost can cycle back to it's idle state.</param>
         /// <returns>The initialized ghost.</returns>
         public Ghost InitWithPositionPossibleFormsGrabRadiusBouncerAngleBubblesBungeesBouncers(
             Vector position,
@@ -33,7 +35,9 @@ namespace CutTheRopeDX.GameMain
             List<Bubble> bubbles,
             List<Grab> bungees,
             List<Bouncer> bouncers,
-            GameScene owner)
+            GameScene owner,
+            int bouncerSize,
+            bool returnsToIdle)
         {
             hostScene = owner;
             this.possibleForms = possibleForms | GhostForm.Idle;
@@ -42,7 +46,9 @@ namespace CutTheRopeDX.GameMain
             MorphPhase = null;
             retiringApparitions.Clear();
             this.bouncerAngle = bouncerAngle;
+            this.bouncerSize = bouncerSize;
             this.grabRadius = grabRadius;
+            this.returnsToIdle = returnsToIdle;
             gsBubbles = bubbles;
             gsBungees = bungees;
             gsBouncers = bouncers;
@@ -224,7 +230,7 @@ namespace CutTheRopeDX.GameMain
                     grab.PlayTimeline(10);
                     break;
                 case GhostForm.Bouncer:
-                    GhostBouncer bouncer = (GhostBouncer)new GhostBouncer().InitWithPosXYWidthAndAngle(x, y, 1, bouncerAngle);
+                    GhostBouncer bouncer = (GhostBouncer)new GhostBouncer().InitWithPosXYWidthAndAngle(x, y, bouncerSize, bouncerAngle);
                     gsBouncers.Add(bouncer);
                     Apparition = bouncer;
                     bouncer.AddTimelinewithID(morphIn, 10);
@@ -256,7 +262,7 @@ namespace CutTheRopeDX.GameMain
                 nextForm = (GhostForm)((int)nextForm << 1);
                 if ((int)nextForm == 16)
                 {
-                    nextForm = GhostForm.Bubble;
+                    nextForm = returnsToIdle ? GhostForm.Idle : GhostForm.Bubble;
                 }
             }
             while ((nextForm & possibleForms) == 0);
@@ -464,6 +470,9 @@ namespace CutTheRopeDX.GameMain
         /// <summary>Bouncer angle used when the ghost morphs into a bouncer.</summary>
         public float bouncerAngle;
 
+        /// <summary>Bouncer size used when the ghost morphs into a bouncer.</summary>
+        public int bouncerSize;
+
         /// <summary>Root element for the ghost body and face images.</summary>
         public BaseElement ghostImage;
 
@@ -493,6 +502,9 @@ namespace CutTheRopeDX.GameMain
 
         /// <summary>Allowed forms for this ghost, including idle.</summary>
         private GhostForm possibleForms;
+
+        /// <summary>Whether this ghost can cycle back to it's idle state.</summary>
+        public bool returnsToIdle;
 
         /// <summary>Outgoing apparitions waiting for safe post-iteration retirement.</summary>
         private readonly List<RetiringGhostApparition> retiringApparitions = [];

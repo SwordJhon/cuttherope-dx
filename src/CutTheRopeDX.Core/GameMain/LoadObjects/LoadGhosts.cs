@@ -25,9 +25,15 @@ namespace CutTheRopeDX.GameMain
                 grabRadius *= scale;
             }
             float bouncerAngle = ParseFloatOrZero(xmlNode.Attribute("angle")?.Value);
+            int bouncerSize = ParseIntOrZero(xmlNode.Attribute("size")?.Value);
+            if (bouncerSize == 0)
+            {
+                bouncerSize = 1;
+            }
             _ = bool.TryParse(xmlNode.Attribute("grab")?.Value, out bool useGrab);
             _ = bool.TryParse(xmlNode.Attribute("bubble")?.Value, out bool useBubble);
             _ = bool.TryParse(xmlNode.Attribute("bouncer")?.Value, out bool useBouncer);
+            _ = bool.TryParse(xmlNode.Attribute("ghost")?.Value, out bool returnsToIdle);
             GhostForm possibleForms = (useBouncer ? GhostForm.Bouncer : GhostForm.None)
                 | (useBubble ? GhostForm.Bubble : GhostForm.None)
                 | (useGrab ? GhostForm.Grab : GhostForm.None);
@@ -39,7 +45,9 @@ namespace CutTheRopeDX.GameMain
                 bubbles,
                 bungees,
                 bouncers,
-                this);
+                this,
+                bouncerSize,
+                returnsToIdle);
             ghosts.Add(ghost);
         }
     }
