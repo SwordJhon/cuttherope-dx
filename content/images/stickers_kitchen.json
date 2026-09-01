@@ -1,0 +1,215 @@
+{
+  "frames": [
+    {
+      "filename": "decal_bowl.png",
+      "frame": {
+        "x": 671,
+        "y": 704,
+        "w": 369,
+        "h": 250
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 369,
+        "h": 250
+      },
+      "sourceSize": {
+        "w": 369,
+        "h": 250
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "decal_cutting_board.png",
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 381,
+        "h": 415
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 1,
+        "y": 0,
+        "w": 381,
+        "h": 415
+      },
+      "sourceSize": {
+        "w": 384,
+        "h": 416
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "decal_glove.png",
+      "frame": {
+        "x": 725,
+        "y": 357,
+        "w": 249,
+        "h": 310
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 7,
+        "y": 0,
+        "w": 249,
+        "h": 310
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 312
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "decal_kettle.png",
+      "frame": {
+        "x": 0,
+        "y": 415,
+        "w": 320,
+        "h": 359
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 1,
+        "w": 320,
+        "h": 359
+      },
+      "sourceSize": {
+        "w": 320,
+        "h": 360
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "decal_pan.png",
+      "frame": {
+        "x": 381,
+        "y": 357,
+        "w": 344,
+        "h": 347
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 344,
+        "h": 347
+      },
+      "sourceSize": {
+        "w": 344,
+        "h": 348
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "decal_pot.png",
+      "frame": {
+        "x": 320,
+        "y": 704,
+        "w": 351,
+        "h": 312
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 351,
+        "h": 312
+      },
+      "sourceSize": {
+        "w": 352,
+        "h": 312
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "decal_roller.png",
+      "frame": {
+        "x": 381,
+        "y": 0,
+        "w": 403,
+        "h": 357
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 2,
+        "w": 403,
+        "h": 357
+      },
+      "sourceSize": {
+        "w": 404,
+        "h": 360
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "decal_toast.png",
+      "frame": {
+        "x": 0,
+        "y": 774,
+        "w": 317,
+        "h": 325
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 317,
+        "h": 325
+      },
+      "sourceSize": {
+        "w": 317,
+        "h": 325
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  ],
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "stickers_kitchen.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1040,
+      "h": 1099
+    },
+    "scale": 1
+  }
+}

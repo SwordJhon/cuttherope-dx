@@ -1,0 +1,40 @@
+{
+  "frames": [
+    {
+      "filename": "frame_0000_OmNomPillow18.png",
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 272,
+        "h": 207
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 186,
+        "y": 353,
+        "w": 272,
+        "h": 207
+      },
+      "sourceSize": {
+        "w": 640,
+        "h": 640
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  ],
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "char_supports2.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 272,
+      "h": 207
+    },
+    "scale": 1
+  }
+}

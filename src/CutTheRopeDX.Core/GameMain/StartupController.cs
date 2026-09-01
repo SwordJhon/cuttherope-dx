@@ -366,6 +366,7 @@ namespace CutTheRopeDX.GameMain
             Resources.Img.CutTheRopeDXLogo,
             Resources.Img.MenuPackSelection,
             Resources.Img.MenuPackSelection2,
+            Resources.Img.MenuPackSelection3,
             Resources.Img.MenuPackUI,
             Resources.Img.MenuExtraButtons,
             Resources.Img.MenuBgrShadow,

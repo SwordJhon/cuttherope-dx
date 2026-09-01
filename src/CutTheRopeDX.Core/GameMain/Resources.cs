@@ -240,6 +240,7 @@ namespace CutTheRopeDX.GameMain
                 BackgroundImg.Bgr09P1, BackgroundImg.Bgr09P2, BackgroundImg.Bgr10P1, BackgroundImg.Bgr10P2,
                 BackgroundImg.Bgr11P1, BackgroundImg.Bgr11P2, BackgroundImg.Bgr12P1, BackgroundImg.Bgr13P1,
                 BackgroundImg.Bgr14P1, BackgroundImg.Bgr15P1, BackgroundImg.Bgr16P1, BackgroundImg.Bgr17P1,
+                BackgroundImg.Bgr18P1, BackgroundImg.Bgr18P2, BackgroundImg.Bgr17P1New,
                 BackgroundImg.ZeptolabNoLink, BackgroundImg.SkinBackground
             ];
         }
@@ -279,6 +280,9 @@ namespace CutTheRopeDX.GameMain
             public const string Bgr17P1 = "bgr_17_p1";
             public const string ZeptolabNoLink = "zeptolab_no_link";
             public const string SkinBackground = "skin_bg";
+            public const string Bgr17P1New = "bgr_17_p1_new";
+            public const string Bgr18P1 = "bgr_18_p1";
+            public const string Bgr18P2 = "bgr_18_p2";
         }
 
         /// <summary>
@@ -393,7 +397,17 @@ namespace CutTheRopeDX.GameMain
             public const string FingerTraceGlow = "traces_ctr2_glow";
             public const string ObjHookChain = "obj_hook_chain";
             public const string ObjHookAutoChain = "obj_hook_auto_chain";
+            public const string CharSupportsXmas = "char_supports_xmas";
+
+            // Custom / Extra Assets
+            public const string Bgr18Cover = "bgr_18_cover";
+            public const string MenuPackSelection3 = "menu_pack_selection3";
+            public const string CharSupports2 = "char_supports2";
             public const string ObjSpikeOrigins = "obj_spike_origins";
+            public const string StickersKitchen = "stickers_kitchen";
+            public const string ObjSpikeOriginsNew = "obj_spike_origins_new";
+            public const string ObjRoboHandReverse = "obj_robohand_reverse";
+            public const string ObjMetalTube = "obj_metal_tube";
 
             // Candies
             public const string ObjCandyFx = "candies/obj_candy_fx";
@@ -747,6 +761,12 @@ namespace CutTheRopeDX.GameMain
             public const string TTCyborgSleep01 = "Cyborg_sleep01";
             public const string TTCyborgSleep02 = "Cyborg_sleep02";
             public const string TTCyborgSleep03 = "Cyborg_sleep03";
+
+            // Custom / Extra sounds
+            public const string MonsterCake = "monster_cake";
+            public const string MonsterChoko = "monster_choko";
+            public const string MonsterIceCream = "monster_icecream";
+            public const string SpCloverLeaf = "sp_cloverleaf";
         }
 
         /// <summary>
@@ -762,6 +782,19 @@ namespace CutTheRopeDX.GameMain
             public const string GameMusic5 = "game_music5";
             public const string MenuMusicXmas = "menu_music_xmas";
             public const string GameMusicXmas = "game_music_xmas";
+
+            // CTR Experiments music
+            public const string MenuMusicExperiments = "menu_music_experiments";
+            public const string GameMusicExperiments = "game_music_experiments";
+            public const string GameMusic2Experiments = "game_music2_experiments";
+
+            // CTR Time Travel music
+            public const string MenuMusicTimeTravel = "menu_music_timetravel";
+            public const string GameMusicTimeTravel = "game_music_timetravel";
+
+            // Custom / Extra music
+            public const string MenuMusicHalloween = "menu_music_halloween";
+            public const string GameMusicOld = "game_music_old";
         }
 
         /// <summary>
