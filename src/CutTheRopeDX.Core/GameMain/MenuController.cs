@@ -1668,6 +1668,10 @@ namespace CutTheRopeDX.GameMain
             {
                 CTRSoundMgr.PlayMusic(Resources.Music.MenuMusicXmas);
             }
+            else if (SpecialEvents.IsHalloween)
+            {
+                CTRSoundMgr.PlayMusic(Resources.Music.MenuMusicHalloween);
+            }
             else
             {
                 CTRSoundMgr.PlayMusic(Resources.Music.MenuMusic);
@@ -1728,6 +1732,10 @@ namespace CutTheRopeDX.GameMain
                 if (SpecialEvents.IsXmas)
                 {
                     CTRSoundMgr.PlayMusic(Resources.Music.MenuMusicXmas);
+                }
+                else if (SpecialEvents.IsHalloween)
+                {
+                    CTRSoundMgr.PlayMusic(Resources.Music.MenuMusicHalloween);
                 }
                 else
                 {
@@ -1962,6 +1970,10 @@ namespace CutTheRopeDX.GameMain
                         if (SpecialEvents.IsXmas)
                         {
                             CTRSoundMgr.PlayMusic(Resources.Music.MenuMusicXmas);
+                        }
+                        else if (SpecialEvents.IsHalloween)
+                        {
+                            CTRSoundMgr.PlayMusic(Resources.Music.MenuMusicHalloween);
                         }
                         else
                         {
