@@ -402,7 +402,6 @@ namespace CutTheRopeDX.GameMain
             public const string FingerTraceGlow = "traces_ctr2_glow";
             public const string ObjHookChain = "obj_hook_chain";
             public const string ObjHookAutoChain = "obj_hook_auto_chain";
-            public const string CharSupportsXmas = "char_supports_xmas";
 
             // Custom / Extra Assets
             public const string Bgr18Cover = "bgr_18_cover";
