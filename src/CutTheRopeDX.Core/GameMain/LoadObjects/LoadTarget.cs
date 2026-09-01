@@ -33,9 +33,6 @@ namespace CutTheRopeDX.GameMain
         /// <param name="mapOffsetY">The additional map Y offset applied during loading.</param>
         private void LoadTarget(XElement xmlNode, float scale, float offsetX, float offsetY, int mapOffsetX, int mapOffsetY)
         {
-            int pack = ((CTRRootController)Application.SharedRootController()).GetPack();
-            int sittingPlatform = PackConfig.GetSittingPlatform(pack);
-
             int targetType = ParseIntOrZero(xmlNode.Attribute("targetType")?.Value ?? string.Empty);
 
             bool isClassicSkin = OmNomSkinRegistry.IsClassicSkin(
@@ -49,8 +46,11 @@ namespace CutTheRopeDX.GameMain
             bool paddingtonGreetingPending =
                 isPaddington && isPrimaryTarget && !nightLevel && CTRRootController.IsShowGreeting();
 
+            int pack = ((CTRRootController)Application.SharedRootController()).GetPack();
+            int sittingPlatform = PackConfig.GetSittingPlatform(pack);
+
             // Paddington seats Om Nom on the bear's suitcase instead of the pack's usual platform.
-            string supportResource = isPaddington ? Resources.Img.CharSupportsXmas : Resources.Img.CharSupports;
+            string supportResource = isPaddington ? Resources.Img.CharSupportsXmas : PackConfig.GetSittingPlatformSpritesheet(pack);
             int requestedQuad = isPaddington ? PaddingtonSupportQuad : sittingPlatform;
 
             // Clamp quad index to valid range; fall back to first quad for invalid values.
