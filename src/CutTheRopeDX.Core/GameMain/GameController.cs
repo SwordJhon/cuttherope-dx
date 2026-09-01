@@ -1209,7 +1209,7 @@ namespace CutTheRopeDX.GameMain
         private static void PlayMusic()
         {
             CTRRootController cTRRootController = (CTRRootController)Application.SharedRootController();
-            if (SpecialEvents.IsXmas)
+            if (SpecialEvents.IsXmas && false)
             {
                 CTRSoundMgr.PlayMusic(Resources.Music.GameMusicXmas);
             }
