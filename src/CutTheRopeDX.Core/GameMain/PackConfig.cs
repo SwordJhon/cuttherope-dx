@@ -31,6 +31,7 @@ namespace CutTheRopeDX.GameMain
     /// <param name="boxLabelText">Localization key for optional box label text.</param>
     /// <param name="packName">Localized box pack name.</param>
     /// <param name="ghostGrabColor">Optional ghost grab circle color override, or <see langword="null"/> to use the default.</param>
+    /// <param name="sittingPlatformSpritesheet">Resource name for the spritesheet containing this pack's support platform.</param>
     internal sealed class PackDefinition(
         int unlockStars,
         int levelCount,
@@ -48,7 +49,8 @@ namespace CutTheRopeDX.GameMain
         Vector? earthBgPosition,
         string boxLabelText,
         string packName,
-        RGBAColor? ghostGrabColor
+        RGBAColor? ghostGrabColor,
+        string sittingPlatformSpritesheet
     )
     {
         /// <summary>Number of stars required to unlock this pack.</summary>
@@ -69,7 +71,10 @@ namespace CutTheRopeDX.GameMain
         /// <summary>Y position for secondary background (p2) in long levels. 0 means no p2.</summary>
         public int BoxBackgroundP2Y { get; } = boxBackgroundP2Y;
 
-        /// <summary>Quad index in <see cref="Resources.Img.CharSupports"/> used for the support platform.</summary>
+        /// <summary>Resource ID for the spritesheet containing this pack's support platform.</summary>
+        public string SittingPlatformSpritesheet { get; } = sittingPlatformSpritesheet;
+
+        /// <summary>Quad index in <see cref="SittingPlatformSpritesheet"/> used for the support platform.</summary>
         public int SittingPlatform { get; } = sittingPlatform;
 
         /// <summary>String resource names for cover assets.</summary>
@@ -235,6 +240,16 @@ namespace CutTheRopeDX.GameMain
             return string.IsNullOrWhiteSpace(coverResourceName)
                 ? throw new InvalidDataException($"pack config is missing boxCover for pack {pack}.")
                 : coverResourceName;
+        }
+
+        /// <summary>
+        /// Gets the support platform spritesheet for a pack.
+        /// </summary>
+        /// <param name="pack">Target pack index.</param>
+        /// <returns>The support platform spritesheet, or <see cref="Resources.Img.CharSupports"/> when <paramref name="pack"/> is out of range.</returns>
+        public static string GetSittingPlatformSpritesheet(int pack)
+        {
+            return pack >= 0 && pack < packs.Count ? packs[pack].SittingPlatformSpritesheet : Resources.Img.CharSupports;
         }
 
         /// <summary>
@@ -517,6 +532,8 @@ namespace CutTheRopeDX.GameMain
 
                     int boxBackgroundP2Y = ParseIntProperty(packElement, "boxBackgroundP2Y", 0, packListEntry.ConfigFileName);
 
+                    string sittingPlatformSpritesheetRaw = ParseStringProperty(packElement, "sittingPlatformSpritesheet");
+                    string sittingPlatformSpritesheet = ResolveSittingPlatformSpritesheetId(sittingPlatformSpritesheetRaw);
                     int sittingPlatform = ParseIntProperty(packElement, "sittingPlatform", 0, packListEntry.ConfigFileName);
 
                     string[] boxCovers = ParseResourceNames(packElement, "boxCover");
@@ -561,7 +578,8 @@ namespace CutTheRopeDX.GameMain
                             earthBgPosition,
                             boxLabelText,
                             packName,
-                            ghostGrabColor
+                            ghostGrabColor,
+                            sittingPlatformSpritesheet
                             )
                         );
                 }
@@ -599,7 +617,25 @@ namespace CutTheRopeDX.GameMain
             {
                 "1" => Resources.Img.MenuPackSelection,
                 "2" => Resources.Img.MenuPackSelection2,
+                "3" => Resources.Img.MenuPackSelection3,
                 _ => Resources.Img.MenuPackSelection,
+            };
+        }
+
+        /// <summary>
+        /// Maps a shorthand spritesheet ID (e.g. "1", "2") to its full resource name.
+        /// Falls back to <see cref="Resources.Img.MenuPackSelection"/> for unrecognized or empty values.
+        /// </summary>
+        /// <param name="id">Spritesheet ID from the pack configuration.</param>
+        /// <returns>The resolved spritesheet resource name.</returns>
+        private static string ResolveSittingPlatformSpritesheetId(string id)
+        {
+            return id switch
+            {
+                "1" => Resources.Img.CharSupports,
+                "2" => Resources.Img.CharSupports2,
+                "Xmas" => Resources.Img.CharSupportsXmas,
+                _ => Resources.Img.CharSupports,
             };
         }
 

@@ -25,12 +25,13 @@ namespace CutTheRopeDX.GameMain
         {
             int pack = ((CTRRootController)Application.SharedRootController()).GetPack();
             int sittingPlatform = PackConfig.GetSittingPlatform(pack);
+            string sittingPlatformSpritesheet = PackConfig.GetSittingPlatformSpritesheet(pack);
 
             // Clamp quad index to valid range; fall back to first quad for invalid values.
-            CTRTexture2D supportTexture = Application.GetTexture(Resources.Img.CharSupports);
+            CTRTexture2D supportTexture = Application.GetTexture(sittingPlatformSpritesheet);
             int quadIndex = (sittingPlatform >= 0 && sittingPlatform < supportTexture.quadRects.Length) ? sittingPlatform : 0;
 
-            support = Image.Image_createWithResIDQuad(Resources.Img.CharSupports, quadIndex);
+            support = Image.Image_createWithResIDQuad(sittingPlatformSpritesheet, quadIndex);
             support.DoRestoreCutTransparency();
             support.anchor = 18;
 

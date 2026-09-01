@@ -423,6 +423,8 @@ namespace CutTheRopeDX.GameMain
 
             _ = resources.Add(Resources.Img.FxBubbles);
             _ = resources.Add(Resources.Img.CharSupports);
+            _ = resources.Add(Resources.Img.CharSupports2);
+            _ = resources.Add(Resources.Img.CharSupportsXmas);
 
             AddOmNomSound(resources, skin, Resources.Snd.MonsterChewing);
             AddOmNomSound(resources, skin, Resources.Snd.MonsterClose);
