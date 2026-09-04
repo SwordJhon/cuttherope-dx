@@ -47,11 +47,19 @@ namespace CutTheRopeDX.GameMain
                 isPaddington && isPrimaryTarget && !nightLevel && CTRRootController.IsShowGreeting();
 
             int pack = ((CTRRootController)Application.SharedRootController()).GetPack();
-            int sittingPlatform = PackConfig.GetSittingPlatform(pack);
-
+            string supportResourceRaw = xmlNode.Attribute("supportResource")?.Value ?? string.Empty;
             // Paddington seats Om Nom on the bear's suitcase instead of the pack's usual platform.
             string supportResource = isPaddington ? Resources.Img.CharSupportsXmas : PackConfig.GetSittingPlatformSpritesheet(pack);
-            int requestedQuad = isPaddington ? PaddingtonSupportQuad : sittingPlatform;
+            int requestedQuad = ParseIntOrZero(xmlNode.Attribute("supportQuad")?.Value ?? string.Empty);
+
+            if (string.IsNullOrEmpty(supportResourceRaw))
+            {
+                requestedQuad = isPaddington ? PaddingtonSupportQuad : PackConfig.GetSittingPlatform(pack);
+            }
+            else
+            {
+                supportResource = PackConfig.ResolveSittingPlatformSpritesheetId(supportResourceRaw);
+            }
 
             // Clamp quad index to valid range; fall back to first quad for invalid values.
             CTRTexture2D supportTexture = Application.GetTexture(supportResource);
