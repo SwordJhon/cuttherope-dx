@@ -628,7 +628,7 @@ namespace CutTheRopeDX.GameMain
         /// </summary>
         /// <param name="id">Spritesheet ID from the pack configuration.</param>
         /// <returns>The resolved spritesheet resource name.</returns>
-        private static string ResolveSittingPlatformSpritesheetId(string id)
+        public static string ResolveSittingPlatformSpritesheetId(string id)
         {
             return id switch
             {
