@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
+using CutTheRopeDX.Framework.Core;
 using CutTheRopeDX.Helpers;
 
 using static CutTheRopeDX.Helpers.ParsingHelpers;
@@ -422,9 +423,15 @@ namespace CutTheRopeDX.GameMain
             }
 
             _ = resources.Add(Resources.Img.FxBubbles);
-            _ = resources.Add(Resources.Img.CharSupports);
-            _ = resources.Add(Resources.Img.CharSupports2);
-            _ = resources.Add(Resources.Img.CharSupportsXmas);
+
+            int pack = ((CTRRootController)Application.SharedRootController()).GetPack();
+            string platformSheetRaw = node.Attribute("platformSheet")?.Value ?? string.Empty;
+            string platformSheet = PackConfig.GetSittingPlatformSpritesheet(pack);
+            if (!string.IsNullOrEmpty(platformSheetRaw))
+            {
+                platformSheet = PackConfig.ResolveSittingPlatformSpritesheetId(platformSheetRaw);
+            }
+            _ = resources.Add(platformSheet);
 
             AddOmNomSound(resources, skin, Resources.Snd.MonsterChewing);
             AddOmNomSound(resources, skin, Resources.Snd.MonsterClose);

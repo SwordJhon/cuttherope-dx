@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<map>
+  <layer name="settings">
+    <map gridSize="10" width="840" height="480" levelName="Amazing Platforms" />
+    <gameDesign ropePhysicsSpeed="1" special="0" twoParts="false" nightLevel="false" useMobilePhysics="true" />
+  </layer>
+  <layer name="Objects">
+    <target x="200" y="340" targetType="15" platformSheet="1" platformQuad="16" />
+    <target x="420" y="420" targetType="2" platformSheet="Xmas" platformQuad="0" />
+    <target x="640" y="340" targetType="13" platformSheet="2" platformQuad="0" />
+    <candy x="240" y="220" candyNumber="0" />
+    <candy x="420" y="230" candyNumber="1" />
+    <candy x="600" y="220" candyNumber="2" />
+    <grab x="460" y="130" length="100" wheel="false" gun="false" radius="-1" moveLength="-1" moveVertical="false" moveOffset="0" spider="false" kickable="false" kicked="false" hidePath="false" invisible="false" candyNumber="1" />
+    <grab x="460" y="130" length="200" wheel="false" gun="false" radius="-1" moveLength="-1" moveVertical="false" moveOffset="0" spider="false" kickable="false" kicked="false" hidePath="false" invisible="false" candyNumber="2" />
+    <grab x="380" y="130" length="200" wheel="false" gun="false" radius="-1" moveLength="-1" moveVertical="false" moveOffset="0" spider="false" kickable="false" kicked="false" hidePath="false" invisible="false" />
+    <grab x="640" y="150" length="80" wheel="false" gun="false" radius="-1" moveLength="-1" moveVertical="false" moveOffset="0" spider="false" kickable="false" kicked="false" hidePath="false" invisible="false" candyNumber="2" />
+    <grab x="200" y="150" length="80" wheel="false" gun="false" radius="-1" moveLength="-1" moveVertical="false" moveOffset="0" spider="false" kickable="false" kicked="false" hidePath="false" invisible="false" />
+    <grab x="380" y="130" length="100" wheel="false" gun="false" radius="-1" moveLength="-1" moveVertical="false" moveOffset="0" spider="false" kickable="false" kicked="false" hidePath="false" invisible="false" candyNumber="1" />
+  </layer>
+  <!--transporter x="390" y="340" velocity="10" direction="forward" length="60" width="60" angle="0" type="manual" /-->
+  <!--lightBulb x="420" y="340" litRadius="0" bulbNumber="0" /-->
+  <!--star x="340" y="230" timeout="-1" /-->
+  <!--star x="500" y="230" timeout="-1" /-->
+  <!--star x="420" y="130" timeout="-1" /-->
+  <!--bouncer1 x="40" y="340" size="1" angle="90" /-->
+  <!--bouncer1 x="800" y="340" size="1" angle="90" /-->
+</map>

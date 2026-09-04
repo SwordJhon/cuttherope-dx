@@ -24,14 +24,24 @@ namespace CutTheRopeDX.GameMain
         private void LoadTarget(XElement xmlNode, float scale, float offsetX, float offsetY, int mapOffsetX, int mapOffsetY)
         {
             int pack = ((CTRRootController)Application.SharedRootController()).GetPack();
-            int sittingPlatform = PackConfig.GetSittingPlatform(pack);
-            string sittingPlatformSpritesheet = PackConfig.GetSittingPlatformSpritesheet(pack);
+            string platformSheetRaw = xmlNode.Attribute("platformSheet")?.Value ?? string.Empty;
+            string platformSheet = PackConfig.GetSittingPlatformSpritesheet(pack);
+            int platformQuad = ParseIntOrZero(xmlNode.Attribute("platformQuad")?.Value ?? string.Empty);
+
+            if (string.IsNullOrEmpty(platformSheetRaw))
+            {
+                platformQuad = PackConfig.GetSittingPlatform(pack);
+            }
+            else
+            {
+                platformSheet = PackConfig.ResolveSittingPlatformSpritesheetId(platformSheetRaw);
+            }
 
             // Clamp quad index to valid range; fall back to first quad for invalid values.
-            CTRTexture2D supportTexture = Application.GetTexture(sittingPlatformSpritesheet);
-            int quadIndex = (sittingPlatform >= 0 && sittingPlatform < supportTexture.quadRects.Length) ? sittingPlatform : 0;
+            CTRTexture2D supportTexture = Application.GetTexture(platformSheet);
+            int quadIndex = (platformQuad >= 0 && platformQuad < supportTexture.quadRects.Length) ? platformQuad : 0;
 
-            support = Image.Image_createWithResIDQuad(sittingPlatformSpritesheet, quadIndex);
+            support = Image.Image_createWithResIDQuad(platformSheet, quadIndex);
             support.DoRestoreCutTransparency();
             support.anchor = 18;
 
