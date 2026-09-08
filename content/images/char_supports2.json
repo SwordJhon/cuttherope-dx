@@ -24,6 +24,31 @@
         "x": 0.5,
         "y": 0.5
       }
+    },
+    {
+      "filename": "frame_0001.png",
+      "frame": {
+        "x": 0,
+        "y": 207,
+        "w": 211,
+        "h": 266
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 215,
+        "y": 257,
+        "w": 211,
+        "h": 266
+      },
+      "sourceSize": {
+        "w": 640,
+        "h": 640
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
     }
   ],
   "meta": {
@@ -33,7 +58,7 @@
     "format": "RGBA8888",
     "size": {
       "w": 272,
-      "h": 207
+      "h": 473
     },
     "scale": 1
   }

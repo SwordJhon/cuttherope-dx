@@ -1,5 +1,7 @@
 using System;
 
+using CutTheRopeDX.Framework.Core;
+
 namespace CutTheRopeDX.GameMain
 {
     /// <summary>
@@ -13,13 +15,15 @@ namespace CutTheRopeDX.GameMain
         /// <summary>
         /// Gets a value indicating whether the current month is January.
         /// </summary>
-        public static bool IsJanuary => DateTime.Now.Month == 1;
+        public static bool IsJanuary => Preferences.GetBooleanForKey("FORCE_EVENT_JANUARY_ON")
+        || (!Preferences.GetBooleanForKey("FORCE_EVENT_JANUARY_OFF") && DateTime.Now.Month == 1);
 
         /// <summary>
         /// Gets a value indicating whether the Christmas event period is active.
         /// Includes December and January.
         /// </summary>
-        public static bool IsXmas => DateTime.Now.Month is 12 or 1;
+        public static bool IsXmas => Preferences.GetBooleanForKey("FORCE_EVENT_XMAS_ON")
+        || (!Preferences.GetBooleanForKey("FORCE_EVENT_XMAS_OFF") && DateTime.Now.Month is 12 or 1);
 
         #endregion
 
@@ -28,7 +32,8 @@ namespace CutTheRopeDX.GameMain
         /// <summary>
         /// Gets a value indicating whether the Halloween event period is active.
         /// </summary>
-        public static bool IsHalloween => DateTime.Now.Month is 10;
+        public static bool IsHalloween => Preferences.GetBooleanForKey("FORCE_EVENT_HALLOWEEN_ON")
+        || (!Preferences.GetBooleanForKey("FORCE_EVENT_HALLOWEEN_OFF") && DateTime.Now.Month is 10);
 
         #endregion
     }
