@@ -48,7 +48,6 @@ namespace CutTheRopeDX.GameMain
                 base.Update(delta);
                 dd.Update(delta);
                 UpdateCameraTracking(delta);
-                StretchProfessorHandSleeve();
                 _ = AdvanceRestartFlow(delta);
                 return;
             }
