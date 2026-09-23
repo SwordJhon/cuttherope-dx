@@ -200,12 +200,13 @@ namespace CutTheRopeDX.GameMain
                 int pathPoints = CTRMover.PathPointCapacity(path);
                 float moveSpeed = ParseFloatOrZero(xml.Attribute("moveSpeed")?.Value);
                 float rotateSpeed = ParseFloatOrZero(xml.Attribute("rotateSpeed")?.Value);
+                float startAngle = ParseFloatOrZero(xml.Attribute("startAngle")?.Value);
                 CTRMover ctrMover = new(pathPoints, moveSpeed, rotateSpeed)
                 {
                     angle_ = rotation
                 };
                 ctrMover.angle_initial = ctrMover.angle_;
-                ctrMover.SetPathFromStringandStart(path, Vect(x, y));
+                ctrMover.SetPathFromStringandStart(path, Vect(x, y), startAngle);
                 SetMover(ctrMover);
                 ctrMover.Start();
             }

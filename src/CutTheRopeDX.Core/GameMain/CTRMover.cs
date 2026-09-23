@@ -42,8 +42,9 @@ namespace CutTheRopeDX.GameMain
             {
                 angle_ = angle,
             };
+            float startAngle = ParseFloatOrZero(xml.Attribute("startAngle")?.Value);
             mover.angle_initial = mover.angle_;
-            mover.SetPathFromStringandStart(pathString, start);
+            mover.SetPathFromStringandStart(pathString, start, startAngle);
             mover.Start();
             return mover;
         }
@@ -72,7 +73,7 @@ namespace CutTheRopeDX.GameMain
         }
 
         /// <inheritdoc />
-        public override void SetPathFromStringandStart(string p, Vector s)
+        public override void SetPathFromStringandStart(string p, Vector s, float startAngle = 0)
         {
             if (p[0] == 'R')
             {
@@ -89,7 +90,7 @@ namespace CutTheRopeDX.GameMain
                 {
                     angleStep = 0f - angleStep;
                 }
-                float theta = 0f;
+                float theta = startAngle * (MathF.PI / 180f);
                 for (int i = 0; i < pointCount; i++)
                 {
                     float x = s.X + (radius * Cosf(theta));

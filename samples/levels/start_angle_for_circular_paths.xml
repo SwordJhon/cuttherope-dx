@@ -1,0 +1,57 @@
+<map>
+  <layer name="settings">
+    <map gridSize="10" width="640" height="480" />
+    <gameDesign ropePhysicsSpeed="1" />
+  </layer>
+  <layer name="objects">
+    <grab x="160" y="40" length="80" radius="-1" />
+    <candy x="60" y="40" candyNumber="0" />
+    <star x="180" y="340" timeout="-1" path="RC75" startAngle="0" moveSpeed="70" />
+    <star x="325" y="340" timeout="-1" path="RC75" startAngle="180" moveSpeed="70" />
+    <star x="255" y="415" timeout="-1" path="RC75" startAngle="270" moveSpeed="70" />
+    <star x="255" y="265" timeout="-1" path="RC75" startAngle="90" moveSpeed="70" />
+    <electro x="250" y="240" initialDelay="0.0" offTime="2.0" onTime="2.0" angle="0" size="5" />
+    <spike4 x="320" y="90" angle="90" size="4" />
+    <spike4 x="0" y="90" angle="90" size="4" />
+    <spike2 x="50" y="0" angle="0" size="2" />
+    <spike2 x="270" y="0" angle="0" size="2" />
+    <spike2 x="160" y="0" angle="0" size="2" />
+    <spike4 x="90" y="240" angle="0" size="4" />
+    <spike1 x="0" y="210" angle="90" size="1" />
+    <spike4 x="320" y="270" angle="90" size="4" />
+    <spike4 x="320" y="450" angle="90" size="4" />
+    <spike4 x="180" y="330" angle="90" size="4" />
+    <spike2 x="180" y="470" angle="90" size="2" />
+    <spike4 x="60" y="300" angle="45" size="4" />
+    <spike1 x="150" y="360" angle="0" size="1" />
+    <spike1 x="300" y="20" angle="45" size="1" />
+    <spike1 x="20" y="20" angle="-45" size="1" />
+    <spike1 x="20" y="220" angle="45" size="1" />
+    <sock x="260" y="430" group="0" angle="-90" />
+    <sock x="390" y="220" group="0" angle="-45" />
+    <target x="570" y="100" />
+  </layer>
+  <layer name="deco">
+    <sock x="570" y="80" group="999" angle="103" />
+    <grab x="0" y="240" length="90" radius="-1" breakable="false" bindBulb="true" bulbNumber="0" />
+    <lightBulb x="30" y="360" litRadius="0" bulbNumber="0" />
+    <grab x="120" y="360" length="30" radius="-1" breakable="false" bindBulb="true" bulbNumber="1" />
+    <lightBulb x="140" y="420" litRadius="0" bulbNumber="1" />
+    <bubble x="130" y="290" />
+    <bubble x="400" y="310" />
+    <bubble x="490" y="400" />
+    <bubble x="600" y="340" />
+    <bubble x="510" y="250" />
+    <bubble x="380" y="430" />
+    <bubble x="380" y="120" />
+    <bubble x="510" y="30" />
+    <bubble x="630" y="190" />
+    <bubble x="610" y="470" />
+    <bubble x="390" y="10" />
+  </layer>
+  <layer name="en">
+    <tutorial09 x="60" y="170" angle="0" locale="en" duration="5" />
+    <tutorialText x="65" y="100" text="Objects on circular paths can now start at different angles" width="190" locale="en" />
+    <tutorial01 x="210" y="70" angle="-50" locale="en" duration="1.5" delay="3.5" />
+  </layer>
+</map>

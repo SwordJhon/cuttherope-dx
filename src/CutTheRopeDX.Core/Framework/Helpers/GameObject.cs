@@ -152,12 +152,13 @@ namespace CutTheRopeDX.Framework.Helpers
                 }
                 float moveSpeed = ParseFloatOrZero(xml.Attribute("moveSpeed")?.Value);
                 float rotateSpeed = ParseFloatOrZero(xml.Attribute("rotateSpeed")?.Value);
+                float startAngle = ParseFloatOrZero(xml.Attribute("startAngle")?.Value);
                 Mover parsedMover = new(moverCapacity, moveSpeed, rotateSpeed)
                 {
                     angle_ = rotation
                 };
                 parsedMover.angle_initial = parsedMover.angle_;
-                parsedMover.SetPathFromStringandStart(pathString, Vect(x, y));
+                parsedMover.SetPathFromStringandStart(pathString, Vect(x, y), startAngle);
                 SetMover(parsedMover);
                 parsedMover.Start();
             }
