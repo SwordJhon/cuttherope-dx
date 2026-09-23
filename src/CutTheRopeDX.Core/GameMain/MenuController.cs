@@ -743,9 +743,9 @@ namespace CutTheRopeDX.GameMain
             _ = audioRow.AddChild(musicToggle);
             if (MenuTheme.IsExperiments)
             {
-                ToggleButton voiceToggle = CreateExperimentsVoiceToggle(this);
+                ToggleButton voiceToggle = CreateExperimentsVoiceToggle(this, MenuButtonId.ToggleVoice);
                 _ = audioRow.AddChild(voiceToggle);
-                if (!Preferences.GetBooleanForKey("PREFS_EXP_VOICE_ON"))
+                if (!Preferences.GetBooleanForKey(ExperimentsVoice.PreferenceKey))
                 {
                     voiceToggle.Toggle();
                 }
@@ -1976,6 +1976,9 @@ namespace CutTheRopeDX.GameMain
                         }
                         return;
                     }
+                case var id when id == MenuButtonId.ToggleVoice:
+                    ExperimentsVoice.Toggle();
+                    return;
                 case var id when id == MenuButtonId.ToggleMusic:
                     {
                         bool musicOn = Preferences.GetBooleanForKey("MUSIC_ON");
