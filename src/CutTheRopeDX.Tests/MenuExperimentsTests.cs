@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 
 using CutTheRopeDX.Commons;
-using CutTheRopeDX.Framework;
 using CutTheRopeDX.Framework.Core;
 using CutTheRopeDX.Framework.Platform;
 using CutTheRopeDX.Framework.Visual;
@@ -43,132 +42,6 @@ namespace CutTheRopeDX.Tests
         }
 
         [Fact]
-        public void OnlyAPerfectPackWearsTheBadge()
-        {
-            _ = HeadlessGame.Boot();
-            const int Pack = 0;
-            int slot = PackConfig.GetSaveSlot(Pack);
-            int levels = Preferences.GetLevelsInPackCount(Pack);
-            int[] original = new int[levels];
-            for (int level = 0; level < levels; level++)
-            {
-                original[level] = Preferences.GetStarsForPackLevel(slot, Pack, level);
-                Preferences.SetStarsForPackLevel(slot, 3, Pack, level);
-            }
-
-            try
-            {
-                WithExperiments(2560, 1440, controller =>
-                {
-                    List<BaseElement> containers = Named(controller.GetView(MenuController.VIEW_PACK_SELECT), "boxContainer");
-                    for (int i = 0; i < containers.Count; i++)
-                    {
-                        bool perfect = i < Preferences.GetPacksCount() && Preferences.IsPackPerfect(i);
-                        Assert.Equal(perfect, containers[i].GetChildWithName("perfect") != null);
-                    }
-                    Assert.NotNull(containers[Pack].GetChildWithName("perfect"));
-                });
-            }
-            finally
-            {
-                for (int level = 0; level < levels; level++)
-                {
-                    Preferences.SetStarsForPackLevel(slot, original[level], Pack, level);
-                }
-            }
-        }
-
-        [Fact]
-        public void OnlyTheLastPackIsCagedAndItsCageShowsNoPrice()
-        {
-            WithExperiments(2560, 1440, controller =>
-            {
-                List<BaseElement> containers = Named(controller.GetView(MenuController.VIEW_PACK_SELECT), "boxContainer");
-                Texture2D packAtlas = Application.GetTexture(Resources.Img.MenuExpPackSelection);
-                int caged = Preferences.GetPacksCount() - 1;
-                for (int i = 1; i < Preferences.GetPacksCount(); i++)
-                {
-                    if (Preferences.GetUnlockedForPackLevel(i, 0) != UNLOCKEDSTATE.LOCKED)
-                    {
-                        continue;
-                    }
-                    Image cage = All<Image>(containers[i]).Find(image => image.texture == packAtlas && image.quadToDraw == 17);
-                    Assert.Equal(i == caged, cage != null);
-                    if (cage != null)
-                    {
-                        Assert.Empty(All<HBox>(cage));
-                    }
-                }
-            });
-        }
-
-        [Theory]
-        [MemberData(nameof(LayoutSurfaces.Theory), MemberType = typeof(LayoutSurfaces))]
-        [InlineData("ReportedUltrawide", 2940, 960)]
-        [InlineData("ReportedPortrait", 640, 960)]
-        public void ProjectorRigPeeksUpFromTheBottomEdgeAtEveryShape(string name, int width, int height)
-        {
-            _ = name;
-            WithExperiments(width, height, controller =>
-            {
-                FittedGroup underlay = Find<FittedGroup>(controller.GetView(MenuController.VIEW_PACK_SELECT));
-                Rectangle visible = ScreenPresentation.Instance.Snapshot.VisibleBounds;
-                float scale = underlay.scaleY;
-                Image projector = All<Image>(underlay).Find(image => image.quadToDraw == 21);
-                Image beam = All<Image>(underlay).Find(image => image.quadToDraw == 0);
-                Assert.NotNull(projector);
-                Assert.NotNull(beam);
-                // Resolve positions through the same anchor calculation used by PreDraw.
-                // Local x/y alone miss children that ignore their parent's position.
-                ResolveDrawPositions(controller.GetView(MenuController.VIEW_PACK_SELECT));
-                Vector offset = Image.GetQuadOffset(Resources.Img.MenuExpPackSelection, 21);
-                float centerX = underlay.drawX + (underlay.width >> 1);
-                float centerY = underlay.drawY + (underlay.height >> 1);
-                float left = centerX + ((projector.drawX + offset.X - centerX) * scale);
-                float top = centerY + ((projector.drawY + offset.Y - centerY) * scale);
-                Assert.Equal(117f, (left - (visible.x + (visible.w / 2f))) / scale, 2);
-                Assert.Equal(22f, (visible.y + visible.h - top) / scale, 2);
-                Assert.Equal(projector.drawX, beam.drawX);
-                Assert.Equal(projector.drawY, beam.drawY);
-            });
-        }
-
-        /// <summary>Resolves ancestor anchors before their children, as drawing does.</summary>
-        /// <param name="element">Root of the subtree to resolve.</param>
-        private static void ResolveDrawPositions(BaseElement element)
-        {
-            BaseElement.CalculateTopLeft(element);
-            foreach (BaseElement child in element.GetChilds().Values)
-            {
-                ResolveDrawPositions(child);
-            }
-        }
-
-        [Fact]
-        public void TheButterflyKeepsTheLockedCagedBoxCompany()
-        {
-            WithExperiments(2560, 1440, controller =>
-            {
-                int caged = Preferences.GetPacksCount() - 1;
-                ExperimentsButterfly butterfly = Find<ExperimentsButterfly>(controller.GetView(MenuController.VIEW_PACK_SELECT));
-                Assert.Equal(Preferences.GetUnlockedForPackLevel(caged, 0) == UNLOCKEDSTATE.LOCKED, butterfly != null);
-                if (butterfly == null)
-                {
-                    return;
-                }
-
-                // Heading for the caged box sends it in to land; it perches once there. The view is
-                // never scrolled here, so it crosses most of the strip at its on-screen speed.
-                controller.ScrollableContainerchangedTargetScrollPoint(null, caged);
-                for (int frame = 0; frame < 3000 && butterfly.Mode != ExperimentsButterfly.FlightMode.Landed; frame++)
-                {
-                    butterfly.Update(1f / 60f);
-                }
-                Assert.Equal(ExperimentsButterfly.FlightMode.Landed, butterfly.Mode);
-            });
-        }
-
-        [Fact]
         public void PackSelectRebuildsForANewShape()
         {
             WithExperiments(2560, 1440, controller =>
@@ -186,7 +59,7 @@ namespace CutTheRopeDX.Tests
         {
             WithExperiments(2560, 1440, controller =>
             {
-                // Sound, music and voice; the click-to-cut switch is a toggle too, drawn with its own art.
+                // Sound and music; the click-to-cut switch is a toggle too, drawn with its own art.
                 Texture2D audio = Application.GetTexture(Resources.Img.MenuExpAudio);
                 int audioToggles = 0;
                 foreach (ToggleButton toggle in All<ToggleButton>(controller.GetView(MenuController.VIEW_OPTIONS)))
@@ -196,64 +69,7 @@ namespace CutTheRopeDX.Tests
                         audioToggles++;
                     }
                 }
-                Assert.Equal(3, audioToggles);
-            });
-        }
-
-        [Fact]
-        public void BoxTitlesAreTheBarePackNames()
-        {
-            WithExperiments(2560, 1440, controller =>
-            {
-                View view = controller.GetView(MenuController.VIEW_PACK_SELECT);
-                List<BaseElement> containers = Named(view, "boxContainer");
-                for (int pack = 0; pack < Preferences.GetPacksCount(); pack++)
-                {
-                    Text title = Find<Text>(containers[pack]);
-                    Assert.Equal(Application.GetString(PackConfig.GetPackName(pack)), title.GetString());
-                }
-            });
-        }
-
-        [Fact]
-        public void TheVoiceToggleFlipsTheVoicePreference()
-        {
-            bool original = Preferences.GetBooleanForKey("PREFS_EXP_VOICE_ON");
-            try
-            {
-                WithExperiments(2560, 1440, controller =>
-                {
-                    Preferences.SetBooleanForKey(true, "PREFS_EXP_VOICE_ON", false);
-                    controller.OnButtonPressed(MenuButtonId.ToggleVoice);
-                    Assert.False(Preferences.GetBooleanForKey("PREFS_EXP_VOICE_ON"));
-                    controller.OnButtonPressed(MenuButtonId.ToggleVoice);
-                    Assert.True(Preferences.GetBooleanForKey("PREFS_EXP_VOICE_ON"));
-                });
-            }
-            finally
-            {
-                Preferences.SetBooleanForKey(original, "PREFS_EXP_VOICE_ON", false);
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(LayoutSurfaces.Theory), MemberType = typeof(LayoutSurfaces))]
-        public void LevelSelectCoversTheScreenWithTheLoadingSheet(string name, int width, int height)
-        {
-            _ = name;
-            WithExperiments(width, height, controller =>
-            {
-                controller.CreateLevelSelect();
-                View view = controller.GetView(MenuController.VIEW_LEVEL_SELECT);
-                BaseElement sheet = view.GetChildWithName("levelsBack");
-                Image backdrop = (Image)sheet.GetChild(0);
-                Assert.Same(Application.GetTexture(Resources.BackgroundImg.MenuExpLoadingBgr), backdrop.texture);
-
-                controller.ShowView(MenuController.VIEW_LEVEL_SELECT);
-                controller.RelayoutTree(ScreenPresentation.Instance.Snapshot);
-                Rectangle visible = ScreenPresentation.Instance.Snapshot.VisibleBounds;
-                Assert.True(sheet.width * sheet.scaleX >= visible.w - 0.5f, $"the sheet is {sheet.width * sheet.scaleX} wide on a {visible.w} viewport");
-                Assert.True(sheet.height * sheet.scaleY >= visible.h - 0.5f, $"the sheet is {sheet.height * sheet.scaleY} tall on a {visible.h} viewport");
+                Assert.Equal(2, audioToggles);
             });
         }
 
@@ -270,9 +86,7 @@ namespace CutTheRopeDX.Tests
 
         /// <summary>
         /// Builds a menu controller with the Experiments style at a surface size, then restores
-        /// the classic style and the save state the menu writes whatever happens. Building the
-        /// pack select unlocks packs whose star price is met and scrolling it moves the resting
-        /// box; both persist and would reshape the classic menus of later tests.
+        /// the classic style whatever happens.
         /// </summary>
         /// <param name="width">Surface width.</param>
         /// <param name="height">Surface height.</param>
@@ -281,13 +95,6 @@ namespace CutTheRopeDX.Tests
         {
             _ = HeadlessGame.Boot();
             MenuStyle previous = MenuTheme.Current;
-            UNLOCKEDSTATE[] unlocks = new UNLOCKEDSTATE[Preferences.GetPacksCount()];
-            for (int pack = 0; pack < unlocks.Length; pack++)
-            {
-                unlocks[pack] = Preferences.GetUnlockedForPackLevel(pack, 0);
-            }
-            int lastBox = Preferences.GetLastBox();
-            int lastGamePack = Preferences.GetLastGamePack();
             MenuTheme.Current = MenuStyle.Experiments;
             try
             {
@@ -307,12 +114,6 @@ namespace CutTheRopeDX.Tests
             finally
             {
                 MenuTheme.Current = previous;
-                for (int pack = 0; pack < unlocks.Length; pack++)
-                {
-                    Preferences.SetUnlockedForPackLevel(unlocks[pack], pack, 0);
-                }
-                Preferences.SetLastBox(lastBox);
-                Preferences.SetLastGamePack(lastGamePack);
             }
         }
 

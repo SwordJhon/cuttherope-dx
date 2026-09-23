@@ -83,12 +83,6 @@ namespace CutTheRopeDX.GameMain
         private int expKeyQuad = ExpQuadFirstKey;
 
         /// <summary>
-        /// Key frame the last load stopped on, so the level transition's blind carries the key up
-        /// still, on the same frame.
-        /// </summary>
-        internal static int ExperimentsHeldKeyQuad { get; private set; } = ExpQuadFirstKey;
-
-        /// <summary>
         /// Restarts the Experiments animation for a new load.
         /// </summary>
         private void ResetExperiments()
@@ -124,7 +118,6 @@ namespace CutTheRopeDX.GameMain
             else if (Application.SharedResourceMgr().GetPercentLoaded() >= 100)
             {
                 expLitElapsed = 0f;
-                ExperimentsHeldKeyQuad = expKeyQuad;
             }
             else
             {
@@ -215,54 +208,6 @@ namespace CutTheRopeDX.GameMain
             Renderer.SetColor(Color.White);
             Renderer.Disable(Renderer.GL_TEXTURE_2D);
             Renderer.Disable(Renderer.GL_BLEND);
-        }
-
-        /// <summary>
-        /// Builds the sheet the loading screen, the level picker and the level transition share:
-        /// the backdrop with the scroll hung along its bottom edge, laid out over the design box.
-        /// </summary>
-        /// <param name="onSheet">Drawn over the backdrop and under the scroll, or <see langword="null"/>.</param>
-        /// <returns>The sheet, <see cref="ViewportLayout.DesignWidth"/> by <see cref="ViewportLayout.DesignHeight"/>.</returns>
-        internal static BaseElement CreateExperimentsSheet(BaseElement onSheet = null)
-        {
-            float width = ViewportLayout.DesignWidth;
-            float height = ViewportLayout.DesignHeight;
-            BaseElement sheet = new()
-            {
-                width = (int)width,
-                height = (int)height,
-            };
-            sheet.anchor = sheet.parentAnchor = 9;
-
-            Image backdrop = Image.FromResource(Resources.BackgroundImg.MenuExpLoadingBgr);
-            backdrop.anchor = backdrop.parentAnchor = 9;
-            backdrop.scaleX = width / backdrop.width;
-            backdrop.scaleY = height / backdrop.height;
-            backdrop.x = (width - backdrop.width) / 2f;
-            backdrop.y = (height - backdrop.height) / 2f;
-            _ = sheet.AddChild(backdrop);
-            if (onSheet != null)
-            {
-                _ = sheet.AddChild(onSheet);
-            }
-
-            Image scroll = Image.FromResource(Resources.Img.MenuExpLoadingScroll, 0);
-            scroll.anchor = scroll.parentAnchor = 9;
-            scroll.scaleX = width / scroll.width;
-            scroll.scaleY = ExpScrollScaleY;
-            scroll.x = (width - scroll.width) / 2f;
-            scroll.y = height + ExpScrollCenterBelow - (scroll.height / 2f);
-            _ = sheet.AddChild(scroll);
-            return sheet;
-        }
-
-        /// <summary>
-        /// How far the sheet's scroll hangs below the sheet's bottom edge, pull ring included.
-        /// </summary>
-        /// <returns>The overhang in design units.</returns>
-        internal static float ExperimentsSheetOverhang()
-        {
-            return ExpScrollCenterBelow + (Image.GetQuadSize(Resources.Img.MenuExpLoadingScroll, 0).Y * ExpScrollScaleY / 2f);
         }
 
         /// <summary>

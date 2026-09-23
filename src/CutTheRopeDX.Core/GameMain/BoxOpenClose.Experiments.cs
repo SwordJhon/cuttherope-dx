@@ -26,11 +26,39 @@ namespace CutTheRopeDX.GameMain
         /// </param>
         private void ShowExperimentsBlind(bool open)
         {
+            float width = ViewportLayout.DesignWidth;
+            float height = ViewportLayout.DesignHeight;
+            BaseElement sheet = new()
+            {
+                width = (int)width,
+                height = (int)height,
+            };
+            sheet.anchor = sheet.parentAnchor = 9;
+
+            Image backdrop = Image.FromResource(Resources.BackgroundImg.MenuExpLoadingBgr);
+            backdrop.anchor = backdrop.parentAnchor = 9;
+            backdrop.scaleX = width / backdrop.width;
+            backdrop.scaleY = height / backdrop.height;
+            backdrop.x = (width - backdrop.width) / 2f;
+            backdrop.y = (height - backdrop.height) / 2f;
+            _ = sheet.AddChild(backdrop);
+
             // Coming out of the loading screen, the lit machine it ended on rides up with the sheet.
-            BaseElement sheet = LoadingView.CreateExperimentsSheet(boxAnim == 0 ? CreateExperimentsMachine() : null);
+            if (boxAnim == 0)
+            {
+                _ = sheet.AddChild(CreateExperimentsMachine());
+            }
+
+            Image scroll = Image.FromResource(Resources.Img.MenuExpLoadingScroll, 0);
+            scroll.anchor = scroll.parentAnchor = 9;
+            scroll.scaleX = width / scroll.width;
+            scroll.scaleY = LoadingView.ExpScrollScaleY;
+            scroll.x = (width - scroll.width) / 2f;
+            scroll.y = height + LoadingView.ExpScrollCenterBelow - (scroll.height / 2f);
+            _ = sheet.AddChild(scroll);
 
             // Rolled up far enough that the pull ring hanging below the rod is gone too.
-            float rolledUp = -(ViewportLayout.DesignHeight + LoadingView.ExperimentsSheetOverhang());
+            float rolledUp = -(height + LoadingView.ExpScrollCenterBelow + (scroll.height * LoadingView.ExpScrollScaleY / 2f));
             Timeline timeline = new Timeline().InitWithMaxKeyFramesOnTrack(2);
             if (open)
             {
@@ -91,7 +119,10 @@ namespace CutTheRopeDX.GameMain
             _ = machine.AddChild(line);
 
             _ = machine.AddChild(CreateMachinePart(Image.FromResource(atlas, 6)));
-            _ = machine.AddChild(CreateMachinePart(Image.FromResource(atlas, LoadingView.ExperimentsHeldKeyQuad)));
+            Animation key = CreateMachinePart(Image.InitializeFromResource(new Animation(), atlas, 8));
+            int keyAnimation = key.AddAnimationDelayLoopFirstLast(0.05f, Timeline.LoopType.TIMELINE_REPLAY, 8, 16);
+            key.PlayTimeline(keyAnimation);
+            _ = machine.AddChild(key);
             return machine;
         }
 

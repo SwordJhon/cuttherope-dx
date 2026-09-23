@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 using CutTheRopeDX.Framework;
@@ -41,11 +42,23 @@ namespace CutTheRopeDX.GameMain
         /// <summary>Design-space height the selected box's art is centered on.</summary>
         private const float ExpBoxCenterY = 560f;
 
-        /// <summary>Projector artwork's left edge relative to the selected box's center.</summary>
-        private const float ExpProjectorRightOffset = 117f;
+        /// <summary>
+        /// Projector beam's top left relative to the selected box's center. iOS places it at the
+        /// background's quad 3 offset, (473, 1220), with the box centered at (772.5, 810).
+        /// </summary>
+        private static readonly Vector ExpBeamOffset = new((473f - 772.5f) * IosToAsset, (1220f - 810f) * IosToAsset);
 
-        /// <summary>How much projector artwork peeks above the visible bottom, in design units.</summary>
-        private const float ExpProjectorVisibleHeight = 22f;
+        /// <summary>
+        /// Projector's top left relative to the beam's, putting its lens under the arc painted at
+        /// the beam's base. Measured from the art; the iOS background had the projector painted in.
+        /// </summary>
+        private static readonly Vector ExpProjectorOffset = new(335f, 305f);
+
+        /// <summary>Bottom of the bullet row below the selected box's center (iOS <c>y = -440</c> from the bottom).</summary>
+        private const float ExpBulletsBelowBox = 623f;
+
+        /// <summary>Space between two bullets.</summary>
+        private const float ExpBulletGap = 12f;
 
         /// <summary>Pack title's top center in the element (iOS 740, 260; the coming-soon box uses 440).</summary>
         private static readonly Vector ExpTitlePosition = new(740f * IosToAsset, 260f * IosToAsset);
@@ -65,67 +78,37 @@ namespace CutTheRopeDX.GameMain
         /// <summary>Width the unlock hint wraps within (iOS <c>scaleToFitRect:800, 240</c>).</summary>
         private const float ExpHintWidth = 800f * IosToAsset;
 
-        /// <summary>
-        /// Width the unlock hint wraps within when its wrapped lines would reach the floor: wide
-        /// viewports have room across but little below the box.
-        /// </summary>
-        private const float ExpWideHintWidth = 2f * ExpHintWidth;
-
-        /// <summary>
-        /// Share of the pack backdrop's height taken by the patterned floor along its bottom edge
-        /// (130 of its 1080 rows), which text drawn over is hard to read against.
-        /// </summary>
-        private const float ExpFloorFraction = 130f / 1080f;
-
-        /// <summary>Gap kept between the unlock hint and the floor, in design units.</summary>
-        private const float ExpHintFloorClearance = 8f;
-
         /// <summary>Monster tint on the selected box (iOS and WP7 agree on 172, 85, 13).</summary>
         private static readonly RGBAColor ExpMonsterSelected = new(172f / 255f, 85f / 255f, 13f / 255f, 1f);
 
         /// <summary>Monster tint on every other box (54, 100, 169).</summary>
         private static readonly RGBAColor ExpMonsterIdle = new(54f / 255f, 100f / 255f, 169f / 255f, 1f);
 
-        /// <summary>
-        /// Pack atlas quads. iOS numbering up to the star badge; the atlas drops iOS quad 15 and
-        /// everything after 21, so later quads sit one lower and the projector is appended last.
-        /// </summary>
+        /// <summary>Pack atlas quads, in iOS numbering.</summary>
         private const int ExpQuadBeam = 0;
         private const int ExpQuadBox = 1;
         private const int ExpQuadBoxSelected = 2;
+        private const int ExpQuadBulletIdle = 3;
+        private const int ExpQuadBulletActive = 4;
         private const int ExpQuadFirstMonster = 5;
         private const int ExpMonsterCount = 8;
         private const int ExpQuadStar = 13;
-        private const int ExpQuadPerfect = 14;
-        private const int ExpQuadBambooLock = 17;
-        private const int ExpQuadProjector = 21;
+        private const int ExpQuadBambooLock = 18;
+        private const int ExpQuadProjector = 25;
 
-        /// <summary>
-        /// How far right of the butterfly body's own spot on the box it perches (iOS 20), in
-        /// atlas pixels.
-        /// </summary>
-        private const float ExpButterflyPerchNudge = 20f * IosToAsset;
-
-        /// <summary>Speed the strip scrolls to the caged box when the butterfly is tapped (iOS 1.8).</summary>
-        private const float ExpButterflyScrollMultiplier = 1.8f;
-
-        /// <summary>
-        /// Whether the butterfly is still flying about this session. Every launch starts it
-        /// flying, as iOS does; tapping it sends it to perch on the caged box instead.
-        /// </summary>
-        private static bool expButterflyFlying = true;
-
-        /// <summary>The butterfly by the caged box, or <see langword="null"/> once that box is open.</summary>
-        private ExperimentsButterfly expButterfly;
+        /// <summary>The pack iOS closes with bamboo instead of the padlock.</summary>
+        private const int ExpBambooPack = 7;
 
         /// <summary>Audio atlas quads: two button plates, three icons and the cross.</summary>
-        private const int ExpAudioQuadVoice = 2;
         private const int ExpAudioQuadSound = 3;
         private const int ExpAudioQuadMusic = 4;
         private const int ExpAudioQuadCross = 5;
 
         /// <summary>The projector beam, faded by how close the strip is to resting on a box.</summary>
         private Image expBeam;
+
+        /// <summary>One bullet per pack, lit for the box the strip is nearest.</summary>
+        private readonly List<Image> expBullets = [];
 
         /// <summary>
         /// Picks the Experiments backdrop for a menu scene.
@@ -177,26 +160,6 @@ namespace CutTheRopeDX.GameMain
         }
 
         /// <summary>
-        /// Creates the Experiments voice toggle, which the classic menus have no art for. The
-        /// engine's <c>+[MenuController createAudioButtonWithQuad:Delegate:ID:]</c> with the
-        /// speech bubble.
-        /// </summary>
-        /// <param name="delegateValue">Button delegate that receives press events.</param>
-        /// <param name="bid">Button identifier assigned to the toggle.</param>
-        /// <returns>The toggle, showing the voice as on.</returns>
-        internal static ToggleButton CreateExperimentsVoiceToggle(IButtonDelegation delegateValue, ButtonId bid)
-        {
-            ToggleButton toggle = new ToggleButton().InitWithUpElement1DownElement1UpElement2DownElement2andID(
-                CreateExperimentsAudioElement(ExpAudioQuadVoice, false, false),
-                CreateExperimentsAudioElement(ExpAudioQuadVoice, false, true),
-                CreateExperimentsAudioElement(ExpAudioQuadVoice, true, false),
-                CreateExperimentsAudioElement(ExpAudioQuadVoice, true, true),
-                bid);
-            toggle.delegateButtonDelegate = delegateValue;
-            return toggle;
-        }
-
-        /// <summary>
         /// Creates a total-stars style label with the Experiments star. The engine's
         /// <c>-[MenuController createTextWithStar:]</c>.
         /// </summary>
@@ -228,35 +191,41 @@ namespace CutTheRopeDX.GameMain
         private void CreateExperimentsPackSelect()
         {
             MenuView menuView = new();
-            BaseElement baseElement = CreateBackgroundWithLogowithShadow(false, false, VIEW_PACK_SELECT);
+            BaseElement baseElement = CreateBackgroundWithLogo(false, VIEW_PACK_SELECT);
             Rectangle visible = VisibleBounds;
             Rectangle fitted = FittedBox;
             float scale = FittedScale;
             float boxCenterY = fitted.y - visible.y + (ExpBoxCenterY * scale);
 
-            // Beam and projector sit under the strip, as they do in iOS where they are added to
-            // the background before the container. Pinned to the visible bottom edge rather than
-            // hung from the box, whose distance to that edge changes with the aspect ratio.
+            // Beam, projector and bullets sit under the strip, as they do in iOS where they are
+            // added to the background before the container.
             FittedGroup underlay = new() { anchor = 9, parentAnchor = 9 };
-            float visibleBottom = (visible.y + visible.h - fitted.y) / scale;
-            Vector artworkOffset = Image.GetQuadOffset(Resources.Img.MenuExpPackSelection, ExpQuadProjector);
+            Vector boxCenter = new(ViewportLayout.DesignWidth / 2f, ExpBoxCenterY);
             Image projector = Image.FromResource(Resources.Img.MenuExpPackSelection, ExpQuadProjector);
-            // Children must inherit the group's position as well as its scale.
-            projector.anchor = projector.parentAnchor = 9;
-            // Position the artwork, accounting for the transparent padding in its source canvas.
-            projector.x = (ViewportLayout.DesignWidth / 2f) + ExpProjectorRightOffset - artworkOffset.X;
-            projector.y = visibleBottom - ExpProjectorVisibleHeight - artworkOffset.Y;
+            projector.x = boxCenter.X + ExpBeamOffset.X + ExpProjectorOffset.X;
+            projector.y = boxCenter.Y + ExpBeamOffset.Y + ExpProjectorOffset.Y;
             _ = underlay.AddChild(projector);
             expBeam = Image.FromResource(Resources.Img.MenuExpPackSelection, ExpQuadBeam);
-            expBeam.anchor = expBeam.parentAnchor = 9;
-            // Both quads share the same source canvas, so keep their canvas origins aligned.
-            expBeam.x = projector.x;
-            expBeam.y = projector.y;
+            expBeam.x = boxCenter.X + ExpBeamOffset.X;
+            expBeam.y = boxCenter.Y + ExpBeamOffset.Y;
             _ = underlay.AddChild(expBeam);
+
+            int displayCount = Preferences.GetPacksCount() + (PackConfig.GetComingSoonPackIndex() >= 0 ? 1 : 0);
+            expBullets.Clear();
+            HBox bullets = new HBox().InitWithOffsetAlignHeight(ExpBulletGap, 16, 0);
+            for (int i = 0; i < displayCount; i++)
+            {
+                Image bullet = Image.FromResource(Resources.Img.MenuExpPackSelection, ExpQuadBulletIdle);
+                bullets.height = Math.Max(bullets.height, bullet.height);
+                _ = bullets.AddChild(bullet);
+                expBullets.Add(bullet);
+            }
+            bullets.x = boxCenter.X - (bullets.width / 2f);
+            bullets.y = boxCenter.Y + ExpBulletsBelowBox - bullets.height;
+            _ = underlay.AddChild(bullets);
             _ = baseElement.AddChild(underlay);
             PlaceFittedGroup(underlay);
 
-            int displayCount = Preferences.GetPacksCount() + (PackConfig.GetComingSoonPackIndex() >= 0 ? 1 : 0);
             float elementSize = ExpPackElementSize * scale;
             float step = (ExpPackElementSize + ExpPackGap) * scale;
             Vector artCenter = ExperimentsBoxArtCenter();
@@ -276,14 +245,9 @@ namespace CutTheRopeDX.GameMain
             packContainer.dontHandleTouchUpsHandledByChilds = true;
             packContainer.TurnScrollPointsOnWithCapacity(displayCount);
             packContainer.delegateScrollableContainerProtocol = this;
-            // How far below its anchor the unlock hint may reach before touching the floor.
-            Image backdrop = backdrops[VIEW_PACK_SELECT].Backdrop;
-            float floorTop = visible.h - (ExpFloorFraction * backdrop.height * backdrop.scaleY);
-            float hintCenterY = elementCenterY + (ExpHintOffset.Y * scale);
-            float hintRoom = ((floorTop - hintCenterY) / scale) - ExpHintFloorClearance;
             for (int i = 0; i < displayCount; i++)
             {
-                TouchBaseElement element = CreateExperimentsPackElement(i, elementSize, scale, hintRoom);
+                TouchBaseElement element = CreateExperimentsPackElement(i, elementSize, scale);
                 boxes[i] = element;
                 element.anchor = element.parentAnchor = 17;
                 element.x = firstLeft + (i * step);
@@ -291,7 +255,6 @@ namespace CutTheRopeDX.GameMain
                 _ = packRow.AddChild(element);
                 _ = packContainer.AddScrollPointAtXY(i * step, 0f);
             }
-            AddExperimentsButterfly(packRow, visible, scale, elementSize);
             _ = baseElement.AddChild(packContainer);
 
             HBox starTotal = CreateExperimentsTextWithStar(
@@ -347,12 +310,8 @@ namespace CutTheRopeDX.GameMain
         /// <param name="n">Displayed pack index; one past the last pack is the coming-soon box.</param>
         /// <param name="elementSize">Side of the element in logical units.</param>
         /// <param name="scale">Scale from design units to logical units.</param>
-        /// <param name="hintRoom">
-        /// How far below its authored center the unlock hint may reach before touching the floor,
-        /// in design units.
-        /// </param>
         /// <returns>The touchable pack element.</returns>
-        private TouchBaseElement CreateExperimentsPackElement(int n, float elementSize, float scale, float hintRoom)
+        private TouchBaseElement CreateExperimentsPackElement(int n, float elementSize, float scale)
         {
             int packsCount = Preferences.GetPacksCount();
             bool isComingSoon = n >= packsCount;
@@ -396,9 +355,8 @@ namespace CutTheRopeDX.GameMain
             _ = boxContainer.AddChild(CreateExperimentsBoxLayer(ExpQuadBoxSelected, "boxSelected"));
             if (!isComingSoon)
             {
-                Image monster = CreateExperimentsBoxLayer(ExpQuadFirstMonster + ExperimentsPackPicture(n), "boxPic");
+                Image monster = CreateExperimentsBoxLayer(ExpQuadFirstMonster + (n % ExpMonsterCount), "boxPic");
                 monster.color = ExpMonsterIdle;
-                monster.hasColor = true;
                 _ = boxContainer.AddChild(monster);
             }
 
@@ -406,7 +364,7 @@ namespace CutTheRopeDX.GameMain
             title.SetAlignment(2);
             title.SetString(isComingSoon
                 ? Application.GetString("BOX_SOON_LABEL")
-                : PackConfig.GetPackTitle(n, withNumber: false));
+                : $"{n + 1}. {Application.GetString(PackConfig.GetPackName(n))}");
             float titleScale = MathF.Min(0.75f, MathF.Min(ExpTitleFit.X / title.width, ExpTitleFit.Y / title.height));
             title.scaleX = title.scaleY = titleScale;
             title.rotationCenterY = -title.height / 2f;
@@ -421,33 +379,21 @@ namespace CutTheRopeDX.GameMain
                 int requiredStars = PackConfig.GetUnlockStars(n);
                 Image lockImage = CreateExperimentsLock(n);
                 _ = boxContainer.AddChild(lockImage);
-
-                // The padlock shows its price; the bamboo cage leaves it to the hint below.
-                if (!IsExperimentsCagedPack(n))
-                {
-                    HBox stars = CreateExperimentsTextWithStar(requiredStars.ToString(CultureInfo.InvariantCulture));
-                    stars.anchor = stars.parentAnchor = 18;
-                    stars.x = ExpLockStarsOffset.X;
-                    stars.y = ExpLockStarsOffset.Y;
-                    _ = lockImage.AddChild(stars);
-                }
+                HBox stars = CreateExperimentsTextWithStar(requiredStars.ToString(CultureInfo.InvariantCulture));
+                stars.anchor = stars.parentAnchor = 18;
+                stars.x = ExpLockStarsOffset.X;
+                stars.y = ExpLockStarsOffset.Y;
+                _ = lockImage.AddChild(stars);
 
                 Text hint = new Text().InitWithFont(Application.GetFont(Resources.Fnt.SmallFont));
                 hint.SetName("hintText");
                 hint.SetAlignment(2);
-                string hintString = Application.GetString("UNLOCK_HINT").ToString()
-                    .Replace("%d", requiredStars.ToString(CultureInfo.InvariantCulture), StringComparison.Ordinal);
-                hint.SetStringandWidth(hintString, ExpHintWidth);
-
-                // Wrapped lines that would reach the floor go on one wider line instead, lifted
-                // clear of it if even that one line would still touch.
-                if (hint.height / 2f > hintRoom)
-                {
-                    hint.SetStringandWidth(hintString, ExpWideHintWidth);
-                }
+                hint.SetStringandWidth(
+                    Application.GetString("UNLOCK_HINT").ToString().Replace("%d", requiredStars.ToString(CultureInfo.InvariantCulture), StringComparison.Ordinal),
+                    ExpHintWidth);
                 hint.anchor = hint.parentAnchor = 18;
                 hint.x = ExpHintOffset.X;
-                hint.y = ExpHintOffset.Y - MathF.Max(0f, (hint.height / 2f) - hintRoom);
+                hint.y = ExpHintOffset.Y;
                 hint.color = RGBAColor.transparentRGBA;
                 _ = scaler.AddChild(hint);
             }
@@ -464,12 +410,6 @@ namespace CutTheRopeDX.GameMain
                 _ = boxContainer.AddChild(lockImage);
             }
 
-            // Every star in the pack collected: the badge sits on the box's corner, over the lock.
-            if (!isComingSoon && Preferences.IsPackPerfect(n))
-            {
-                _ = boxContainer.AddChild(CreateExperimentsBoxLayer(ExpQuadPerfect, "perfect"));
-            }
-
             Timeline pressBounce = new Timeline().InitWithMaxKeyFramesOnTrack(4);
             pressBounce.AddKeyFrame(KeyFrame.MakeScale(1, 1, KeyFrame.TransitionType.FRAME_TRANSITION_LINEAR, 0));
             pressBounce.AddKeyFrame(KeyFrame.MakeScale(0.95f, 1.05f, KeyFrame.TransitionType.FRAME_TRANSITION_EASE_OUT, 0.15f));
@@ -477,18 +417,6 @@ namespace CutTheRopeDX.GameMain
             pressBounce.AddKeyFrame(KeyFrame.MakeScale(1, 1, KeyFrame.TransitionType.FRAME_TRANSITION_EASE_OUT, 0.25f));
             _ = boxContainer.AddTimeline(pressBounce);
             return element;
-        }
-
-        /// <summary>
-        /// Monster drawn on a pack's box: the one its pack entry names, or the next in turn by the
-        /// pack's position when it names none that exists.
-        /// </summary>
-        /// <param name="n">Pack index.</param>
-        /// <returns>The monster index, from 0 to <see cref="ExpMonsterCount"/> - 1.</returns>
-        private static int ExperimentsPackPicture(int n)
-        {
-            int picture = PackConfig.GetExpPackPicture(n);
-            return picture is >= 0 and < ExpMonsterCount ? picture : n % ExpMonsterCount;
         }
 
         /// <summary>
@@ -507,43 +435,14 @@ namespace CutTheRopeDX.GameMain
         }
 
         /// <summary>
-        /// Gets whether a pack is caged in bamboo rather than padlocked: the packs whose entries
-        /// ask for a bamboo gate, or iOS's choice of the last pack when none does.
-        /// </summary>
-        /// <param name="n">Displayed pack index.</param>
-        /// <returns><see langword="true"/> for a caged pack.</returns>
-        private static bool IsExperimentsCagedPack(int n)
-        {
-            return PackConfig.HasBambooGates
-                ? n < Preferences.GetPacksCount() && PackConfig.GetUseBambooGate(n)
-                : n == Preferences.GetPacksCount() - 1;
-        }
-
-        /// <summary>
-        /// Gets the caged pack the butterfly keeps company: the last one, as there is one butterfly.
-        /// </summary>
-        /// <returns>The pack index, or -1 when no pack is caged.</returns>
-        private static int ExperimentsButterflyPack()
-        {
-            for (int n = Preferences.GetPacksCount() - 1; n >= 0; n--)
-            {
-                if (IsExperimentsCagedPack(n))
-                {
-                    return n;
-                }
-            }
-            return -1;
-        }
-
-        /// <summary>
-        /// Creates the lock drawn over a closed box: bamboo on the last pack, the padlock
-        /// everywhere else.
+        /// Creates the lock drawn over a closed box: bamboo on the last Experiments pack, the
+        /// padlock everywhere else.
         /// </summary>
         /// <param name="n">Displayed pack index.</param>
         /// <returns>The lock, in the box's frame.</returns>
         private static Image CreateExperimentsLock(int n)
         {
-            Image lockImage = IsExperimentsCagedPack(n)
+            Image lockImage = n % ExpMonsterCount == ExpBambooPack
                 ? Image.FromResource(Resources.Img.MenuExpPackSelection, ExpQuadBambooLock)
                 : Image.FromResource(Resources.Img.MenuExpLock, 0);
             lockImage.DoRestoreCutTransparency();
@@ -569,11 +468,11 @@ namespace CutTheRopeDX.GameMain
             }
 
             float scroll = packContainer.GetScroll().X;
-            expButterfly?.ViewLeft = scroll;
             float step = packContainer.TotalScrollPoints > 1
                 ? packContainer.GetScrollPoint(1).X - packContainer.GetScrollPoint(0).X
                 : 1f;
             float nearest = 0f;
+            int nearestIndex = 0;
             for (int i = 0; i < packContainer.TotalScrollPoints; i++)
             {
                 BaseElement element = boxes[i];
@@ -584,7 +483,11 @@ namespace CutTheRopeDX.GameMain
 
                 float distance = MathF.Min(1f, MathF.Abs((scroll + packContainer.GetScrollPoint(i).X) / step));
                 float closeness = 1f - distance;
-                nearest = MathF.Max(nearest, closeness);
+                if (closeness > nearest)
+                {
+                    nearest = closeness;
+                    nearestIndex = i;
+                }
 
                 SetFade(element.GetChildWithName("box"), distance);
                 SetFade(element.GetChildWithName("boxSelected"), closeness);
@@ -598,106 +501,9 @@ namespace CutTheRopeDX.GameMain
 
             // Dark until the strip is at least halfway onto a box, full on it.
             SetFade(expBeam, MathF.Max(0f, (2f * nearest) - 1f));
-        }
-
-        /// <summary>
-        /// Adds the butterfly while the caged box is still locked. iOS
-        /// <c>-[MenuController createPackSelect]</c>: it perches on the cage at once when the
-        /// picker opens on that box or has already been sent there this session, and otherwise
-        /// flies in.
-        /// </summary>
-        /// <param name="packRow">The strip's content, which the butterfly scrolls with.</param>
-        /// <param name="visible">The logical region the viewport exposes.</param>
-        /// <param name="scale">Scale the strip is drawn at.</param>
-        /// <param name="elementSize">Side of a pack element in logical units.</param>
-        private void AddExperimentsButterfly(BaseElement packRow, Rectangle visible, float scale, float elementSize)
-        {
-            expButterfly = null;
-            int caged = ExperimentsButterflyPack();
-            if (caged < 0 || boxes[caged] == null || Preferences.GetUnlockedForPackLevel(caged, 0) != UNLOCKEDSTATE.LOCKED)
+            for (int i = 0; i < expBullets.Count; i++)
             {
-                return;
-            }
-
-            // Perched where the atlas draws the body on the box: the top of the cage's left pole.
-            BaseElement box = boxes[caged];
-            float boxTop = (visible.h / 2f) + box.y - (elementSize / 2f);
-            Vector bodyOffset = Image.GetQuadOffset(Resources.Img.MenuExpPackSelection, ExperimentsButterfly.QuadBody);
-            Vector bodySize = Image.GetQuadSize(Resources.Img.MenuExpPackSelection, ExperimentsButterfly.QuadBody);
-            Vector perch = new(
-                box.x + ((bodyOffset.X + (bodySize.X / 2f) + ExpButterflyPerchNudge) * scale),
-                boxTop + ((bodyOffset.Y + (bodySize.Y / 2f)) * scale));
-
-            ExperimentsButterfly butterfly = new(scale)
-            {
-                ViewSize = new Vector(visible.w, visible.h),
-            };
-            butterfly.SetLandingPoint(perch);
-            int lastPack = Math.Min(Preferences.GetLastBox(), Preferences.GetPacksCount());
-            butterfly.ViewLeft = ExperimentsViewLeftAt(lastPack);
-            butterfly.SetViewRect(butterfly.ViewLeft);
-            if (lastPack == caged || !expButterflyFlying)
-            {
-                butterfly.SetFlyingMode(ExperimentsButterfly.FlightMode.Landed);
-                butterfly.x = perch.X;
-                butterfly.y = perch.Y;
-            }
-            else
-            {
-                // Starts a little off the left of the screen and flies in.
-                butterfly.x = butterfly.ViewLeft - (butterfly.width * scale);
-                butterfly.y = visible.h / 3f;
-            }
-            butterfly.Tapped = () =>
-            {
-                expButterflyFlying = false;
-                butterfly.SetFlyingMode(ExperimentsButterfly.FlightMode.Landing);
-                packContainer.MoveToScrollPointmoveMultiplier(caged, ExpButterflyScrollMultiplier);
-            };
-            butterfly.Gone = () => expButterfly = null;
-            _ = packRow.AddChild(butterfly);
-            expButterfly = butterfly;
-        }
-
-        /// <summary>
-        /// Steers the butterfly as the picker heads for another box: toward the cage to land if
-        /// that is where it is going, otherwise over to the new box. iOS
-        /// <c>-[MenuController scrollableContainer:changedTargetScrollPoint:]</c>.
-        /// </summary>
-        /// <param name="i">Box the picker is heading for.</param>
-        private void SteerExperimentsButterfly(int i)
-        {
-            if (expButterfly == null || !expButterflyFlying || i >= packContainer.TotalScrollPoints)
-            {
-                return;
-            }
-
-            expButterfly.SetViewRect(ExperimentsViewLeftAt(i));
-            expButterfly.SetFlyingMode(i == ExperimentsButterflyPack()
-                ? ExperimentsButterfly.FlightMode.Landing
-                : ExperimentsButterfly.FlightMode.Transition);
-        }
-
-        /// <summary>
-        /// Gets where the screen's left edge falls in the strip's content once it rests on a box.
-        /// The container keeps its scroll points as negative offsets.
-        /// </summary>
-        /// <param name="i">Box index.</param>
-        /// <returns>The left edge in content coordinates.</returns>
-        private float ExperimentsViewLeftAt(int i)
-        {
-            return -packContainer.GetScrollPoint(i).X;
-        }
-
-        /// <summary>
-        /// Sends the butterfly away when the caged box opens.
-        /// </summary>
-        /// <param name="i">Box whose lock just came off.</param>
-        private void ReleaseExperimentsButterfly(int i)
-        {
-            if (expButterfly != null && i == ExperimentsButterflyPack())
-            {
-                expButterfly.FlyAway();
+                expBullets[i].SetDrawQuad(i == nearestIndex ? ExpQuadBulletActive : ExpQuadBulletIdle);
             }
         }
 
