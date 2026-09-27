@@ -461,6 +461,23 @@ namespace CutTheRopeDX.GameMain
         }
 
         /// <summary>
+        /// Gets a pack's title for the pack picker: its localized name, numbered unless its entry
+        /// turns the number off.
+        /// </summary>
+        /// <param name="pack">Target pack index.</param>
+        /// <returns>The title, or <see langword="null"/> when <paramref name="pack"/> is out of range.</returns>
+        public static string GetPackTitle(int pack)
+        {
+            if (pack < 0 || pack >= packs.Count)
+            {
+                return null;
+            }
+
+            string name = Application.GetString(packs[pack].PackName);
+            return packs[pack].ShowBoxNumber ? $"{pack + 1}. {name}" : name;
+        }
+
+        /// <summary>
         /// Returns the index of the first non-playable pack entry (coming soon placeholder), or -1 if none.
         /// </summary>
         /// <returns>The coming-soon pack index, or -1 when no placeholder pack exists.</returns>
