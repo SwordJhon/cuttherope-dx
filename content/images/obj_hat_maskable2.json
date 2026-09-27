@@ -1,0 +1,215 @@
+{
+  "frames": [
+    {
+      "filename": "frame_0009_layer_middle_03.png",
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 155,
+        "h": 58
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 124,
+        "y": 110,
+        "w": 155,
+        "h": 58
+      },
+      "sourceSize": {
+        "w": 431,
+        "h": 431
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "frame_0010_layer_mask_03.png",
+      "frame": {
+        "x": 2,
+        "y": 64,
+        "w": 151,
+        "h": 54
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 126,
+        "y": 113,
+        "w": 151,
+        "h": 54
+      },
+      "sourceSize": {
+        "w": 431,
+        "h": 431
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "frame_0011_layer_middle_04.png",
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 155,
+        "h": 58
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 124,
+        "y": 110,
+        "w": 155,
+        "h": 58
+      },
+      "sourceSize": {
+        "w": 431,
+        "h": 431
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "frame_0012_layer_mask_04.png",
+      "frame": {
+        "x": 2,
+        "y": 122,
+        "w": 151,
+        "h": 54
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 126,
+        "y": 113,
+        "w": 151,
+        "h": 54
+      },
+      "sourceSize": {
+        "w": 431,
+        "h": 431
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "frame_0013_layer_middle_05.png",
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 155,
+        "h": 58
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 124,
+        "y": 110,
+        "w": 155,
+        "h": 58
+      },
+      "sourceSize": {
+        "w": 431,
+        "h": 431
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "frame_0014_layer_mask_05.png",
+      "frame": {
+        "x": 2,
+        "y": 180,
+        "w": 151,
+        "h": 54
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 126,
+        "y": 113,
+        "w": 151,
+        "h": 54
+      },
+      "sourceSize": {
+        "w": 431,
+        "h": 431
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "frame_0015_layer_middle_06.png",
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 155,
+        "h": 58
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 124,
+        "y": 110,
+        "w": 155,
+        "h": 58
+      },
+      "sourceSize": {
+        "w": 431,
+        "h": 431
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "frame_0016_layer_mask_06.png",
+      "frame": {
+        "x": 2,
+        "y": 238,
+        "w": 151,
+        "h": 54
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 126,
+        "y": 113,
+        "w": 151,
+        "h": 54
+      },
+      "sourceSize": {
+        "w": 431,
+        "h": 431
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  ],
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "obj_hat_maskable2.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 159,
+      "h": 294
+    },
+    "scale": 1
+  }
+}

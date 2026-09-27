@@ -1,0 +1,290 @@
+{
+  "frames": [
+    {
+      "filename": "decal_arrow.png",
+      "frame": {
+        "x": 2,
+        "y": 405,
+        "w": 55,
+        "h": 51
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 1,
+        "y": 0,
+        "w": 55,
+        "h": 51
+      },
+      "sourceSize": {
+        "w": 56,
+        "h": 52
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "decal_candy.png",
+      "frame": {
+        "x": 166,
+        "y": 321,
+        "w": 92,
+        "h": 100
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 92,
+        "h": 100
+      },
+      "sourceSize": {
+        "w": 92,
+        "h": 100
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "decal_cardboard_arrows.png",
+      "frame": {
+        "x": 325,
+        "y": 2,
+        "w": 127,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 127,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 127,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "decal_cardboard_umbrella.png",
+      "frame": {
+        "x": 320,
+        "y": 315,
+        "w": 126,
+        "h": 127
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 126,
+        "h": 127
+      },
+      "sourceSize": {
+        "w": 126,
+        "h": 127
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "decal_heart1.png",
+      "frame": {
+        "x": 61,
+        "y": 405,
+        "w": 36,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 36,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 36,
+        "h": 37
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "decal_heart2.png",
+      "frame": {
+        "x": 2,
+        "y": 330,
+        "w": 58,
+        "h": 71
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 58,
+        "h": 71
+      },
+      "sourceSize": {
+        "w": 58,
+        "h": 71
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "decal_omnom1.png",
+      "frame": {
+        "x": 2,
+        "y": 166,
+        "w": 160,
+        "h": 160
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 160,
+        "h": 160
+      },
+      "sourceSize": {
+        "w": 160,
+        "h": 160
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "decal_omnom2.png",
+      "frame": {
+        "x": 175,
+        "y": 2,
+        "w": 146,
+        "h": 161
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 146,
+        "h": 161
+      },
+      "sourceSize": {
+        "w": 146,
+        "h": 161
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "decal_omnom3.png",
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 169,
+        "h": 160
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 169,
+        "h": 160
+      },
+      "sourceSize": {
+        "w": 169,
+        "h": 160
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "decal_star1.png",
+      "frame": {
+        "x": 320,
+        "y": 167,
+        "w": 136,
+        "h": 144
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 136,
+        "h": 144
+      },
+      "sourceSize": {
+        "w": 136,
+        "h": 144
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "decal_star2.png",
+      "frame": {
+        "x": 166,
+        "y": 167,
+        "w": 150,
+        "h": 150
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 150,
+        "h": 150
+      },
+      "sourceSize": {
+        "w": 150,
+        "h": 150
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  ],
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "decals_cardboard.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 458,
+      "h": 458
+    },
+    "scale": 1
+  }
+}

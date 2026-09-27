@@ -1,0 +1,115 @@
+{
+  "frames": [
+    {
+      "filename": "frame_0000_spring_bottom.png",
+      "frame": {
+        "x": 160,
+        "y": 80,
+        "w": 161,
+        "h": 70
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 161,
+        "h": 70
+      },
+      "sourceSize": {
+        "w": 161,
+        "h": 70
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "frame_0001_spring_top.png",
+      "frame": {
+        "x": 160,
+        "y": 154,
+        "w": 152,
+        "h": 42
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 152,
+        "h": 42
+      },
+      "sourceSize": {
+        "w": 152,
+        "h": 42
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "frame_0002_metal_bumper.png",
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 154,
+        "h": 154
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 154,
+        "h": 154
+      },
+      "sourceSize": {
+        "w": 154,
+        "h": 154
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "frame_0003_spikes.png",
+      "frame": {
+        "x": 160,
+        "y": 2,
+        "w": 164,
+        "h": 74
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 164,
+        "h": 74
+      },
+      "sourceSize": {
+        "w": 164,
+        "h": 74
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  ],
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "obj_origins.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 326,
+      "h": 198
+    },
+    "scale": 1
+  }
+}

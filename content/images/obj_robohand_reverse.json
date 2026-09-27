@@ -1,0 +1,65 @@
+{
+  "frames": [
+    {
+      "filename": "frame_10_button_active.png",
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 118,
+        "h": 122
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 91,
+        "y": 89,
+        "w": 118,
+        "h": 122
+      },
+      "sourceSize": {
+        "w": 298,
+        "h": 298
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "frame_11_button_idle.png",
+      "frame": {
+        "x": 118,
+        "y": 0,
+        "w": 118,
+        "h": 122
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 91,
+        "y": 89,
+        "w": 118,
+        "h": 122
+      },
+      "sourceSize": {
+        "w": 298,
+        "h": 298
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  ],
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "obj_robohand_reverse.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 236,
+      "h": 122
+    },
+    "scale": 1
+  }
+}

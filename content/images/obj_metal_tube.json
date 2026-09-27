@@ -1,0 +1,115 @@
+{
+  "frames": [
+    {
+      "filename": "frame_0000.png",
+      "frame": {
+        "x": 349,
+        "y": 0,
+        "w": 287,
+        "h": 289
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 31,
+        "y": 28,
+        "w": 287,
+        "h": 289
+      },
+      "sourceSize": {
+        "w": 350,
+        "h": 344
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "frame_0001.png",
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 349,
+        "h": 343
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 1,
+        "w": 349,
+        "h": 343
+      },
+      "sourceSize": {
+        "w": 350,
+        "h": 344
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "frame_0002.png",
+      "frame": {
+        "x": 0,
+        "y": 343,
+        "w": 333,
+        "h": 329
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 15,
+        "w": 333,
+        "h": 329
+      },
+      "sourceSize": {
+        "w": 350,
+        "h": 344
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "frame_0003.png",
+      "frame": {
+        "x": 349,
+        "y": 289,
+        "w": 40,
+        "h": 42
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 156,
+        "y": 151,
+        "w": 40,
+        "h": 42
+      },
+      "sourceSize": {
+        "w": 350,
+        "h": 344
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  ],
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "obj_metal_tube.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 636,
+      "h": 672
+    },
+    "scale": 1
+  }
+}
