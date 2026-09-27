@@ -1,0 +1,115 @@
+{
+  "frames": [
+    {
+      "filename": "frame_00_stick_left.png",
+      "frame": {
+        "x": 2,
+        "y": 93,
+        "w": 37,
+        "h": 87
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 37,
+        "h": 87
+      },
+      "sourceSize": {
+        "w": 37,
+        "h": 87
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "frame_01_stick_mid.png",
+      "frame": {
+        "x": 84,
+        "y": 93,
+        "w": 1,
+        "h": 21
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 35,
+        "w": 1,
+        "h": 21
+      },
+      "sourceSize": {
+        "w": 1,
+        "h": 87
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "frame_02_stick_right.png",
+      "frame": {
+        "x": 43,
+        "y": 93,
+        "w": 37,
+        "h": 87
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 37,
+        "h": 87
+      },
+      "sourceSize": {
+        "w": 37,
+        "h": 87
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "frame_03_spikes.png",
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 125,
+        "h": 87
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 13,
+        "y": 0,
+        "w": 125,
+        "h": 87
+      },
+      "sourceSize": {
+        "w": 153,
+        "h": 87
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  ],
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "obj_spike_extendable.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 129,
+      "h": 182
+    },
+    "scale": 1
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "frames": [
+    {
+      "filename": "frame_0000.png",
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 89,
+        "h": 92
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 89,
+        "h": 92
+      },
+      "sourceSize": {
+        "w": 89,
+        "h": 92
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "frame_0001.png",
+      "frame": {
+        "x": 95,
+        "y": 2,
+        "w": 89,
+        "h": 92
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 89,
+        "h": 92
+      },
+      "sourceSize": {
+        "w": 89,
+        "h": 92
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  ],
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "obj_hook_clockwork.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 186,
+      "h": 96
+    },
+    "scale": 1
+  }
+}
