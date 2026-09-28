@@ -461,6 +461,10 @@ namespace CutTheRopeDX.GameMain
                 {
                     _ = resources.Add(Resources.Img.CharAnimationsExperiments);
                 }
+                if (MenuTheme.IsExperiments)
+                {
+                    _ = resources.Add(Resources.Img.CharAnimationsExperiments);
+                }
             }
             else
             {
@@ -471,8 +475,8 @@ namespace CutTheRopeDX.GameMain
             }
 
             _ = resources.Add(Resources.Img.FxBubbles);
-            // Every skin sits on the pack's platform; Paddington's suitcase is preloaded with the January art.
-            _ = resources.Add(GameScene.ResolveSupport(pack, isPaddington: false, MenuTheme.IsExperiments).Resource);
+            // Every skin sits on the platform of the menus in use.
+            _ = resources.Add(MenuTheme.IsExperiments ? Resources.Img.CharSupportExperiments : Resources.Img.CharSupports);
 
             AddOmNomSound(resources, skin, Resources.Snd.MonsterChewing);
             AddOmNomSound(resources, skin, Resources.Snd.MonsterClose);

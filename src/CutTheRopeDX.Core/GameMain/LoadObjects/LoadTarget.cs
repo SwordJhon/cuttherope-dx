@@ -24,6 +24,9 @@ namespace CutTheRopeDX.GameMain
         /// <summary>Number of platforms on the Experiments support sheet, one per Experiments pack.</summary>
         private const int ExperimentsSupportCount = 8;
 
+        /// <summary>Number of platforms on the Experiments support sheet, one per Experiments pack.</summary>
+        private const int ExperimentsSupportCount = 8;
+
         /// <summary>
         /// Loads Om Nom from XML node data
         /// Sets up Om Nom animations, blink animation, and greeting if needed
@@ -52,6 +55,7 @@ namespace CutTheRopeDX.GameMain
                 isPaddington && isPrimaryTarget && !nightLevel && RootController.IsShowGreeting();
 
             (string supportResource, int requestedQuad) = ResolveSupport(pack, isPaddington, MenuTheme.IsExperiments);
+            (string supportResource, int requestedQuad) = ResolveSupport(pack, isPaddington, MenuTheme.IsExperiments);
 
             // Clamp quad index to valid range; fall back to first quad for invalid values.
             Texture2D supportTexture = Application.GetTexture(supportResource);
@@ -62,6 +66,7 @@ namespace CutTheRopeDX.GameMain
             support.anchor = 18;
 
             ITargetAnimationBackend animation = TargetAnimationBackendFactory.CreateForTarget(
+                targetType, nightLevel, SpecialEvents.IsXmas, isPaddington, paddingtonGreetingPending, MenuTheme.IsExperiments);
                 targetType, nightLevel, SpecialEvents.IsXmas, isPaddington, paddingtonGreetingPending, MenuTheme.IsExperiments);
             GameObject targetObj = animation.TargetObject;
             targetBaseScaleX = animation.GetTargetBaseScaleX();
@@ -120,9 +125,9 @@ namespace CutTheRopeDX.GameMain
         }
 
         /// <summary>
-        /// Picks the platform Om Nom sits on. Paddington seats him on the bear's suitcase. Otherwise
-        /// the pack's platform set decides: the Experiments set takes the platform the pack's entry
-        /// names or, when it names none that exists, the next in turn by the pack's position.
+        /// Picks the platform Om Nom sits on. Paddington seats him on the bear's suitcase; the
+        /// Experiments menus use that game's platforms, each pack taking the one its entry names or,
+        /// when it names none that exists, the next in turn by the pack's position.
         /// </summary>
         /// <param name="pack">Pack being played.</param>
         /// <param name="isPaddington">Whether the Paddington greeting is in play.</param>
@@ -134,24 +139,13 @@ namespace CutTheRopeDX.GameMain
             {
                 return (Resources.Img.CharSupportsXmas, PaddingtonSupportQuad);
             }
-            if (ResolveSupportTheme(PackConfig.GetSittingPlatformTheme(pack), isExperiments) == SittingPlatformTheme.Experiments)
+            if (isExperiments)
             {
                 int quad = PackConfig.GetExpSittingPlatform(pack);
                 return (Resources.Img.CharSupportExperiments,
                     quad is >= 0 and < ExperimentsSupportCount ? quad : pack % ExperimentsSupportCount);
             }
             return (Resources.Img.CharSupports, PackConfig.GetSittingPlatform(pack));
-        }
-
-        /// <summary>
-        /// Picks the platform set: the one the pack asks for, else the one matching the menus.
-        /// </summary>
-        /// <param name="configured">Platform set from the pack's entry, or <see langword="null"/> when unset.</param>
-        /// <param name="isExperiments">Whether the Experiments menus are active.</param>
-        /// <returns>The platform set to draw from.</returns>
-        internal static SittingPlatformTheme ResolveSupportTheme(SittingPlatformTheme? configured, bool isExperiments)
-        {
-            return configured ?? (isExperiments ? SittingPlatformTheme.Experiments : SittingPlatformTheme.Original);
         }
     }
 }
