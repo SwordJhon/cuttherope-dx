@@ -41,6 +41,7 @@ namespace CutTheRopeDX.GameMain
     /// <param name="boxBackgroundP2Y">Y position for the secondary background in long levels, or 0 when unused.</param>
     /// <param name="sittingPlatform">Quad index used for the support platform.</param>
     /// <param name="expSittingPlatform">Quad index of this pack's Experiments support platform, or -1 to follow the pack's position.</param>
+    /// <param name="sittingPlatformTheme">Platform set this pack sits on, or <see langword="null"/> to follow the menu style.</param>
     /// <param name="boxCovers">Resource names for the pack cover assets.</param>
     /// <param name="boxHoleBgColor">Background color used behind the box hole in the pack selection menu.</param>
     /// <param name="musicPack">Resource names for pack-specific music.</param>
@@ -63,6 +64,7 @@ namespace CutTheRopeDX.GameMain
         int boxBackgroundP2Y,
         int sittingPlatform,
         int expSittingPlatform,
+        SittingPlatformTheme? sittingPlatformTheme,
         string[] boxCovers,
         RGBAColor boxHoleBgColor,
         string[] musicPack,
@@ -103,6 +105,9 @@ namespace CutTheRopeDX.GameMain
 
         /// <summary>Quad index in <see cref="Resources.Img.CharSupportExperiments"/> for this pack's support platform, or -1 to follow the pack's position.</summary>
         public int ExpSittingPlatform { get; } = expSittingPlatform;
+
+        /// <summary>Platform set this pack sits on, or <see langword="null"/> to follow the menu style.</summary>
+        public SittingPlatformTheme? SittingPlatformTheme { get; } = sittingPlatformTheme;
 
         /// <summary>String resource names for cover assets.</summary>
         public string[] BoxCovers { get; } = boxCovers;
@@ -291,6 +296,16 @@ namespace CutTheRopeDX.GameMain
         public static int GetExpSittingPlatform(int pack)
         {
             return pack >= 0 && pack < packs.Count ? packs[pack].ExpSittingPlatform : -1;
+        }
+
+        /// <summary>
+        /// Gets the platform set a pack asks to sit on.
+        /// </summary>
+        /// <param name="pack">Target pack index.</param>
+        /// <returns>The platform set, or <see langword="null"/> when unset or <paramref name="pack"/> is out of range.</returns>
+        public static SittingPlatformTheme? GetSittingPlatformTheme(int pack)
+        {
+            return pack >= 0 && pack < packs.Count ? packs[pack].SittingPlatformTheme : null;
         }
 
         /// <summary>
@@ -606,6 +621,8 @@ namespace CutTheRopeDX.GameMain
 
                     int sittingPlatform = ParseIntProperty(packElement, "sittingPlatform", 0, packListEntry.ConfigFileName);
                     int expSittingPlatform = ParseIntProperty(packElement, "expSittingPlatform", -1, packListEntry.ConfigFileName);
+                    SittingPlatformTheme? sittingPlatformTheme = ParseSittingPlatformTheme(
+                        ParseStringProperty(packElement, "sittingPlatformTheme"), packListEntry.ConfigFileName);
 
                     string[] boxCovers = ParseResourceNames(packElement, "boxCover");
                     if (isPlayable)
@@ -645,6 +662,7 @@ namespace CutTheRopeDX.GameMain
                             boxBackgroundP2Y,
                             sittingPlatform,
                             expSittingPlatform,
+                            sittingPlatformTheme,
                             boxCovers,
                             boxHoleBgColor,
                             musicPack,
