@@ -240,6 +240,7 @@ namespace CutTheRopeDX.GameMain
                 BackgroundImg.Bgr09P1, BackgroundImg.Bgr09P2, BackgroundImg.Bgr10P1, BackgroundImg.Bgr10P2,
                 BackgroundImg.Bgr11P1, BackgroundImg.Bgr11P2, BackgroundImg.Bgr12P1, BackgroundImg.Bgr13P1,
                 BackgroundImg.Bgr14P1, BackgroundImg.Bgr15P1, BackgroundImg.Bgr16P1, BackgroundImg.Bgr17P1,
+                BackgroundImg.Bgr17P1New, BackgroundImg.Bgr18P1, BackgroundImg.Bgr18P2,
                 BackgroundImg.ZeptolabNoLink, BackgroundImg.SkinBackground,
                 BackgroundImg.MenuExpMainBgr, BackgroundImg.MenuExpDefaultBgr,
                 BackgroundImg.MenuExpCampaignBgr, BackgroundImg.MenuExpLoadingBgr
@@ -287,6 +288,11 @@ namespace CutTheRopeDX.GameMain
             public const string MenuExpDefaultBgr = "menu_bgr_default_horiz";
             public const string MenuExpCampaignBgr = "menu_campaign_bgr_horiz";
             public const string MenuExpLoadingBgr = "menu_loading_bgr_exp";
+
+            // Custom / Extra Assets
+            public const string Bgr17P1New = "bgr_17_p1_new";
+            public const string Bgr18P1 = "bgr_18_p1";
+            public const string Bgr18P2 = "bgr_18_p2";
         }
 
         /// <summary>
