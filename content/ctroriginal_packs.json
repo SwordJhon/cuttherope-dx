@@ -207,7 +207,7 @@
     },
     {
         "packName": "BOX17_LABEL",
-        "boxBackground": ["bgr_17_p1"],
+        "boxBackground": ["bgr_17_p1_new"],
         "boxCover": ["bgr_17_cover"],
         "boxHoleBgColor": [55, 38, 62],
         "boxLabelText": "HARDEST_LABEL",

@@ -1,0 +1,17 @@
+[
+    {
+        "packName": "Sweet Testing",
+        "boxBackground": ["bgr_18_p1", "bgr_18_p2"],
+        "boxBackgroundP2Y": 1165,
+        "boxCover": ["bgr_18_cover"],
+        "boxHoleBgColor": [31, 42, 84],
+        "ghostGrabColor": [102, 179, 255],
+        "levelCount": 1,
+        "musicList": ["game_music_exp"],
+        "packSpritesheet": "3",
+        "packQuadIndex": 0,
+        "sittingPlatformTheme": "extras",
+        "extraSittingPlatform": 0,
+        "unlockStars": 0
+    }
+]

@@ -4,5 +4,10 @@
         "saveSlot": 0,
         "introVideo": "ctr_intro",
         "outroVideo": "ctr_outro"
+    },
+    {
+        "boxDataName": "testing_packs",
+        "showBoxNumber": false,
+        "saveSlot": 1
     }
 ]

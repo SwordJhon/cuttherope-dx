@@ -1,0 +1,14 @@
+[
+    {
+        "packName": "Sweet Challenge / Kitchen Box",
+        "boxBackground": ["bgr_18_p1", "bgr_18_p2"],
+        "boxBackgroundP2Y": 1165,
+        "boxBackgroundP2Y_old": 1167,
+        "boxCover": ["bgr_18_cover"],
+        "boxHoleBgColor": [31, 42, 84],
+        "packSpritesheet": "3",
+        "packQuadIndex": 0,
+        "sittingPlatformSpritesheet": "extras",
+        "sittingPlatform": 0
+    }
+]

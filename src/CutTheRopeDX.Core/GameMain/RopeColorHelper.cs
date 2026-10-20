@@ -76,6 +76,34 @@ namespace CutTheRopeDX.GameMain
                     RGBAColor.MakeRGBA(1, 0.831f, 0.404f, 1),  // Orange
                     RGBAColor.MakeRGBA(0.251f, 0.239f, 0.278f, 1)   // Dark purple
                 ),
+                9 => new RopeColors(
+                    RGBAColor.MakeRGBA(0.49f, 0.1f, 0.86f, 1),  // Purple
+                    RGBAColor.MakeRGBA(0.3f, 0.77f, 0.06f, 1)   // Green
+                ),
+                10 => new RopeColors(
+                    RGBAColor.MakeRGBA(0.8f, 0.17f, 0.17f, 1),  // Red
+                    RGBAColor.MakeRGBA(0.24f, 0.35f, 0.73f, 1)   // Blue
+                ),
+                11 => new RopeColors(
+                    RGBAColor.MakeRGBA(0.97f, 0.74f, 0.32f, 1),  // Gold
+                    RGBAColor.MakeRGBA(0.32f, 0.65f, 0.62f, 1)   // Greenish blue
+                ),
+                12 => new RopeColors(
+                    RGBAColor.MakeRGBA(0.71f, 0.13f, 0.67f, 1),  // Purple
+                    RGBAColor.MakeRGBA(1f, 0.4f, 0.97f, 1)   // Magenta
+                ),
+                13 => new RopeColors(
+                    RGBAColor.MakeRGBA(0.09f, 0.47f, 0.16f, 1),  // Dark green
+                    RGBAColor.MakeRGBA(0.57f, 0.73f, 0.15f, 1)   // Green
+                ),
+                14 => new RopeColors(
+                    RGBAColor.MakeRGBA(0.2f, 0.46f, 0.87f, 1),  // Blue
+                    RGBAColor.MakeRGBA(0.19f, 0.75f, 0.97f, 1)   // Turquoise
+                ),
+                15 => new RopeColors(
+                    RGBAColor.MakeRGBA(0.51f, 0.51f, 0.51f, 1),  // Gray
+                    RGBAColor.MakeRGBA(1, 1, 1, 1)   // White
+                ),
                 _ => new RopeColors(
                     RGBAColor.MakeRGBA(0.475f, 0.305f, 0.185f, 1),  // Default to original
                     RGBAColor.MakeRGBA(0.6755555555555556f, 0.44f, 0.27555555555555555f, 1)
@@ -172,6 +200,6 @@ namespace CutTheRopeDX.GameMain
         /// <summary>
         /// Gets the total number of available rope color schemes.
         /// </summary>
-        public const int TotalRopeColors = 9;
+        public const int TotalRopeColors = 16;
     }
 }

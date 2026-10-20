@@ -788,10 +788,12 @@ namespace CutTheRopeDX.Framework.Core
             Resources.Img.MenuPopup,
             Resources.Img.MenuLogo,
             Resources.Img.MenuLogoNew,
+            Resources.Img.MenuLogoNewCandies,
             Resources.Img.CutTheRopeDXLogo,
             Resources.Img.MenuLevelUi,
             Resources.Img.MenuPackSelection,
             Resources.Img.MenuPackSelection2,
+            Resources.Img.MenuPackSelection3,
             Resources.Img.MenuPackUI,
             Resources.Img.MenuExtraButtons,
             Resources.Img.MenuBgrShadow,
@@ -801,6 +803,8 @@ namespace CutTheRopeDX.Framework.Core
                 : [],
             Resources.BackgroundImg.SkinBackground,
             Resources.Img.SkinSelection,
+            Resources.Img.SkinSelectionCandies,
+            Resources.Img.SkinSelectionRopes,
             Resources.Img.CandySelectionFx,
             null
         ];

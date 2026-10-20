@@ -24,6 +24,9 @@ namespace CutTheRopeDX.GameMain
 
         /// <summary>The Cut the Rope: Experiments platforms, picked by <c>expSittingPlatform</c>.</summary>
         Experiments,
+
+        /// <summary>Extra platforms, picked by <c>extraSittingPlatform</c>.</summary>
+        Extras,
     }
 
     /// <summary>
@@ -41,6 +44,7 @@ namespace CutTheRopeDX.GameMain
     /// <param name="boxBackgroundP2Y">Y position for the secondary background in long levels, or 0 when unused.</param>
     /// <param name="sittingPlatform">Quad index used for the support platform.</param>
     /// <param name="expSittingPlatform">Quad index of this pack's Experiments support platform, or -1 to follow the pack's position.</param>
+    /// <param name="extraSittingPlatform">Quad index of this pack's extra support platform, or -1 to follow the pack's position.</param>
     /// <param name="sittingPlatformTheme">Platform set this pack sits on, or <see langword="null"/> to follow the menu style.</param>
     /// <param name="boxCovers">Resource names for the pack cover assets.</param>
     /// <param name="boxHoleBgColor">Background color used behind the box hole in the pack selection menu.</param>
@@ -64,6 +68,7 @@ namespace CutTheRopeDX.GameMain
         int boxBackgroundP2Y,
         int sittingPlatform,
         int expSittingPlatform,
+        int extraSittingPlatform,
         SittingPlatformTheme? sittingPlatformTheme,
         string[] boxCovers,
         RGBAColor boxHoleBgColor,
@@ -105,6 +110,9 @@ namespace CutTheRopeDX.GameMain
 
         /// <summary>Quad index in <see cref="Resources.Img.CharSupportExperiments"/> for this pack's support platform, or -1 to follow the pack's position.</summary>
         public int ExpSittingPlatform { get; } = expSittingPlatform;
+
+        /// <summary>Quad index in <see cref="Resources.Img.CharSupportsExtras"/> for this pack's support platform, or -1 to follow the pack's position.</summary>
+        public int ExtraSittingPlatform { get; } = extraSittingPlatform;
 
         /// <summary>Platform set this pack sits on, or <see langword="null"/> to follow the menu style.</summary>
         public SittingPlatformTheme? SittingPlatformTheme { get; } = sittingPlatformTheme;
@@ -296,6 +304,16 @@ namespace CutTheRopeDX.GameMain
         public static int GetExpSittingPlatform(int pack)
         {
             return pack >= 0 && pack < packs.Count ? packs[pack].ExpSittingPlatform : -1;
+        }
+
+        /// <summary>
+        /// Gets the extra support platform quad index for a pack.
+        /// </summary>
+        /// <param name="pack">Target pack index.</param>
+        /// <returns>The quad index, or 0 when unset or <paramref name="pack"/> is out of range.</returns>
+        public static int GetExtraSittingPlatform(int pack)
+        {
+            return pack >= 0 && pack < packs.Count ? packs[pack].ExtraSittingPlatform : 0;
         }
 
         /// <summary>
@@ -621,6 +639,7 @@ namespace CutTheRopeDX.GameMain
 
                     int sittingPlatform = ParseIntProperty(packElement, "sittingPlatform", 0, packListEntry.ConfigFileName);
                     int expSittingPlatform = ParseIntProperty(packElement, "expSittingPlatform", -1, packListEntry.ConfigFileName);
+                    int extraSittingPlatform = ParseIntProperty(packElement, "extraSittingPlatform", -1, packListEntry.ConfigFileName);
                     SittingPlatformTheme? sittingPlatformTheme = ParseSittingPlatformTheme(
                         ParseStringProperty(packElement, "sittingPlatformTheme"), packListEntry.ConfigFileName);
 
@@ -662,6 +681,7 @@ namespace CutTheRopeDX.GameMain
                             boxBackgroundP2Y,
                             sittingPlatform,
                             expSittingPlatform,
+                            extraSittingPlatform,
                             sittingPlatformTheme,
                             boxCovers,
                             boxHoleBgColor,
@@ -709,6 +729,7 @@ namespace CutTheRopeDX.GameMain
             {
                 "1" => Resources.Img.MenuPackSelection,
                 "2" => Resources.Img.MenuPackSelection2,
+                "3" => Resources.Img.MenuPackSelection3,
                 _ => Resources.Img.MenuPackSelection,
             };
         }
@@ -899,6 +920,8 @@ namespace CutTheRopeDX.GameMain
                     return SittingPlatformTheme.Original;
                 case "experiments":
                     return SittingPlatformTheme.Experiments;
+                case "extras":
+                    return SittingPlatformTheme.Extras;
                 default:
                     PackConfigLog.UnknownSittingPlatformTheme(Log.For(LogCategories.ContentPacks), fileName, value);
                     return null;

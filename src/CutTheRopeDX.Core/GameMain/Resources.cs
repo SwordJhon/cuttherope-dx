@@ -240,6 +240,8 @@ namespace CutTheRopeDX.GameMain
                 BackgroundImg.Bgr09P1, BackgroundImg.Bgr09P2, BackgroundImg.Bgr10P1, BackgroundImg.Bgr10P2,
                 BackgroundImg.Bgr11P1, BackgroundImg.Bgr11P2, BackgroundImg.Bgr12P1, BackgroundImg.Bgr13P1,
                 BackgroundImg.Bgr14P1, BackgroundImg.Bgr15P1, BackgroundImg.Bgr16P1, BackgroundImg.Bgr17P1,
+                BackgroundImg.Bgr18P1, BackgroundImg.Bgr18P2,
+                BackgroundImg.Bgr17P1New,
                 BackgroundImg.ZeptolabNoLink, BackgroundImg.SkinBackground,
                 BackgroundImg.MenuExpMainBgr, BackgroundImg.MenuExpDefaultBgr,
                 BackgroundImg.MenuExpCampaignBgr, BackgroundImg.MenuExpLoadingBgr
@@ -279,6 +281,9 @@ namespace CutTheRopeDX.GameMain
             public const string Bgr15P1 = "bgr_15_p1";
             public const string Bgr16P1 = "bgr_16_p1";
             public const string Bgr17P1 = "bgr_17_p1";
+            public const string Bgr17P1New = "bgr_17_p1_new";
+            public const string Bgr18P1 = "bgr_18_p1";
+            public const string Bgr18P2 = "bgr_18_p2";
             public const string ZeptolabNoLink = "zeptolab_no_link";
             public const string SkinBackground = "skin_bg";
 
@@ -305,12 +310,16 @@ namespace CutTheRopeDX.GameMain
             public const string MenuPopup = "menu_popup";
             public const string MenuLogo = "menu_logo";
             public const string MenuLogoNew = "menu_logo_new";
+            public const string MenuLogoNewCandies = "menu_logo_new_candies";
             public const string CutTheRopeDXLogo = "CutTheRopeDXLogo";
             public const string CandySelectionFx = "candy_selection_fx";
             public const string SkinSelection = "skin_selection";
+            public const string SkinSelectionCandies = "skin_selection_candies";
+            public const string SkinSelectionRopes = "skin_selection_ropes";
             public const string MenuPackUI = "menu_pack_ui";
             public const string MenuPackSelection = "menu_pack_selection";
             public const string MenuPackSelection2 = "menu_pack_selection2";
+            public const string MenuPackSelection3 = "menu_pack_selection3";
             public const string MenuExtraButtons = "menu_extra_buttons";
             public const string MenuScrollbar = "menu_scrollbar";
             public const string MenuLeaderboard = "menu_leaderboard";
@@ -373,6 +382,7 @@ namespace CutTheRopeDX.GameMain
             public const string CharSupports = "char_supports";
             public const string CharSupportsXmas = "char_supports_xmas";
             public const string CharSupportExperiments = "char_support_experiments";
+            public const string CharSupportsExtras = "char_supports_extras";
             public const string CharAnimations2 = "char_animations2";
             public const string CharAnimations3 = "char_animations3";
             public const string ObjVinil = "obj_vinil";
@@ -432,6 +442,7 @@ namespace CutTheRopeDX.GameMain
             public const string FingerTraceGlow = "traces_ctr2_glow";
             public const string ObjHookChain = "obj_hook_chain";
             public const string ObjHookAutoChain = "obj_hook_auto_chain";
+            public const string Bgr18Cover = "bgr_18_cover";
 
             // Candies
             public const string ObjCandyFx = "candies/obj_candy_fx";
@@ -487,6 +498,10 @@ namespace CutTheRopeDX.GameMain
             public const string ObjCandy50 = "candies/obj_candy_50";
             public const string ObjCandy51 = "candies/obj_candy_51";
             public const string ObjCandy52 = "candies/obj_candy_52";
+            public const string ObjCandyPaddington = "candies/obj_candy_paddington";
+            public const string ObjCandyOrigins = "candies/obj_candy_origins";
+            public const string ObjCandyLicorice = "candies/obj_candy_licorice";
+            public const string ObjCandyPlaceholder = "candies/obj_candy_placeholder";
         }
 
         /// <summary>

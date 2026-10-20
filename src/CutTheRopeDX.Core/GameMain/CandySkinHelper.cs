@@ -66,6 +66,10 @@ namespace CutTheRopeDX.GameMain
                 49 => Resources.Img.ObjCandy50,
                 50 => Resources.Img.ObjCandy51,
                 51 => Resources.Img.ObjCandy52,
+                52 => Resources.Img.ObjCandyPaddington,
+                53 => Resources.Img.ObjCandyOrigins,
+                54 => Resources.Img.ObjCandyLicorice,
+                55 => Resources.Img.ObjCandyPlaceholder,
                 _ => Resources.Img.ObjCandy01New  // Default to candy 01
             };
         }

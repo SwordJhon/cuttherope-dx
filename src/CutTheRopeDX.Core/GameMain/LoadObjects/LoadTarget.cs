@@ -24,6 +24,9 @@ namespace CutTheRopeDX.GameMain
         /// <summary>Number of platforms on the Experiments support sheet, one per Experiments pack.</summary>
         private const int ExperimentsSupportCount = 8;
 
+        /// <summary>Number of platforms on the extra support sheet.</summary>
+        private const int ExtrasSupportCount = 3;
+
         /// <summary>
         /// Loads Om Nom from XML node data
         /// Sets up Om Nom animations, blink animation, and greeting if needed
@@ -134,11 +137,18 @@ namespace CutTheRopeDX.GameMain
             {
                 return (Resources.Img.CharSupportsXmas, PaddingtonSupportQuad);
             }
-            if (ResolveSupportTheme(PackConfig.GetSittingPlatformTheme(pack), isExperiments) == SittingPlatformTheme.Experiments)
+            SittingPlatformTheme theme = ResolveSupportTheme(PackConfig.GetSittingPlatformTheme(pack), isExperiments);
+            if (theme == SittingPlatformTheme.Experiments)
             {
                 int quad = PackConfig.GetExpSittingPlatform(pack);
                 return (Resources.Img.CharSupportExperiments,
                     quad is >= 0 and < ExperimentsSupportCount ? quad : pack % ExperimentsSupportCount);
+            }
+            if (theme == SittingPlatformTheme.Extras)
+            {
+                int quad = PackConfig.GetExtraSittingPlatform(pack);
+                return (Resources.Img.CharSupportsExtras,
+                    quad is >= 0 and < ExtrasSupportCount ? quad : pack % ExtrasSupportCount);
             }
             return (Resources.Img.CharSupports, PackConfig.GetSittingPlatform(pack));
         }
