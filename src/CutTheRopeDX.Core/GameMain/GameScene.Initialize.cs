@@ -99,7 +99,7 @@ namespace CutTheRopeDX.GameMain
         /// </summary>
         private (GameObject candy, GameObject candyMain, GameObject candyTop, Animation candyBlink, Animation candyBubble, CandyInGhostBubbleAnimation candyGhostBubble) CreateCandyVisual()
         {
-            // Get selected candy skin from preferences (0-50 for candy_01 to candy_51)
+            // Get selected candy skin from preferences
             int selectedCandySkin = Framework.Core.Preferences.GetIntForKey("PREFS_SELECTED_CANDY");
             string candyResource = CandySkinHelper.GetCandyResource(selectedCandySkin);
 

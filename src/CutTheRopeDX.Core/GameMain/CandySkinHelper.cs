@@ -6,7 +6,7 @@ namespace CutTheRopeDX.GameMain
     internal static class CandySkinHelper
     {
         /// <summary>
-        /// Gets the candy resource name for a given skin index (0-50).
+        /// Gets the candy resource name for a given skin index.
         /// </summary>
         /// <param name="skinIndex">The candy skin index (0 for candy_01, 1 for candy_02, etc.)</param>
         /// <returns>The resource name for the candy skin</returns>

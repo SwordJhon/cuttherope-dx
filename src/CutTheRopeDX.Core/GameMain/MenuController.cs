@@ -332,7 +332,7 @@ namespace CutTheRopeDX.GameMain
                 logo.y = 55f;
 
                 // Candy on rope (positioned under the logo)
-                // Get selected candy skin from preferences (0-50 for candy_01 to candy_51)
+                // Get selected candy skin from preferences
                 int selectedCandySkin = Preferences.GetIntForKey("PREFS_SELECTED_CANDY");
                 Image candyUp = Image.FromResource(Resources.Img.MenuLogoNewCandies, selectedCandySkin);
                 Image candyDown = Image.FromResource(Resources.Img.MenuLogoNewCandies, selectedCandySkin);

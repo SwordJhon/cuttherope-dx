@@ -449,7 +449,7 @@ namespace CutTheRopeDX.GameMain
                 case CandySelectionMode.Rope:
                     totalItems = RopeColorHelper.TotalRopeColors;
                     selectedIndex = Preferences.GetIntForKey("PREFS_SELECTED_ROPE");
-                    baseQuadIndex = 0; // rope01-rope09 are quads 60-68
+                    baseQuadIndex = 0;
                     itemResourceName = Resources.Img.SkinSelectionRopes;
                     getButtonId = MenuButtonId.ForRopeSlot;
                     break;
@@ -466,10 +466,10 @@ namespace CutTheRopeDX.GameMain
                     break;
                 case CandySelectionMode.Candy:
                 default: // Candy
-                    const int TOTAL_CANDIES = 55;
+                    const int TOTAL_CANDIES = 56;
                     totalItems = TOTAL_CANDIES;
                     selectedIndex = Preferences.GetIntForKey("PREFS_SELECTED_CANDY");
-                    baseQuadIndex = 0; // candy01-candy52 are quads 6-57
+                    baseQuadIndex = 0;
                     itemResourceName = Resources.Img.SkinSelectionCandies;
                     getButtonId = MenuButtonId.ForCandySlot;
                     break;
