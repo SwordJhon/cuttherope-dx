@@ -49,7 +49,7 @@ def _sources(content_root: Path) -> list[Path]:
     found += sorted((content_root / "images" / "animations").rglob("*.xml"))
     found += sorted((content_root / "maps").rglob("*.xml"))
     found += sorted((content_root / "locales").glob("*.json"))
-    for name in ("packlist.json", "ctroriginal_packs.json"):
+    for name in ("packlist.json", "ctroriginal_packs.json", "testing_packs.json"):
         candidate = content_root / name
         if candidate.exists():
             found.append(candidate)
