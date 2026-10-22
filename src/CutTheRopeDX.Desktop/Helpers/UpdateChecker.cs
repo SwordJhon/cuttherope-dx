@@ -251,12 +251,12 @@ namespace CutTheRopeDX.Helpers
         /// <summary>
         /// GitHub API endpoint for the latest release.
         /// </summary>
-        private const string LatestReleaseUrl = "https://api.github.com/repos/yell0wsuit/cuttherope-dx/releases/latest";
+        private const string LatestReleaseUrl = "https://api.github.com/repos/SwordJhon/cuttherope-dx/releases/latest";
 
         /// <summary>
         /// Fallback release page when API url is missing.
         /// </summary>
-        private const string ReleasesPageUrl = "https://github.com/yell0wsuit/cuttherope-dx/releases";
+        private const string ReleasesPageUrl = "https://github.com/SwordJhon/cuttherope-dx/releases";
 
         /// <summary>
         /// Shared HTTP client for update checks.

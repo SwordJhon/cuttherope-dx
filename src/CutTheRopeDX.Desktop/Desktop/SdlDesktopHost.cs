@@ -188,7 +188,7 @@ namespace CutTheRopeDX.Desktop
                 _ => throw new ArgumentException($"Unknown SDL renderer '{renderer}'."),
             };
             // Names the game to the OS instead of the executable.
-            _ = SDL.SetAppMetadata(ProductName, Version, "page.yell0wsuit.cuttherope.dx");
+            _ = SDL.SetAppMetadata(ProductName, Version, "page.swordjhon.cuttherope.dx");
             if (!SDL.Init(SDL.InitFlags.Video | SDL.InitFlags.Events | SDL.InitFlags.Gamepad))
             {
                 throw new InvalidOperationException(SDL.GetError());
