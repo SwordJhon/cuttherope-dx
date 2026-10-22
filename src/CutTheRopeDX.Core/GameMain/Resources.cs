@@ -836,11 +836,108 @@ namespace CutTheRopeDX.GameMain
             public const string GameMusic3 = "game_music3";
             public const string GameMusic4 = "game_music4";
             public const string GameMusic5 = "game_music_remake";
+            public const string GameMusicOld = "game_music_old";
+            public const string GameMusicExtra = "game_music_extra";
             public const string MenuMusicXmas = "menu_music_xmas";
             public const string GameMusicXmas = "game_music_xmas";
             public const string MenuMusicHalloween = "menu_music_halloween";
             public const string MenuMusicExp = "menu_music_exp";
             public const string GameMusicExp = "game_music_exp";
+            public const string GameMusicExp2 = "game_music_exp2";
+
+            // CTR 2
+            public const string CTR2MenuMusic = "ctr2/MainTheme";
+            public const string CTR2GameMusic1 = "ctr2/GameMusic1";
+            public const string CTR2GameMusic2 = "ctr2/GameMusic2";
+            public const string CTR2GameMusic3 = "ctr2/GameMusic3";
+            public const string CTR2GameMusic3OST = "ctr2/GameMusic3_ost";
+
+            // Magic
+            public const string MagicBossMusic = "ctrm/BossTheme";
+            public const string MagicMenuMusic = "ctrm/LobbyTheme";
+            public const string MagicGameMusic1 = "ctrm/GameplayTheme1";
+            public const string MagicGameMusic2 = "ctrm/GameplayTheme2";
+            public const string MagicGameMusic3 = "ctrm/GameplayTheme3";
+            public const string MagicGameMusic4 = "ctrm/GameplayTheme4";
+            public const string MagicGameMusic3OST = "ctrm/GameplayTheme3_ost";
+            public const string MagicBossMusicEarly = "ctrm/BossTheme_early";
+            public const string MagicMenuMusicEarly = "ctrm/LobbyTheme_early";
+            public const string MagicGameMusicEarly = "ctrm/GameplayTheme_early";
+
+            // Remastered
+            public const string RemasteredMenuMusic = "remastered/Title";
+            public const string RemasteredMenuMusicCh1 = "remastered/Chapter01_WM";
+            public const string RemasteredGameMusicCh1 = "remastered/Chapter01";
+            public const string RemasteredMenuMusicCh2 = "remastered/Chapter02_WM";
+            public const string RemasteredGameMusicCh2 = "remastered/Chapter02";
+            public const string RemasteredMenuMusicCh3 = "remastered/Chapter03_WM";
+            public const string RemasteredGameMusicCh3 = "remastered/Chapter03";
+            public const string RemasteredMenuMusicCh4 = "remastered/Chapter04_WM";
+            public const string RemasteredGameMusicCh4 = "remastered/Chapter04";
+            public const string RemasteredMenuMusicCh5 = "remastered/Chapter05_WM";
+            public const string RemasteredGameMusicCh5 = "remastered/Chapter05";
+            public const string RemasteredBoardMusicBirthday = "remastered/Boardgame_Birthday";
+            public const string RemasteredBoardMusicChristmas = "remastered/Boardgame_Christmas";
+            public const string RemasteredBoardMusicCircus = "remastered/Boardgame_Circus";
+            public const string RemasteredBoardMusicPirates = "remastered/Boardgame_Pirates";
+            public const string RemasteredBoardMusicSpace = "remastered/Boardgame_Space";
+            public const string RemasteredBoardMusicWinterFun = "remastered/Boardgame_WinterFun";
+            public const string RemasteredMiniStoryMusicSuperHeroes = "remastered/MiniStory_SuperHeroes";
+            public const string RemasteredSpecialLevelMusicAdventure = "remastered/SpecialLevel_Adventure";
+            public const string RemasteredSpecialLevelMusicChristmas = "remastered/SpecialLevel_Christmas";
+            public const string RemasteredSpecialLevelMusicCircus = "remastered/SpecialLevel_Circus";
+            public const string RemasteredSpecialLevelMusicPirates = "remastered/SpecialLevel_Pirates";
+            public const string RemasteredSpecialLevelMusicSpace = "remastered/SpecialLevel_Space";
+            public const string RemasteredSpecialLevelMusicWinterfun = "remastered/SpecialLevel_Winterfun";
+
+            // CTR 3
+            public const string CTR3MenuMusic = "ctr3/music_Title";
+            public const string CTR3GameMusicCave = "ctr3/music_Cave";
+            public const string CTR3GameMusicDesert = "ctr3/music_Desert";
+            public const string CTR3GameMusicIceCave = "ctr3/music_IceCave_Final";
+            public const string CTR3GameMusicJungle = "ctr3/music_Jungle";
+            public const string CTR3GameMusicPirate = "ctr3/music_Pirate";
+
+            // Daily
+            public const string DailyAmbienceBeach = "daily/beach_ambience";
+            public const string DailyGrindMusicBeach = "daily/beach_grind_music";
+            public const string DailyMenuMusicBeach = "daily/beach_menu_music";
+            public const string DailyAmbienceCafe = "daily/cafe_ambience";
+            public const string DailyGrindMusicCafe = "daily/cafe_grind_music";
+            public const string DailyMenuMusicCafe = "daily/cafe_menu_music";
+            public const string DailyAmbienceCastle = "daily/castle_ambience";
+            public const string DailyGrindMusicCastle = "daily/castle_grind_music";
+            public const string DailyMenuMusicCastle = "daily/castle_menu_music";
+            public const string DailyAmbienceChristmas = "daily/christmas_ambience";
+            public const string DailyGrindMusicChristmas = "daily/christmas_grind_music";
+            public const string DailyMenuMusicChristmas = "daily/christmas_menu_music";
+            public const string DailyAmbienceCinema = "daily/cinema_ambience";
+            public const string DailyGrindMusicCinema = "daily/cinema_grind_music";
+            public const string DailyMenuMusicCinema = "daily/cinema_menu_music";
+            public const string DailyAmbienceEngineer = "daily/engineer_ambience";
+            public const string DailyGrindMusicEngineer = "daily/engineer_grind_music";
+            public const string DailyMenuMusicEngineer = "daily/engineer_menu_music";
+            public const string DailyAmbienceGarden = "daily/garden_ambience";
+            public const string DailyGrindMusicGarden = "daily/garden_grind_music";
+            public const string DailyMenuMusicGarden = "daily/garden_menu_music";
+            public const string DailyAmbienceMagic = "daily/magic_ambience";
+            public const string DailyGrindMusicMagic = "daily/magic_grind_music";
+            public const string DailyMenuMusicMagic = "daily/magic_menu_music";
+            public const string DailyAmbiencePumpkins = "daily/pumpkins_ambience";
+            public const string DailyGrindMusicPumpkins = "daily/pumpkins_grind_music";
+            public const string DailyMenuMusicPumpkins = "daily/pumpkins_menu_music";
+            public const string DailyAmbienceRecordShop = "daily/record_shop_ambience";
+            public const string DailyGrindMusicRecordShop = "daily/record_shop_grind_music";
+            public const string DailyMenuMusicRecordShop = "daily/record_shop_menu_music";
+            public const string DailyAmbienceSnow = "daily/snow_ambience";
+            public const string DailyGrindMusicSnow = "daily/snow_grind_music";
+            public const string DailyMenuMusicSnow = "daily/snow_menu_music";
+            public const string DailyAmbienceSpace = "daily/space_ambience";
+            public const string DailyGrindMusicSpace = "daily/space_grind_music";
+            public const string DailyMenuMusicSpace = "daily/space_menu_music";
+            public const string DailyAmbienceValentines = "daily/valentines_ambience";
+            public const string DailyGrindMusicValentines = "daily/valentines_grind_music";
+            public const string DailyMenuMusicValentines = "daily/valentines_menu_music";
         }
 
         /// <summary>

@@ -39,6 +39,19 @@ namespace CutTheRopeDX.GameMain
                 Resources.Music.GameMusic4,
                 Resources.Music.GameMusic5,
             ],
+            ["ctr_2"] =
+            [
+                Resources.Music.CTR2GameMusic1,
+                Resources.Music.CTR2GameMusic2,
+                Resources.Music.CTR2GameMusic3,
+            ],
+            ["ctr_magic"] =
+            [
+                Resources.Music.MagicGameMusic1,
+                Resources.Music.MagicGameMusic2,
+                Resources.Music.MagicGameMusic3,
+                Resources.Music.MagicGameMusic4,
+            ],
         };
 
         /// <summary>
