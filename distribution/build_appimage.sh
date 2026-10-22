@@ -12,7 +12,7 @@ set -e
 
 # Configuration
 APP_NAME="CutTheRope-DX"
-APP_ID="page.yell0wsuit.cuttherope.dx"
+APP_ID="page.swordjhon.cuttherope.dx"
 APP_DISPLAY_NAME="Cut the Rope DX"
 EXEC_NAME="CutTheRope-DX"
 DESCRIPTION="Cut the Rope DX, a fan-made enhancement of the PC version of Cut the Rope."

@@ -1,3 +1,9 @@
+## For this repository specifically
+
+This is a fork! For anything regarding the main project please go [here](https://github.com/yell0wsuit/cuttherope-dx).  
+The assets for this fork are hosted [here](https://github.com/SwordJhon/ctrdx-assets/).  
+There's also a [level editor](https://github.com/SwordJhon/ctrdx-editor/) for this fork.
+
 # Cut the Rope DX
 
 <p align="center">

@@ -8,7 +8,7 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 # App metadata
 # =========================
 APP_NAME="CutTheRope-DX"
-BUNDLE_ID="page.yell0wsuit.cuttherope.dx"
+BUNDLE_ID="page.swordjhon.cuttherope.dx"
 
 # =========================
 # Project / publish paths

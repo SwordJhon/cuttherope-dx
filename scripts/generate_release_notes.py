@@ -3,7 +3,7 @@
 
 import sys
 
-REPO = "yell0wsuit/cuttherope-dx"
+REPO = "SwordJhon/cuttherope-dx"
 BASE_URL = f"https://github.com/{REPO}/releases/download"
 
 

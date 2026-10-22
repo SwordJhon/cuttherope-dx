@@ -14,7 +14,7 @@ set -e
 APP_NAME="cuttherope-dx"
 APP_DISPLAY_NAME="Cut the Rope DX"
 ARCHITECTURE="amd64"
-MAINTAINER="yell0wsuit"
+MAINTAINER="SwordJhon"
 DESCRIPTION="Cut the Rope DX, a fan-made enhancement of the PC version of Cut the Rope."
 
 # What the shipped natives link against, read off their ELF DT_NEEDED entries rather than
