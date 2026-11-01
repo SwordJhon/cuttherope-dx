@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <map>
   <layer name="settings">
-    <map gridSize="10" width="320" height="480" />
+    <map gridSize="10" width="320" height="480" viewWidth="320" viewHeight="540" />
     <gameDesign ropePhysicsSpeed="1" twoParts="false" />
   </layer>
   <layer name="Objects">

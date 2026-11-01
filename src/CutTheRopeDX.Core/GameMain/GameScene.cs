@@ -420,11 +420,12 @@ namespace CutTheRopeDX.GameMain
         /// <returns>The origin of the range and its extent on each axis.</returns>
         private Rectangle CameraTrackingRange()
         {
+            Vector scrollable = CameraScrollable();
             return new Rectangle(
                 cameraBounds.x,
                 cameraBounds.y,
-                MathF.Max(0f, mapWidth - SCREEN_WIDTH),
-                MathF.Max(0f, mapHeight - SCREEN_HEIGHT));
+                scrollable.X,
+                scrollable.Y);
         }
 
         /// <summary>Clamps a desired camera position into <see cref="CameraTrackingRange"/>.</summary>
@@ -440,21 +441,19 @@ namespace CutTheRopeDX.GameMain
         }
 
         /// <summary>
-        /// World the viewport exposes beyond the camera window on each axis.
+        /// Region of the world the camera shows at once: the level's camera window fitted to the
+        /// viewport, with the longer axis revealing extra world.
         /// </summary>
-        /// <remarks>
-        /// The fit scales <see cref="cameraWindow"/> - the design box, or the level when it is
-        /// smaller - and never the whole map, so a viewport shaped differently from that box
-        /// reveals world past it. That reveal is settled before any anchor is chosen, which is
-        /// what lets both the anchor and the decision to stage an opening pan be made against it.
-        /// </remarks>
-        /// <param name="snapshot">The viewport to measure against.</param>
-        /// <returns>Exposed world beyond the window, horizontally and vertically.</returns>
-        private Vector CameraSlack(ViewportLayoutSnapshot snapshot)
+        private Vector CameraWindowExtent()
         {
-            Rectangle viewport = snapshot.VisibleBounds;
+            Rectangle viewport = ScreenPresentation.Instance.Snapshot.VisibleBounds;
+            if (viewport.w <= 0f || viewport.h <= 0f)
+            {
+                return Vect(cameraWindow.w, cameraWindow.h);
+            }
+
             float scale = MathF.Min(viewport.w / cameraWindow.w, viewport.h / cameraWindow.h);
-            return Vect((viewport.w / scale) - cameraWindow.w, (viewport.h / scale) - cameraWindow.h);
+            return Vect(viewport.w / scale, viewport.h / scale);
         }
 
         /// <summary>
@@ -470,27 +469,26 @@ namespace CutTheRopeDX.GameMain
         /// <returns>Travel available horizontally and vertically.</returns>
         private Vector CameraScrollable()
         {
+            Vector extent = CameraWindowExtent();
             return Vect(
-                MathF.Max(0f, cameraBounds.w - cameraWindow.w),
-                MathF.Max(0f, cameraBounds.h - cameraWindow.h));
+                MathF.Max(0f, cameraBounds.w - extent.X),
+                MathF.Max(0f, cameraBounds.h - extent.Y));
         }
 
         /// <summary>
         /// Whether moving the camera in this viewport would move the picture at all.
         /// </summary>
-        /// <param name="snapshot">The viewport to measure against.</param>
         /// <returns><see langword="true"/> when the level runs past the viewport on either axis.</returns>
-        private bool CameraCanTravel(ViewportLayoutSnapshot snapshot)
+        private bool CameraCanTravel()
         {
             if (cameraBounds.w <= 0f || cameraBounds.h <= 0f)
             {
                 return false;
             }
 
-            Vector slack = CameraSlack(snapshot);
             Vector scrollable = CameraScrollable();
-            return GameplayCamera.HasTravel(scrollable.X, slack.X)
-                || GameplayCamera.HasTravel(scrollable.Y, slack.Y);
+            return GameplayCamera.HasTravel(scrollable.X, 0)
+                || GameplayCamera.HasTravel(scrollable.Y, 0);
         }
 
         /// <summary>
@@ -506,20 +504,25 @@ namespace CutTheRopeDX.GameMain
             }
 
             Rectangle viewport = snapshot.VisibleBounds;
-            Vector slack = CameraSlack(snapshot);
             Vector scrollable = CameraScrollable();
+            Vector extent = CameraWindowExtent();
 
             // The anchor is read from where the tracking has driven the camera, which nothing here
             // writes back to. A fit that took its anchor from its own previous result would
             // subtract the viewport's slack afresh on every pass and walk the camera off the level.
-            float anchorX = GameplayCamera.Anchor(camera.pos.X, cameraBounds.x, scrollable.X, slack.X);
-            float anchorY = GameplayCamera.Anchor(camera.pos.Y, cameraBounds.y, scrollable.Y, slack.Y);
+            float anchorX = GameplayCamera.Anchor(camera.pos.X, cameraBounds.x, scrollable.X, 0);
+            float anchorY = GameplayCamera.Anchor(camera.pos.Y, cameraBounds.y, scrollable.Y, 0);
+
+            // Pad the map so it's no longer pinned to the upper-left corner when the view's size is
+            // greater than the map's size.
+            float padX = MathF.Max(0f, extent.X - cameraBounds.w) / 2f;
+            float padY = MathF.Max(0f, extent.Y - cameraBounds.h) / 2f;
 
             Rectangle window = new(
-                cameraBounds.x + (scrollable.X * anchorX),
-                cameraBounds.y + (scrollable.Y * anchorY),
-                cameraWindow.w,
-                cameraWindow.h);
+                cameraBounds.x + (scrollable.X * anchorX) - padX,
+                cameraBounds.y + (scrollable.Y * anchorY) - padY,
+                extent.X,
+                extent.Y);
 
             camera.ApplyFit(LayoutMath.FitCamera(window, viewport, anchorX, anchorY));
             RelayoutWaterCoverage(snapshot);

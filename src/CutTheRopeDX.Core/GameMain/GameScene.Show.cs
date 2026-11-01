@@ -170,7 +170,7 @@ namespace CutTheRopeDX.GameMain
         public void StartCamera()
         {
             ViewportLayoutSnapshot snapshot = ScreenPresentation.Instance.Snapshot;
-            if (CameraCanTravel(snapshot))
+            if (CameraCanTravel())
             {
                 ignoreTouches = true;
                 fastenCamera = false;
@@ -184,9 +184,10 @@ namespace CutTheRopeDX.GameMain
                 // level wider than the design box is centered on it, so its near end is a negative
                 // world X and neither end is at the origin.
                 Rectangle range = CameraTrackingRange();
+                Vector extent = CameraWindowExtent();
                 float cameraStartX;
                 float cameraStartY;
-                if (mapWidth > SCREEN_WIDTH)
+                if (mapWidth > extent.X)
                 {
                     cameraStartX = constrainedPoint.pos.X > range.x + (mapWidth / 2f)
                         ? range.x
@@ -204,8 +205,8 @@ namespace CutTheRopeDX.GameMain
                     cameraStartY = range.y + range.h;
                 }
                 Vector boundedCamera = BoundedCameraPosition(
-                    constrainedPoint.pos.X - (SCREEN_WIDTH / 2f),
-                    constrainedPoint.pos.Y - (SCREEN_HEIGHT / 2f));
+                    constrainedPoint.pos.X - (extent.X / 2f),
+                    constrainedPoint.pos.Y - (extent.Y / 2f));
 
                 // Seat the tracked position at the authored start point and let the fit derive the
                 // rest from it, the way every later frame does.

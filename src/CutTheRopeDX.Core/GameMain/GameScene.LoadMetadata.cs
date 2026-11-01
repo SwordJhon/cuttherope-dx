@@ -81,8 +81,12 @@ namespace CutTheRopeDX.GameMain
                         case "map":
                             mapWidth = ParseFloatOrZero(node.Attribute("width")?.Value);
                             mapHeight = ParseFloatOrZero(node.Attribute("height")?.Value);
+                            float viewWidth = ParseFloatOrZero(node.Attribute("viewWidth")?.Value);
+                            float viewHeight = ParseFloatOrZero(node.Attribute("viewHeight")?.Value);
                             mapWidth *= scale;
                             mapHeight *= scale;
+                            viewWidth *= scale;
+                            viewHeight *= scale;
 
                             // The level sits centered in the space the camera can show. Deriving
                             // the offset from the camera window rather than the design width is
@@ -91,8 +95,8 @@ namespace CutTheRopeDX.GameMain
                             cameraWindow = new Rectangle(
                                 0f,
                                 0f,
-                                MathF.Min(mapWidth, SCREEN_WIDTH),
-                                MathF.Min(mapHeight, SCREEN_HEIGHT));
+                                viewWidth > 0f ? viewWidth : MathF.Min(mapWidth, SCREEN_WIDTH),
+                                viewHeight > 0f ? viewHeight : MathF.Min(mapHeight, SCREEN_HEIGHT));
                             offsetX = (SCREEN_WIDTH - mapWidth) / 2f;
                             cameraBounds = new Rectangle(offsetX, 0f, mapWidth, mapHeight);
                             levelName = node.Attribute("levelName")?.Value ?? null;
