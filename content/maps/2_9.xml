@@ -1,21 +1,21 @@
 <?xml version='1.0' encoding='utf-8'?>
 <map>
     <layer name="settings">
-        <map gridSize="32" width="640" height="480" />
+        <map gridSize="32" width="320" height="480" />
         <gameDesign ropePhysicsSpeed="1.0" twoParts="false" />
     </layer>
     <layer name="Objects">
-        <candy x="250" y="125" />
-        <target x="318" y="431" />
-        <grab x="249" y="46" length="40" wheel="false" gun="false" radius="-1" moveLength="-1" moveVertical="false" moveOffset="0" spider="false" part="L" />
-        <grab x="317" y="225" length="70" wheel="false" gun="false" radius="80" moveLength="-1" moveVertical="false" moveOffset="0" spider="true" part="L" />
-        <spike1 x="375" y="406" angle="90" size="1" />
-        <spike1 x="256" y="407" angle="90" size="1" />
-        <tutorialText x="211" y="300" locale="en" text="TUTORIAL_LVL_2_9_01" width="240" />
-        <tutorial09 x="194" y="335" locale="en" moveSpeed="100" rotateSpeed="100" />
-        <star x="268" y="223" timeout="-1" />
-        <star x="410" y="287" timeout="-1" />
-        <star x="317" y="377" timeout="-1" />
+        <candy x="92" y="125" />
+        <target x="160" y="431" />
+        <grab x="91" y="46" length="40" wheel="false" gun="false" radius="-1" moveLength="-1" moveVertical="false" moveOffset="0" spider="false" part="L" />
+        <grab x="159" y="225" length="70" wheel="false" gun="false" radius="80" moveLength="-1" moveVertical="false" moveOffset="0" spider="true" part="L" />
+        <spike1 x="217" y="406" angle="90" size="1" />
+        <spike1 x="98" y="407" angle="90" size="1" />
+        <tutorialText x="53" y="300" locale="en" text="TUTORIAL_LVL_2_9_01" width="240" />
+        <tutorial09 x="36" y="335" locale="en" moveSpeed="100" rotateSpeed="100" />
+        <star x="110" y="223" timeout="-1" />
+        <star x="252" y="287" timeout="-1" />
+        <star x="159" y="377" timeout="-1" />
     </layer>
     <layer name="Ru">
         <tutorialText x="48" y="271" locale="ru" text="TUTORIAL_LVL_2_9_01" width="200" />
