@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <map>
     <layer name="settings">
-        <map gridSize="32" width="640" height="480" />
+        <map gridSize="32" width="640" height="480" viewWidth="320" />
         <gameDesign twoParts="false" ropePhysicsSpeed="1.0" water="0" waterSpeed="0" mapOffsetX="36" />
     </layer>
     <layer name="Objects">
