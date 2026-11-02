@@ -1,0 +1,8 @@
+ctr2/GameMusic3.ogg
+ctr3/*.ogg
+ctrm/GameplayTheme3.ogg
+ctrm/GameplayTheme4.ogg
+origins/*.ogg
+remastered/*.ogg
+game_music_tt_ost.ogg
+sfx/explosion_small.ogg
