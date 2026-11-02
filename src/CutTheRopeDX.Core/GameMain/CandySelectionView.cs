@@ -439,7 +439,7 @@ namespace CutTheRopeDX.GameMain
             int totalItems;
             int selectedIndex;
             int baseQuadIndex;
-            string itemResourceName = Resources.Img.SkinSelection;
+            string itemResourceName;
             float itemYOffset = -20f;
             bool doRestoreTransparency = false;
             Func<int, MenuButtonId> getButtonId;
@@ -449,7 +449,8 @@ namespace CutTheRopeDX.GameMain
                 case CandySelectionMode.Rope:
                     totalItems = RopeColorHelper.TotalRopeColors;
                     selectedIndex = Preferences.GetIntForKey("PREFS_SELECTED_ROPE");
-                    baseQuadIndex = 60; // rope01-rope09 are quads 60-68
+                    baseQuadIndex = 0;
+                    itemResourceName = Resources.Img.SkinSelectionRopes;
                     getButtonId = MenuButtonId.ForRopeSlot;
                     break;
                 case CandySelectionMode.OmNom:
@@ -468,7 +469,8 @@ namespace CutTheRopeDX.GameMain
                     const int TOTAL_CANDIES = 52;
                     totalItems = TOTAL_CANDIES;
                     selectedIndex = Preferences.GetIntForKey("PREFS_SELECTED_CANDY");
-                    baseQuadIndex = 6; // candy01-candy52 are quads 6-57
+                    baseQuadIndex = 0;
+                    itemResourceName = Resources.Img.SkinSelectionCandies;
                     getButtonId = MenuButtonId.ForCandySlot;
                     break;
             }

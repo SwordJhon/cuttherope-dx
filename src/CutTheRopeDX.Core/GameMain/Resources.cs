@@ -305,9 +305,12 @@ namespace CutTheRopeDX.GameMain
             public const string MenuPopup = "menu_popup";
             public const string MenuLogo = "menu_logo";
             public const string MenuLogoNew = "menu_logo_new";
+            public const string MenuLogoNewCandies = "menu_logo_new_candies";
             public const string CutTheRopeDXLogo = "CutTheRopeDXLogo";
             public const string CandySelectionFx = "candy_selection_fx";
             public const string SkinSelection = "skin_selection";
+            public const string SkinSelectionCandies = "skin_selection_candies";
+            public const string SkinSelectionRopes = "skin_selection_ropes";
             public const string MenuPackUI = "menu_pack_ui";
             public const string MenuPackSelection = "menu_pack_selection";
             public const string MenuPackSelection2 = "menu_pack_selection2";

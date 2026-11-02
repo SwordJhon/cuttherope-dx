@@ -326,7 +326,7 @@ namespace CutTheRopeDX.GameMain
                 // The logo is design-space content: it belongs to the fitted group where the scene
                 // has one, and to the backdrop where it does not.
                 BaseElement logoParent = designGroup ?? baseElement;
-                Image logo = Image.FromResource(Resources.Img.MenuLogoNew, 52);
+                Image logo = Image.FromResource(Resources.Img.MenuLogoNew, 0);
                 logo.anchor = 10;
                 logo.parentAnchor = 10;
                 logo.y = 55f;
@@ -334,8 +334,8 @@ namespace CutTheRopeDX.GameMain
                 // Candy on rope (positioned under the logo)
                 // Get selected candy skin from preferences (0-50 for candy_01 to candy_51)
                 int selectedCandySkin = Preferences.GetIntForKey("PREFS_SELECTED_CANDY");
-                Image candyUp = Image.FromResource(Resources.Img.MenuLogoNew, selectedCandySkin);
-                Image candyDown = Image.FromResource(Resources.Img.MenuLogoNew, selectedCandySkin);
+                Image candyUp = Image.FromResource(Resources.Img.MenuLogoNewCandies, selectedCandySkin);
+                Image candyDown = Image.FromResource(Resources.Img.MenuLogoNewCandies, selectedCandySkin);
                 candyDown.scaleX = candyDown.scaleY = 0.95f;  // Slight press feedback
                 Button candyButton = new Button().InitWithUpElementDownElementandID(candyUp, candyDown, MenuButtonId.CandySelect);
                 candyButton.SetName("logoCandyButton");
