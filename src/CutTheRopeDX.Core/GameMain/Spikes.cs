@@ -21,9 +21,13 @@ namespace CutTheRopeDX.GameMain
         /// <param name="w">Spike width/type index.</param>
         /// <param name="an">Initial rotation angle in degrees.</param>
         /// <param name="t">Toggle group id, or -1 for non-rotatable spikes.</param>
+        /// <param name="tan">How many degrees a toggled spike rotates.</param>
+        /// <param name="tdm">Toggle duration multiplier.</param>
         /// <returns>The initialized spikes, or <see langword="null"/> if the type or texture is invalid.</returns>
-        public Spikes InitWithPosXYWidthAndAngleToggled(float px, float py, int w, float an, int t)
+        public Spikes InitWithPosXYWidthAndAngleToggled(float px, float py, int w, float an, int t, float tan, float tdm)
         {
+            toggleAngle = tan;
+            toggleDurationMult = tdm;
             (string textureName, int spikeQuad) = GetSpikeTextureAndQuad(w, t != -1);
             if (textureName == null || InitWithTexture(Application.GetTexture(textureName)) == null)
             {
@@ -46,6 +50,7 @@ namespace CutTheRopeDX.GameMain
                 rotateButton.delegateButtonDelegate = this;
                 rotateButton.anchor = rotateButton.parentAnchor = 18;
                 _ = AddChild(rotateButton);
+                rotateButton.scaleX = toggleAngle < 0 ? -1f : 1f;
                 Vector quadOffset = GetQuadOffset(Resources.Img.ObjSpikes, buttonQuad);
                 Vector quadSize = GetQuadSize(Resources.Img.ObjSpikes, buttonQuad);
                 Vector vector = VectSub(Vect(upImage.texture.preCutSize.X, upImage.texture.preCutSize.Y), VectAdd(quadSize, quadOffset));
@@ -141,11 +146,12 @@ namespace CutTheRopeDX.GameMain
         {
             spikesNormal = !spikesNormal;
             RemoveTimeline(2);
-            float rotationOffset = spikesNormal ? DEG_90 : 0;
+            float rotationOffset = spikesNormal ? toggleAngle : 0;
             float targetRotation = origRotation + rotationOffset;
+            float divider = toggleAngle == 0 ? 1 : MathF.Abs(toggleAngle);
             Timeline timeline = new Timeline().InitWithMaxKeyFramesOnTrack(2);
-            timeline.AddKeyFrame(KeyFrame.MakeRotation((int)rotation, KeyFrame.TransitionType.FRAME_TRANSITION_LINEAR, 0f));
-            timeline.AddKeyFrame(KeyFrame.MakeRotation((int)targetRotation, KeyFrame.TransitionType.FRAME_TRANSITION_LINEAR, MathF.Abs(targetRotation - rotation) / DEG_90 * 0.3f));
+            timeline.AddKeyFrame(KeyFrame.MakeRotation(rotation, KeyFrame.TransitionType.FRAME_TRANSITION_LINEAR, 0f));
+            timeline.AddKeyFrame(KeyFrame.MakeRotation(targetRotation, KeyFrame.TransitionType.FRAME_TRANSITION_LINEAR, MathF.Abs(targetRotation - rotation) / divider * toggleDurationMult));
             timeline.delegateTimelineDelegate = this;
             AddTimelinewithID(timeline, 2);
             PlayTimeline(2);
@@ -272,6 +278,12 @@ namespace CutTheRopeDX.GameMain
 
         /// <summary>Timer for the current electrified spike on/off phase.</summary>
         public float electroTimer;
+
+        /// <summary>How many degrees a toggled spike rotates.</summary>
+        public float toggleAngle;
+
+        /// <summary>Toggle duration multiplier.</summary>
+        public float toggleDurationMult;
 
         /// <summary>Whether rotated collision points need to be refreshed during rotation animation.</summary>
         private bool updateRotationFlag;

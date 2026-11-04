@@ -21,14 +21,16 @@ namespace CutTheRopeDX.GameMain
             float px = (ParseCoordinateIntOrZero(xmlNode.Attribute("x")?.Value) * scale) + offsetX + mapOffsetX;
             float py = (ParseCoordinateIntOrZero(xmlNode.Attribute("y")?.Value) * scale) + offsetY + mapOffsetY;
             int w = ParseIntOrZero(xmlNode.Attribute("size")?.Value);
-            float an = ParseIntOrZero(xmlNode.Attribute("angle")?.Value);
+            float an = ParseFloatOrZero(xmlNode.Attribute("angle")?.Value);
             string toggledAttribute = xmlNode.Attribute("toggled")?.Value ?? string.Empty;
             int toggledState = -1;
             if (toggledAttribute.Length > 0)
             {
                 toggledState = toggledAttribute == "false" ? -1 : ParseIntOrZero(toggledAttribute);
             }
-            Spikes spikes = new Spikes().InitWithPosXYWidthAndAngleToggled(px, py, w, an, toggledState);
+            float toggledAn = ParseFloatOrDefault(xmlNode.Attribute("toggleAngle")?.Value, DEG_90);
+            float toggledDurMult = ParseFloatOrDefault(xmlNode.Attribute("toggleDurationMultiplier")?.Value, 0.3f);
+            Spikes spikes = new Spikes().InitWithPosXYWidthAndAngleToggled(px, py, w, an, toggledState, toggledAn, toggledDurMult);
             spikes.ParseMover(xmlNode);
             if (toggledState != 0)
             {
