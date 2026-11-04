@@ -376,6 +376,7 @@ namespace CutTheRopeDX.GameMain
             public const string ObjHatMaskable = "obj_hat_maskable";
             public const string ObjBouncer = "obj_bouncer";
             public const string ObjSpikes = "obj_spikes";
+            public const string ObjRotatableSpikesButton = "obj_rotatable_spikes_button";
             public const string ObjElectrodes = "obj_electrodes";
             public const string ObjAnt = "obj_ant";
             public const string ObjBee = "obj_bee";

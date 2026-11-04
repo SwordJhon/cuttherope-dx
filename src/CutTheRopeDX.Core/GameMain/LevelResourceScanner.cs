@@ -93,6 +93,7 @@ namespace CutTheRopeDX.GameMain
                     case "spike3":
                     case "spike4":
                         _ = resources.Add(Resources.Img.ObjSpikes);
+                        _ = resources.Add(Resources.Img.ObjRotatableSpikesButton);
                         AddSpikeRotationSounds(resources);
                         break;
                     case "electro":

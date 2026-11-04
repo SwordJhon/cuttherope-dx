@@ -42,8 +42,8 @@ namespace CutTheRopeDX.GameMain
                 DoRestoreCutTransparency();
                 int buttonQuad = ButtonFirstQuad + ((t - 1) * ButtonFramesPerToggle);
                 int q = ButtonFirstQuad + ButtonPressedQuadOffset + ((t - 1) * ButtonFramesPerToggle);
-                Image upImage = FromResource(Resources.Img.ObjSpikes, buttonQuad);
-                Image downImage = FromResource(Resources.Img.ObjSpikes, q);
+                Image upImage = FromResource(Resources.Img.ObjRotatableSpikesButton, buttonQuad);
+                Image downImage = FromResource(Resources.Img.ObjRotatableSpikesButton, q);
                 upImage.DoRestoreCutTransparency();
                 downImage.DoRestoreCutTransparency();
                 rotateButton = new Button().InitWithUpElementDownElementandID(upImage, downImage, SpikesButtonId.Rotate);
@@ -51,8 +51,8 @@ namespace CutTheRopeDX.GameMain
                 rotateButton.anchor = rotateButton.parentAnchor = 18;
                 _ = AddChild(rotateButton);
                 rotateButton.scaleX = toggleAngle < 0 ? -1f : 1f;
-                Vector quadOffset = GetQuadOffset(Resources.Img.ObjSpikes, buttonQuad);
-                Vector quadSize = GetQuadSize(Resources.Img.ObjSpikes, buttonQuad);
+                Vector quadOffset = GetQuadOffset(Resources.Img.ObjRotatableSpikesButton, buttonQuad);
+                Vector quadSize = GetQuadSize(Resources.Img.ObjRotatableSpikesButton, buttonQuad);
                 Vector vector = VectSub(Vect(upImage.texture.preCutSize.X, upImage.texture.preCutSize.Y), VectAdd(quadSize, quadOffset));
                 rotateButton.SetTouchIncreaseLeftRightTopBottom(0f - quadOffset.X + (quadSize.X / 2f), 0f - vector.X + (quadSize.X / 2f), 0f - quadOffset.Y + (quadSize.Y / 2f), 0f - vector.Y + (quadSize.Y / 2f));
             }
@@ -310,7 +310,7 @@ namespace CutTheRopeDX.GameMain
         private const int RotatableSpikeFirstQuad = 0;
 
         /// <summary>First texture quad index for rotate button variants.</summary>
-        private const int ButtonFirstQuad = 4;
+        private const int ButtonFirstQuad = 0;
 
         /// <summary>First texture quad index for static spike variants.</summary>
         private const int StaticSpikeFirstQuad = 8;
