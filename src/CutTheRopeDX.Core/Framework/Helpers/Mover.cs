@@ -78,8 +78,9 @@ namespace CutTheRopeDX.Framework.Helpers
             {
                 angle_ = angle,
             };
+            float startAngle = ParseFloatOrZero(xml.Attribute("startAngle")?.Value);
             mover.angle_initial = mover.angle_;
-            mover.SetPathFromStringandStart(pathString, start);
+            mover.SetPathFromStringandStart(pathString, start, startAngle);
             mover.Start();
             return mover;
         }
@@ -114,7 +115,8 @@ namespace CutTheRopeDX.Framework.Helpers
         /// </summary>
         /// <param name="p">Serialized path description.</param>
         /// <param name="s">Starting position for the generated path.</param>
-        public virtual void SetPathFromStringandStart(string p, Vector s)
+        /// <param name="startAngle">Starting angle for a circular path.</param>
+        public virtual void SetPathFromStringandStart(string p, Vector s, float startAngle)
         {
             if (p[0] == 'R')
             {
@@ -131,7 +133,7 @@ namespace CutTheRopeDX.Framework.Helpers
                 {
                     angleStep = 0f - angleStep;
                 }
-                float theta = 0f;
+                float theta = startAngle * (MathF.PI / 180f);
                 for (int i = 0; i < pointCount; i++)
                 {
                     float x = s.X + (radius * MathF.Cos(theta));

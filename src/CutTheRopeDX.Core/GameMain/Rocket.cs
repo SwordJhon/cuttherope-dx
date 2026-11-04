@@ -182,8 +182,9 @@ namespace CutTheRopeDX.GameMain
                 {
                     angle_ = rotation
                 };
+                float startAngle = ParseFloatOrZero(xml.Attribute("startAngle")?.Value);
                 parsedMover.angle_initial = parsedMover.angle_;
-                parsedMover.SetPathFromStringandStart(path, Vect(x, y));
+                parsedMover.SetPathFromStringandStart(path, Vect(x, y), startAngle);
                 SetMover(parsedMover);
                 parsedMover.Start();
             }

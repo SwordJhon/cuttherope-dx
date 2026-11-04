@@ -1,61 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <map>
     <layer name="settings">
-        <map gridSize="10" width="640" height="480" viewWidth="320" />
+        <map gridSize="10" width="640" height="480" viewWidth="480" viewHeight="540" />
         <gameDesign ropePhysicsSpeed="1" />
     </layer>
     <layer name="objects">
-        <grab x="160" y="40" length="80" radius="-1" />
-        <candy x="60" y="40" />
-        <star x="255" y="265" timeout="-1" path="RC75" startAngle="90" moveSpeed="70" />
-        <star x="320" y="378" timeout="-1" path="RC75" startAngle="210" moveSpeed="70" />
-        <star x="190" y="378" timeout="-1" path="RC75" startAngle="330" moveSpeed="70" />
-        <electro x="250" y="240" initialDelay="0.0" offTime="2.0" onTime="2.0" angle="0" size="5" />
-        <spike4 x="320" y="90" angle="90" size="4" />
-        <spike4 x="0" y="90" angle="90" size="4" />
-        <spike2 x="50" y="0" angle="0" size="2" />
-        <spike2 x="270" y="0" angle="0" size="2" />
-        <spike2 x="160" y="0" angle="0" size="2" />
-        <spike4 x="90" y="240" angle="0" size="4" />
-        <spike1 x="0" y="210" angle="90" size="1" />
-        <spike4 x="320" y="270" angle="90" size="4" />
-        <spike4 x="320" y="450" angle="90" size="4" />
-        <spike4 x="180" y="330" angle="90" size="4" />
-        <spike2 x="180" y="470" angle="90" size="2" />
-        <spike4 x="60" y="300" angle="45" size="4" />
-        <spike1 x="150" y="360" angle="0" size="1" />
-        <spike1 x="300" y="20" angle="45" size="1" />
-        <spike1 x="20" y="20" angle="-45" size="1" />
-        <spike1 x="20" y="220" angle="45" size="1" />
-        <sock x="260" y="430" group="0" angle="-90" />
-        <sock x="390" y="220" group="0" angle="-45" />
-        <target x="570" y="100" />
+        <grab x="170" y="40" length="80" radius="-1" />
+        <candy x="70" y="40" />
+        <star x="265" y="265" timeout="-1" path="RC75" startAngle="90" moveSpeed="70" />
+        <star x="330" y="378" timeout="-1" path="RC75" startAngle="210" moveSpeed="70" />
+        <star x="200" y="378" timeout="-1" path="RC75" startAngle="330" moveSpeed="70" />
+        <electro x="260" y="240" initialDelay="0.0" offTime="2.0" onTime="2.0" angle="0" size="5" />
+        <spike4 x="330" y="90" angle="90" size="4" />
+        <spike4 x="10" y="90" angle="90" size="4" />
+        <spike2 x="60" y="0" angle="0" size="2" />
+        <spike2 x="280" y="0" angle="0" size="2" />
+        <spike2 x="170" y="0" angle="0" size="2" />
+        <spike4 x="100" y="240" angle="0" size="4" />
+        <spike1 x="10" y="210" angle="90" size="1" />
+        <spike4 x="330" y="270" angle="90" size="4" />
+        <spike4 x="330" y="450" angle="90" size="4" />
+        <spike4 x="190" y="330" angle="90" size="4" />
+        <spike4 x="190" y="510" angle="90" size="4" />
+        <spike4 x="70" y="300" angle="45" size="4" />
+        <spike1 x="160" y="360" angle="0" size="1" />
+        <spike1 x="310" y="20" angle="45" size="1" />
+        <spike1 x="30" y="20" angle="-45" size="1" />
+        <spike1 x="30" y="220" angle="45" size="1" />
+        <spike1 x="330" y="570" angle="90" size="1" />
+        <spike3 x="260" y="600" angle="0" size="3" />
+        <spike1 x="287" y="566" angle="75" size="1" />
+        <spike1 x="212" y="569" angle="-69" size="1" />
+        <spike1 x="224" y="567" angle="74" size="1" />
+        <spike1 x="299" y="564" angle="-78" size="1" />
+        <spike1 x="261" y="567" angle="-65" size="1" />
+        <spike1 x="254" y="567" angle="-117" size="1" />
+        <spike1 x="316" y="571" angle="76" size="1" />
+        <sock x="270" y="430" group="0" angle="-90" />
+        <sock x="400" y="220" group="0" angle="-45" />
+        <target x="580" y="100" />
     </layer>
     <layer name="deco">
-        <grab x="0" y="240" length="90" radius="-1" breakable="false" bindBulb="true" bulbNumber="0" />
-        <lightBulb x="30" y="360" litRadius="0" bulbNumber="0" />
-        <grab x="120" y="360" length="30" radius="-1" breakable="false" bindBulb="true" bulbNumber="1" />
-        <lightBulb x="140" y="420" litRadius="0" bulbNumber="1" />
-        <bubble x="130" y="290" />
-        <bubble x="400" y="310" />
-        <bubble x="490" y="400" />
-        <bubble x="600" y="340" />
-        <bubble x="510" y="250" />
-        <bubble x="380" y="430" />
-        <bubble x="380" y="120" />
-        <bubble x="510" y="30" />
-        <bubble x="630" y="190" />
-        <bubble x="610" y="470" />
-        <bubble x="390" y="10" />
+        <bubble x="140" y="290" />
+        <bubble x="410" y="310" />
+        <bubble x="510" y="375" />
+        <bubble x="520" y="250" />
+        <bubble x="400" y="409" />
+        <bubble x="400" y="93" />
+        <bubble x="606" y="34" />
+        <bubble x="607" y="198" />
+        <bubble x="604" y="321" />
+        <bubble x="490" y="45" />
     </layer>
     <layer name="en">
-        <tutorial09 x="60" y="170" angle="0" locale="en" duration="5" />
-        <tutorialText x="65" y="100" text="Objects on circular paths can now start at different angles" width="190" locale="en" />
-        <tutorial01 x="210" y="70" angle="-50" locale="en" duration="1.5" delay="3.5" />
+        <tutorial09 x="70" y="170" angle="0" locale="en" duration="5" />
+        <tutorialText x="75" y="100" text="Objects on circular paths can now start at different angles" width="190" locale="en" />
+        <tutorial01 x="220" y="70" angle="-50" locale="en" duration="1.5" delay="3.5" />
     </layer>
     <layer name="es">
-        <tutorial09 x="50" y="140" angle="0" locale="es" duration="5" />
-        <tutorialText x="60" y="105" text="Los objetos en trayectorias circulares ahora pueden comenzar en ángulos diferentes" width="235" locale="es" />
-        <tutorial01 x="210" y="70" angle="-50" locale="es" duration="1.5" delay="3.5" />
+        <tutorial09 x="60" y="140" angle="0" locale="es" duration="5" />
+        <tutorialText x="70" y="105" text="Los objetos en trayectorias circulares ahora pueden comenzar en ángulos diferentes" width="235" locale="es" />
+        <tutorial01 x="220" y="70" angle="-50" locale="es" duration="1.5" delay="3.5" />
+    </layer>
+    <layer name="br">
+        <tutorial09 x="55" y="170" angle="0" locale="pt_br" duration="5" />
+        <tutorialText x="70" y="105" text="Objetos em trajetos circulares agora são capazes de iniciarem em ângulos diferentes" width="235" locale="pt_br" />
+        <tutorial01 x="220" y="70" angle="-50" locale="pt_br" duration="1.5" delay="3.5" />
     </layer>
 </map>
