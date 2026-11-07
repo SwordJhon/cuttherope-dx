@@ -23,12 +23,15 @@ namespace CutTheRopeDX.GameMain
         /// <param name="t">Toggle group id, or -1 for non-rotatable spikes.</param>
         /// <param name="tan">How many degrees a toggled spike rotates.</param>
         /// <param name="tdm">Toggle duration multiplier.</param>
+        /// <param name="sl">The spikes' stick length. (extendable-only)</param>
+        /// <param name="spa">Amount of spikes on the stick (or outside it if you set sl wrong). (extendable-only)</param>
         /// <returns>The initialized spikes, or <see langword="null"/> if the type or texture is invalid.</returns>
-        public Spikes InitWithPosXYWidthAndAngleToggled(float px, float py, int w, float an, int t, float tan, float tdm)
+        public Spikes InitWithPosXYWidthAndAngleToggled(float px, float py, int w, float an, int t, float tan, float tdm, float sl, int spa)
         {
             toggleAngle = tan;
             toggleDurationMult = tdm;
-            (string textureName, int spikeQuad) = GetSpikeTextureAndQuad(w, t != -1);
+            extendable = spa >= 0;
+            (string textureName, int spikeQuad) = GetSpikeTextureAndQuad(w, t != -1, extendable);
             if (textureName == null || InitWithTexture(Application.GetTexture(textureName)) == null)
             {
                 return null;
@@ -36,6 +39,28 @@ namespace CutTheRopeDX.GameMain
             if (spikeQuad > 0)
             {
                 SetDrawQuad(spikeQuad);
+            }
+            if (extendable)
+            {
+                stickLength = sl != -1 ? sl : (stickCapsWidth + (spikeWidth * spa)) * FlashXmlScale.PcOutputScale;
+                exStickVisual = InitializeFromResource(new HorizontallyTiledImage(), Resources.Img.ObjSpikesExtendable);
+                exStickVisual.SetTileHorizontallyLeftCenterRight(exStickLeftQuad, exStickCenterQuad, exStickRightQuad);
+                exStickVisual.width = (int)(stickLength / FlashXmlScale.PcOutputScale);
+                exStickVisual.anchor = 18;
+                exStickVisual.parentAnchor = 18;
+                exStickVisual.scaleX = FlashXmlScale.PcOutputScale;
+                exStickVisual.scaleY = FlashXmlScale.PcOutputScale;
+                _ = AddChild(exStickVisual);
+
+                spikesLength = (blankWidth + (spikeWidth * spa)) * FlashXmlScale.PcOutputScale;
+                exSpikesVisual = InitializeFromResource(new HorizontallyTiledImage(), Resources.Img.ObjSpikesExtendable);
+                exSpikesVisual.SetTileHorizontallyLeftCenterRight(exBlankQuad, RND(1) == 1 ? exSpikeQuad : exSpikeQuadAlt, exBlankQuad);
+                exSpikesVisual.width = (int)(spikesLength / FlashXmlScale.PcOutputScale);
+                exSpikesVisual.anchor = 18;
+                exSpikesVisual.parentAnchor = 18;
+                exSpikesVisual.scaleX = FlashXmlScale.PcOutputScale;
+                exSpikesVisual.scaleY = FlashXmlScale.PcOutputScale;
+                _ = AddChild(exSpikesVisual);
             }
             if (t > 0)
             {
@@ -79,9 +104,11 @@ namespace CutTheRopeDX.GameMain
         /// </summary>
         public void UpdateRotation()
         {
-            float halfWidth = !electro
-                ? ActivePhysicsConstants.SpikesCollisionLineWidth(Toggled != -1, widthIndex)
-                : ActivePhysicsConstants.ElectroSpikesCollisionObjectWidth() - ActivePhysicsConstants.ElectroSpikesWidthReduction;
+            float halfWidth = extendable
+                ? MathF.Max(stickLength, spikesLength)
+                : !electro
+                    ? ActivePhysicsConstants.SpikesCollisionLineWidth(Toggled != -1, widthIndex)
+                    : ActivePhysicsConstants.ElectroSpikesCollisionObjectWidth() - ActivePhysicsConstants.ElectroSpikesWidthReduction;
             halfWidth /= 2f;
             float bandHalfHeight = ActivePhysicsConstants.SpikesCollisionBandHalfHeight;
             t1.X = x - halfWidth;
@@ -202,6 +229,19 @@ namespace CutTheRopeDX.GameMain
                     TurnElectroOn();
                 }
             }
+        }
+
+        /// <inheritdoc />
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                exStickVisual?.Dispose();
+                exSpikesVisual?.Dispose();
+                exStickVisual = null;
+                exSpikesVisual = null;
+            }
+            base.Dispose(disposing);
         }
 
         public static void TimelineReachedKeyFramewithIndex(Timeline _, KeyFrame _1, int _2)
@@ -329,12 +369,17 @@ namespace CutTheRopeDX.GameMain
         /// </summary>
         /// <param name="width">Spike width/type index.</param>
         /// <param name="rotatable">Whether the spike uses rotatable visuals.</param>
+        /// <param name="extendable">Whether the spike uses extendable visuals.</param>
         /// <returns>The texture resource name and quad index, or <see langword="null"/> texture when invalid.</returns>
-        private static (string texture, int quad) GetSpikeTextureAndQuad(int width, bool rotatable)
+        private static (string texture, int quad) GetSpikeTextureAndQuad(int width, bool rotatable, bool extendable)
         {
             if (width == ElectrodesWidthIndex)
             {
                 return (Resources.Img.ObjElectrodes, 0);
+            }
+            if (extendable)
+            {
+                return (Resources.Img.ObjSpikesExtendable, exBlankQuad);
             }
             int index = width - 1;
             if (index is < 0 or >= 4)
@@ -351,5 +396,47 @@ namespace CutTheRopeDX.GameMain
         /// </summary>
         /// <param name="sid">Toggle group id to rotate.</param>
         public delegate void rotateAllSpikesWithID(int sid);
+
+        /// <summary>Whether these spikes use the extendable variant.</summary>
+        private bool extendable;
+
+        /// <summary>The stick visuals. (extendable-only)</summary>
+        private HorizontallyTiledImage exStickVisual;
+
+        /// <summary>The spikes visuals. (extendable-only)</summary>
+        private HorizontallyTiledImage exSpikesVisual;
+
+        /// <summary>The spikes' stick length. (extendable-only)</summary>
+        private float stickLength;
+
+        /// <summary>Calculated length for the spikes visual. (extendable-only)</summary>
+        private float spikesLength;
+
+        /// <summary>Extendable spikes' stick cap width.</summary>
+        private const float stickCapsWidth = 50f;
+
+        /// <summary>Extendable spikes' spike width.</summary>
+        private const float spikeWidth = 76.5f;
+
+        /// <summary>Extendable spikes' blank width.</summary>
+        private const float blankWidth = 2f;
+
+        /// <summary>Extendable spikes' stick left cap quad.</summary>
+        private const int exStickLeftQuad = 0;
+
+        /// <summary>Extendable spikes' stick right cap quad.</summary>
+        private const int exStickRightQuad = 2;
+
+        /// <summary>Extendable spikes' stick center tile quad.</summary>
+        private const int exStickCenterQuad = 1;
+
+        /// <summary>Extendable spikes' blank quad.</summary>
+        private const int exBlankQuad = 3;
+
+        /// <summary>Extendable spikes' spike quad.</summary>
+        private const int exSpikeQuad = 5;
+
+        /// <summary>Extendable spikes' alt spike quad.</summary>
+        private const int exSpikeQuadAlt = 4;
     }
 }

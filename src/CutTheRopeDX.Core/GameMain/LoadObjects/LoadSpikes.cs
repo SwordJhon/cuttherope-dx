@@ -8,7 +8,7 @@ namespace CutTheRopeDX.GameMain
     {
         /// <summary>
         /// Loads a spike object from XML node data
-        /// Supports regular spikes (spike1-4) and electro spikes
+        /// Supports regular spikes (spike1-4), extendable spikes and electro spikes
         /// </summary>
         /// <param name="xmlNode">The XML node describing the spikes.</param>
         /// <param name="scale">The level scale factor applied to object coordinates.</param>
@@ -30,7 +30,13 @@ namespace CutTheRopeDX.GameMain
             }
             float toggledAn = ParseFloatOrDefault(xmlNode.Attribute("toggleAngle")?.Value, DEG_90);
             float toggledDurMult = ParseFloatOrDefault(xmlNode.Attribute("toggleDurationMultiplier")?.Value, 0.3f);
-            Spikes spikes = new Spikes().InitWithPosXYWidthAndAngleToggled(px, py, w, an, toggledState, toggledAn, toggledDurMult);
+            float stickLength = ParseFloatOrDefault(xmlNode.Attribute("stickLength")?.Value, -1f);
+            if (stickLength != -1)
+            {
+                stickLength *= scale;
+            }
+            int spikesAmount = ParseIntOrDefault(xmlNode.Attribute("spikesAmount")?.Value, -1);
+            Spikes spikes = new Spikes().InitWithPosXYWidthAndAngleToggled(px, py, w, an, toggledState, toggledAn, toggledDurMult, stickLength, spikesAmount);
             spikes.ParseMover(xmlNode);
             if (toggledState != 0)
             {

@@ -1,121 +1,142 @@
 {
-  "frames":[
+  "frames": [
     {
-      "filename":"frame_00_stick_left.png",
-      "frame":{
-        "h":87,
-        "w":37,
-        "x":257,
-        "y":2
+      "filename": "frame_00_stick_left.png",
+      "frame": {
+        "x": 1,
+        "y": 1,
+        "w": 37,
+        "h": 87
       },
-      "rotated":false,
-      "sourceSize":{
-        "h":87,
-        "w":37
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 37,
+        "h": 87
       },
-      "spriteSourceSize":{
-        "h":87,
-        "w":37,
-        "x":0,
-        "y":0
-      },
-      "trimmed":true
+      "sourceSize": {
+        "w": 37,
+        "h": 87
+      }
     },
     {
-      "filename":"frame_01_stick_mid.png",
-      "frame":{
-        "h":21,
-        "w":1,
-        "x":335,
-        "y":2
+      "filename": "frame_01_stick_mid.png",
+      "frame": {
+        "x": 38,
+        "y": 1,
+        "w": 120,
+        "h": 87
       },
-      "rotated":false,
-      "sourceSize":{
-        "h":87,
-        "w":1
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 120,
+        "h": 87
       },
-      "spriteSourceSize":{
-        "h":21,
-        "w":1,
-        "x":0,
-        "y":35
-      },
-      "trimmed":true
+      "sourceSize": {
+        "w": 120,
+        "h": 87
+      }
     },
     {
-      "filename":"frame_02_stick_right.png",
-      "frame":{
-        "h":87,
-        "w":37,
-        "x":296,
-        "y":2
+      "filename": "frame_02_stick_right.png",
+      "frame": {
+        "x": 158,
+        "y": 1,
+        "w": 37,
+        "h": 87
       },
-      "rotated":false,
-      "sourceSize":{
-        "h":87,
-        "w":37
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 37,
+        "h": 87
       },
-      "spriteSourceSize":{
-        "h":87,
-        "w":37,
-        "x":0,
-        "y":0
-      },
-      "trimmed":true
+      "sourceSize": {
+        "w": 37,
+        "h": 87
+      }
     },
     {
-      "filename":"frame_03_spikes_SwordJhon.png",
-      "frame":{
-        "h":87,
-        "w":125,
-        "x":130,
-        "y":2
+      "filename": "frame_03_blank.png",
+      "frame": {
+        "x": 501,
+        "y": 1,
+        "w": 1,
+        "h": 1
       },
-      "rotated":false,
-      "sourceSize":{
-        "h":87,
-        "w":153
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 1
       },
-      "spriteSourceSize":{
-        "h":87,
-        "w":125,
-        "x":13,
-        "y":0
-      },
-      "trimmed":true
+      "sourceSize": {
+        "w": 1,
+        "h": 1
+      }
     },
     {
-      "filename":"frame_04_spikes_Bingies24.png",
-      "frame":{
-        "h":87,
-        "w":126,
-        "x":2,
-        "y":2
+      "filename": "frame_04_spikes_SwordJhon.png",
+      "frame": {
+        "x": 195,
+        "y": 1,
+        "w": 153,
+        "h": 87
       },
-      "rotated":false,
-      "sourceSize":{
-        "h":87,
-        "w":153
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 153,
+        "h": 87
       },
-      "spriteSourceSize":{
-        "h":87,
-        "w":126,
-        "x":12,
-        "y":0
+      "sourceSize": {
+        "w": 153,
+        "h": 87
+      }
+    },
+    {
+      "filename": "frame_05_spikes_Bingies24.png",
+      "frame": {
+        "x": 348,
+        "y": 1,
+        "w": 153,
+        "h": 87
       },
-      "trimmed":true
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 153,
+        "h": 87
+      },
+      "sourceSize": {
+        "w": 153,
+        "h": 87
+      }
     }
   ],
-  "meta":{
-    "app":"https://www.codeandweb.com/texturepacker",
-    "format":"RGBA8888",
-    "image":"obj_spike_extendable.png",
-    "scale":"1",
-    "size":{
-      "h":91,
-      "w":338
+  "meta": {
+    "app": "https://www.codeandweb.com/texturepacker",
+    "version": "3.0",
+    "image": "obj_spike_extendable.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 503,
+      "h": 89
     },
-    "smartupdate":"$TexturePacker:SmartUpdate:250e08454612b91f8d41e67bf327620b:3011a106b9c37ca0bea884588d428594:897e563e45b7a6cac513b5f2c954d93e$",
-    "version":"3.0"
+    "scale": "1",
+    "smartupdate": "$TexturePacker:SmartUpdate:ed27c24170f5a32b80d1a2e213071cff:f9d88aaf369a2d1f5b066a8132d9e3db:9e52c29a1c487a211a341a807eb68fa5$"
   }
 }
