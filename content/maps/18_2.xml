@@ -10,32 +10,17 @@
         <star x="265" y="265" timeout="-1" path="RC75" startAngle="90" moveSpeed="70" />
         <star x="330" y="378" timeout="-1" path="RC75" startAngle="210" moveSpeed="70" />
         <star x="200" y="378" timeout="-1" path="RC75" startAngle="330" moveSpeed="70" />
+        <spikes x="330" y="140" angle="90" spikesAmount="10" />
+        <spikes x="10" y="140" angle="90" spikesAmount="10" />
+        <spikes x="170" y="0" angle="0" spikesAmount="12" />
+        <spikes x="310" y="20" angle="45" spikesAmount="3" />
+        <spikes x="30" y="20" angle="-45" spikesAmount="3" />
+        <spikes x="105" y="325" angle="45" spikesAmount="12" />
+        <spikes x="100" y="240" angle="0" spikesAmount="9" />
+        <spikes x="330" y="430" angle="90" spikesAmount="19" />
+        <spikes x="190" y="430" angle="90" spikesAmount="19" />
+        <spikes x="260" y="620" angle="0" spikesAmount="7" />
         <electro x="260" y="240" initialDelay="0.0" offTime="2.0" onTime="2.0" angle="0" size="5" />
-        <spike4 x="330" y="90" angle="90" size="4" />
-        <spike4 x="10" y="90" angle="90" size="4" />
-        <spike2 x="60" y="0" angle="0" size="2" />
-        <spike2 x="280" y="0" angle="0" size="2" />
-        <spike2 x="170" y="0" angle="0" size="2" />
-        <spike4 x="100" y="240" angle="0" size="4" />
-        <spike1 x="10" y="210" angle="90" size="1" />
-        <spike4 x="330" y="270" angle="90" size="4" />
-        <spike4 x="330" y="450" angle="90" size="4" />
-        <spike4 x="190" y="330" angle="90" size="4" />
-        <spike4 x="190" y="510" angle="90" size="4" />
-        <spike4 x="70" y="300" angle="45" size="4" />
-        <spike1 x="160" y="360" angle="0" size="1" />
-        <spike1 x="310" y="20" angle="45" size="1" />
-        <spike1 x="30" y="20" angle="-45" size="1" />
-        <spike1 x="30" y="220" angle="45" size="1" />
-        <spike1 x="330" y="570" angle="90" size="1" />
-        <spike3 x="260" y="600" angle="0" size="3" />
-        <spike1 x="287" y="566" angle="75" size="1" />
-        <spike1 x="212" y="569" angle="-69" size="1" />
-        <spike1 x="224" y="567" angle="74" size="1" />
-        <spike1 x="299" y="564" angle="-78" size="1" />
-        <spike1 x="261" y="567" angle="-65" size="1" />
-        <spike1 x="254" y="567" angle="-117" size="1" />
-        <spike1 x="316" y="571" angle="76" size="1" />
         <sock x="270" y="430" group="0" angle="-90" />
         <sock x="400" y="220" group="0" angle="-45" />
         <target x="580" y="100" />
