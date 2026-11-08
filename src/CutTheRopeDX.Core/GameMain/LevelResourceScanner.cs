@@ -476,7 +476,7 @@ namespace CutTheRopeDX.GameMain
 
             _ = resources.Add(Resources.Img.FxBubbles);
             // Every skin sits on the pack's platform; Paddington's suitcase is preloaded with the January art.
-            _ = resources.Add(GameScene.ResolveSupport(pack, isPaddington: false, MenuTheme.IsExperiments).Resource);
+            _ = resources.Add(GameScene.ResolveSupport(node, pack, isPaddington: false, MenuTheme.IsExperiments).Resource);
 
             AddOmNomSound(resources, skin, Resources.Snd.MonsterChewing);
             AddOmNomSound(resources, skin, Resources.Snd.MonsterClose);

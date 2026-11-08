@@ -55,7 +55,7 @@ namespace CutTheRopeDX.Tests
                 string[] resources = LevelResourceScanner.GetRequiredResources(
                     XElement.Parse("<map><gameDesign><target /></gameDesign></map>"), 0);
 
-                Assert.Equal(drawn, GameScene.ResolveSupport(0, isPaddington: false, MenuTheme.IsExperiments).Resource);
+                Assert.Equal(drawn, GameScene.ResolveSupport(XElement.Parse("<target />"), 0, isPaddington: false, MenuTheme.IsExperiments).Resource);
                 Assert.Contains(drawn, resources);
                 Assert.DoesNotContain(unused, resources);
             }

@@ -54,7 +54,7 @@ namespace CutTheRopeDX.GameMain
             bool paddingtonGreetingPending =
                 isPaddington && isPrimaryTarget && !nightLevel && RootController.IsShowGreeting();
 
-            (string supportResource, int requestedQuad) = ResolveSupport(pack, isPaddington, MenuTheme.IsExperiments);
+            (string supportResource, int requestedQuad) = ResolveSupport(xmlNode, pack, isPaddington, MenuTheme.IsExperiments);
 
             // Clamp quad index to valid range; fall back to first quad for invalid values.
             Texture2D supportTexture = Application.GetTexture(supportResource);
@@ -129,12 +129,24 @@ namespace CutTheRopeDX.GameMain
         /// the pack's platform set decides: the Experiments set takes the platform the pack's entry
         /// names or, when it names none that exists, the next in turn by the pack's position.
         /// </summary>
+        /// <param name="xmlNode">The XML node describing Om Nom.</param>
         /// <param name="pack">Pack being played.</param>
         /// <param name="isPaddington">Whether the Paddington greeting is in play.</param>
         /// <param name="isExperiments">Whether the Experiments menus are active.</param>
         /// <returns>The support sheet and the quad to draw from it.</returns>
-        internal static (string Resource, int Quad) ResolveSupport(int pack, bool isPaddington, bool isExperiments)
+        internal static (string Resource, int Quad) ResolveSupport(XElement xmlNode, int pack, bool isPaddington, bool isExperiments)
         {
+            string overrideTheme = xmlNode.Attribute("supportTheme")?.Value ?? string.Empty;
+            if (!string.IsNullOrEmpty(overrideTheme))
+            {
+                int quad = ParseIntOrZero(xmlNode.Attribute("supportQuad")?.Value ?? string.Empty);
+                return overrideTheme switch
+                {
+                    "experiments" => (Resources.Img.CharSupportExperiments, quad is >= 0 and < ExperimentsSupportCount ? quad : pack % ExperimentsSupportCount),
+                    "extras" => (Resources.Img.CharSupportsExtras, quad is >= 0 and < ExtrasSupportCount ? quad : pack % ExtrasSupportCount),
+                    _ => (Resources.Img.CharSupports, quad),
+                };
+            }
             if (isPaddington)
             {
                 return (Resources.Img.CharSupportsXmas, PaddingtonSupportQuad);
