@@ -519,6 +519,23 @@ namespace CutTheRopeDX.GameMain
                 UpdateNightTargetPresentation(delta);
                 UpdatePostEatSleep(delta);
             }
+
+            for (int ti = 0; ti < targets.Count; ti++)
+            {
+                TargetContext t = targets[ti];
+                if (t.targetObject == null)
+                {
+                    continue;
+                }
+
+                if (t.support != null)
+                {
+                    t.support.x = t.targetObject.x + t.supportOffset.X;
+                    t.support.y = t.targetObject.y + t.supportOffset.Y;
+                }
+                t.animation?.SyncAdditionalOverlayPosition(t.targetObject.x, t.targetObject.y);
+            }
+
             UpdateLightEmitterPhysics();
             UpdateNightStarLighting();
             conveyors.Update(delta, timeFrozen);

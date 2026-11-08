@@ -14,6 +14,8 @@ namespace CutTheRopeDX.GameMain
 
         public Image support;
 
+        public Framework.Core.Vector supportOffset;
+
         public float baseScaleX = 1f;
 
         public float baseScaleY = 1f;

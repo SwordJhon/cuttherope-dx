@@ -94,6 +94,7 @@ namespace CutTheRopeDX.GameMain
                 : MakeRectangle((targetObj.width >> 1) - 56f, (targetObj.height >> 1) + 30f, 108f, 2f);
 
             animation.Initialize(this);
+            targetObj.ParseMover(xmlNode);
 
             // Register this Om Nom as an independent target. targets[0] stays the primary.
             targets.Add(new TargetContext(BLINK_SKIP, RND_RANGE(5, 20))
@@ -101,6 +102,7 @@ namespace CutTheRopeDX.GameMain
                 animation = animation,
                 targetObject = targetObj,
                 support = support,
+                supportOffset = Vect(support.x - targetObj.x, support.y - targetObj.y),
                 baseScaleX = targetBaseScaleX,
                 baseScaleY = targetBaseScaleY,
             });
