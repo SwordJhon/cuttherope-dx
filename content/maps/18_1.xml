@@ -13,5 +13,6 @@
         <target x="270" y="240" targetType="10" />
         <target x="100" y="380" path="120,0" moveSpeed="50" supportTheme="extras" supportQuad="2" />
         <tutorialText x="100" y="45" text="Expect levels here to constantly change!" width="180" locale="en" />
+        <pauseSwitcher x="60" y="240" />
     </layer>
 </map>
