@@ -1,14 +1,26 @@
 [
     {
-        "packName": "Sweet Challenge / Kitchen Box",
+        "packName": "Pillow Box (DX)",
+        "boxBackground": ["bgr_16_p1", "bgr_16_p2"],
+        "boxBackgroundP2Y": 860.625
+    },
+    {
+        "packName": "Mechanical Box (DX)",
+        "boxBackground": ["bgr_17_p1", "bgr_17_p2"],
+        "boxBackgroundP2Y": 825.46875
+    },
+    {
+        "packName": "Kitchen Box",
         "boxBackground": ["bgr_18_p1", "bgr_18_p2"],
         "boxBackgroundP2Y": 1165,
-        "boxBackgroundP2Y_old": 1167,
-        "boxCover": ["bgr_18_cover"],
-        "boxHoleBgColor": [31, 42, 84],
-        "packSpritesheet": "3",
-        "packQuadIndex": 0,
-        "sittingPlatformSpritesheet": "extras",
-        "sittingPlatform": 0
+        "boxCover": ["bgr_challenge1_cover"],
+        "boxHoleBgColor": [31, 42, 84]
+    },
+    {
+        "packName": "Sweet Testing",
+        "boxBackground": ["bgr_testing_p1", "bgr_testing_p2"],
+        "boxBackgroundP2Y": 951,
+        "boxCover": ["bgr_testing_cover"],
+        "boxHoleBgColor": [39, 52, 0]
     }
 ]

@@ -239,9 +239,15 @@ namespace CutTheRopeDX.GameMain
                 BackgroundImg.Bgr07P1, BackgroundImg.Bgr07P2, BackgroundImg.Bgr08P1, BackgroundImg.Bgr08P2,
                 BackgroundImg.Bgr09P1, BackgroundImg.Bgr09P2, BackgroundImg.Bgr10P1, BackgroundImg.Bgr10P2,
                 BackgroundImg.Bgr11P1, BackgroundImg.Bgr11P2, BackgroundImg.Bgr12P1, BackgroundImg.Bgr13P1,
-                BackgroundImg.Bgr14P1, BackgroundImg.Bgr15P1, BackgroundImg.Bgr16P1, BackgroundImg.Bgr17P1,
-                BackgroundImg.Bgr18P1, BackgroundImg.Bgr18P2,
-                BackgroundImg.Bgr17P1New,
+                BackgroundImg.Bgr14P1, BackgroundImg.Bgr15P1, BackgroundImg.Bgr16P1, BackgroundImg.Bgr16P2,
+                BackgroundImg.Bgr17P1, BackgroundImg.Bgr17P2, BackgroundImg.Bgr18P1, BackgroundImg.Bgr18P2,
+                BackgroundImg.BgrE1P1, BackgroundImg.BgrE1P2, BackgroundImg.BgrE2P1, BackgroundImg.BgrE2P2,
+                BackgroundImg.BgrE3P1, BackgroundImg.BgrE3P2, BackgroundImg.BgrE4P1, BackgroundImg.BgrE4P2,
+                BackgroundImg.BgrE5P1, BackgroundImg.BgrE5P2, BackgroundImg.BgrE6P1, BackgroundImg.BgrE6P2,
+                BackgroundImg.BgrE7P1, BackgroundImg.BgrE7P2, BackgroundImg.BgrE8P1, BackgroundImg.BgrE8P2,
+                BackgroundImg.BgrMechanical, BackgroundImg.BgrBlank, BackgroundImg.BgrChallenge1,
+                BackgroundImg.BgrChallenge2, BackgroundImg.BgrChallenge3, BackgroundImg.BgrChallenge4,
+                BackgroundImg.BgrTestingP1, BackgroundImg.BgrTestingP2,
                 BackgroundImg.ZeptolabNoLink, BackgroundImg.SkinBackground,
                 BackgroundImg.MenuExpMainBgr, BackgroundImg.MenuExpDefaultBgr,
                 BackgroundImg.MenuExpCampaignBgr, BackgroundImg.MenuExpLoadingBgr
@@ -280,10 +286,35 @@ namespace CutTheRopeDX.GameMain
             public const string Bgr14P1 = "bgr_14_p1";
             public const string Bgr15P1 = "bgr_15_p1";
             public const string Bgr16P1 = "bgr_16_p1";
+            public const string Bgr16P2 = "bgr_16_p2";
             public const string Bgr17P1 = "bgr_17_p1";
-            public const string Bgr17P1New = "bgr_17_p1_new";
+            public const string Bgr17P2 = "bgr_17_p2";
+            public const string BgrMechanical = "bgr_mechanical";
             public const string Bgr18P1 = "bgr_18_p1";
             public const string Bgr18P2 = "bgr_18_p2";
+            public const string BgrBlank = "blank";
+            public const string BgrChallenge1 = "bgr_challenge1";
+            public const string BgrChallenge2 = "bgr_challenge2";
+            public const string BgrChallenge3 = "bgr_challenge3";
+            public const string BgrChallenge4 = "bgr_challenge4";
+            public const string BgrE1P1 = "bgr_e1_p1";
+            public const string BgrE1P2 = "bgr_e1_p2";
+            public const string BgrE2P1 = "bgr_e2_p1";
+            public const string BgrE2P2 = "bgr_e2_p2";
+            public const string BgrE3P1 = "bgr_e3_p1";
+            public const string BgrE3P2 = "bgr_e3_p2";
+            public const string BgrE4P1 = "bgr_e4_p1";
+            public const string BgrE4P2 = "bgr_e4_p2";
+            public const string BgrE5P1 = "bgr_e5_p1";
+            public const string BgrE5P2 = "bgr_e5_p2";
+            public const string BgrE6P1 = "bgr_e6_p1";
+            public const string BgrE6P2 = "bgr_e6_p2";
+            public const string BgrE7P1 = "bgr_e7_p1";
+            public const string BgrE7P2 = "bgr_e7_p2";
+            public const string BgrE8P1 = "bgr_e8_p1";
+            public const string BgrE8P2 = "bgr_e8_p2";
+            public const string BgrTestingP1 = "bgr_testing_p1";
+            public const string BgrTestingP2 = "bgr_testing_p2";
             public const string ZeptolabNoLink = "zeptolab_no_link";
             public const string SkinBackground = "skin_bg";
 
@@ -444,7 +475,11 @@ namespace CutTheRopeDX.GameMain
             public const string FingerTraceGlow = "traces_ctr2_glow";
             public const string ObjHookChain = "obj_hook_chain";
             public const string ObjHookAutoChain = "obj_hook_auto_chain";
-            public const string Bgr18Cover = "bgr_18_cover";
+            public const string BgrChallenge1Cover = "bgr_challenge1_cover";
+            public const string BgrChallenge2Cover = "bgr_challenge2_cover";
+            public const string BgrChallenge3Cover = "bgr_challenge3_cover";
+            public const string BgrChallenge4Cover = "bgr_challenge4_cover";
+            public const string BgrTestingCover = "bgr_testing_cover";
 
             // Candies
             public const string ObjCandyFx = "candies/obj_candy_fx";

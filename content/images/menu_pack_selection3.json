@@ -1,40 +1,121 @@
 {
-  "frames": [
+  "frames":[
     {
-      "filename": "box_18.png",
-      "frame": {
-        "x": 0,
-        "y": 0,
-        "w": 500,
-        "h": 543
+      "filename":"box_challenge1.png",
+      "frame":{
+        "h":541,
+        "w":500,
+        "x":507,
+        "y":2
       },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 80,
-        "y": 66,
-        "w": 500,
-        "h": 543
+      "rotated":false,
+      "sourceSize":{
+        "h":660,
+        "w":660
       },
-      "sourceSize": {
-        "w": 660,
-        "h": 660
+      "spriteSourceSize":{
+        "h":541,
+        "w":500,
+        "x":80,
+        "y":66
       },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
+      "trimmed":true
+    },
+    {
+      "filename":"box_challenge2.png",
+      "frame":{
+        "h":541,
+        "w":500,
+        "x":1009,
+        "y":2
+      },
+      "rotated":false,
+      "sourceSize":{
+        "h":660,
+        "w":660
+      },
+      "spriteSourceSize":{
+        "h":541,
+        "w":500,
+        "x":80,
+        "y":66
+      },
+      "trimmed":true
+    },
+    {
+      "filename":"box_challenge3.png",
+      "frame":{
+        "h":541,
+        "w":500,
+        "x":1511,
+        "y":2
+      },
+      "rotated":false,
+      "sourceSize":{
+        "h":660,
+        "w":660
+      },
+      "spriteSourceSize":{
+        "h":541,
+        "w":500,
+        "x":80,
+        "y":66
+      },
+      "trimmed":true
+    },
+    {
+      "filename":"box_challenge4.png",
+      "frame":{
+        "h":541,
+        "w":500,
+        "x":2013,
+        "y":2
+      },
+      "rotated":false,
+      "sourceSize":{
+        "h":660,
+        "w":660
+      },
+      "spriteSourceSize":{
+        "h":541,
+        "w":500,
+        "x":80,
+        "y":66
+      },
+      "trimmed":true
+    },
+    {
+      "filename":"box_testing.png",
+      "frame":{
+        "h":544,
+        "w":503,
+        "x":2,
+        "y":2
+      },
+      "rotated":false,
+      "sourceSize":{
+        "h":660,
+        "w":660
+      },
+      "spriteSourceSize":{
+        "h":544,
+        "w":503,
+        "x":79,
+        "y":63
+      },
+      "trimmed":true
     }
   ],
-  "meta": {
-    "app": "http://free-tex-packer.com",
-    "version": "0.6.7",
-    "image": "menu_pack_selection3.png",
-    "format": "RGBA8888",
-    "size": {
-      "w": 500,
-      "h": 543
+  "meta":{
+    "app":"https://www.codeandweb.com/texturepacker",
+    "format":"RGBA8888",
+    "image":"menu_pack_selection3.png",
+    "scale":"1",
+    "size":{
+      "h":548,
+      "w":2515
     },
-    "scale": 1
+    "smartupdate":"$TexturePacker:SmartUpdate:9120228a6023ddcb23f3245824d92437:eccfb1e8f20f6576e77cad58ed47703a:c40a7eb12a02a444f38e101d42c83350$",
+    "version":"3.0"
   }
 }

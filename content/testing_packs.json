@@ -1,15 +1,15 @@
 [
     {
         "packName": "Sweet Testing",
-        "boxBackground": ["bgr_18_p1", "bgr_18_p2"],
-        "boxBackgroundP2Y": 1165,
-        "boxCover": ["bgr_18_cover"],
-        "boxHoleBgColor": [31, 42, 84],
+        "boxBackground": ["bgr_testing_p1", "bgr_testing_p2"],
+        "boxBackgroundP2Y": 951,
+        "boxCover": ["bgr_testing_cover"],
+        "boxHoleBgColor": [39, 52, 0],
         "ghostGrabColor": [102, 179, 255],
         "levelCount": 2,
         "musicPack": ["all"],
         "packSpritesheet": "3",
-        "packQuadIndex": 0,
+        "packQuadIndex": 4,
         "sittingPlatformTheme": "extras",
         "extraSittingPlatform": 0,
         "unlockStars": 0
