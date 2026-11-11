@@ -29,10 +29,17 @@ namespace CutTheRopeDX.Framework.Helpers
             return this;
         }
 
+        /// <summary>
+        /// Scale applied to the time that drives this object's animation (timelines and children).
+        /// The mover is not scaled, as it should always follow unscaled frame time to avoid
+        /// desyncing with other moving objects.
+        /// </summary>
+        protected virtual float AnimationTimeScale => 1f;
+
         /// <inheritdoc />
         public override void Update(float delta)
         {
-            base.Update(delta);
+            base.Update(delta * AnimationTimeScale);
             EnsureTopLeftCalculated();
             // A held mover is stepped by zero rather than skipped: it makes no progress, but the
             // object is still pinned to the mover's position and angle, so anything else that

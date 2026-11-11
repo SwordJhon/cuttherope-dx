@@ -14,9 +14,6 @@ namespace CutTheRopeDX.GameMain
         internal float PlaybackRate { get; set; } = DefaultPlaybackRate;
 
         /// <inheritdoc />
-        public override void Update(float delta)
-        {
-            base.Update(delta * PlaybackRate);
-        }
+        protected override float AnimationTimeScale => PlaybackRate;
     }
 }

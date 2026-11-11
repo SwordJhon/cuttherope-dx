@@ -5,7 +5,7 @@
         <gameDesign ropePhysicsSpeed="1" />
     </layer>
     <layer name="Objects">
-        <target x="160" y="240" targetType="1" supportTheme="extras" supportQuad="2" path="RC100" moveSpeed="50" startAngle="90" />
+        <target x="160" y="240" supportTheme="extras" supportQuad="2" path="RC100" moveSpeed="50" startAngle="90" />
         <grab x="160" y="240" length="60" radius="-1" path="RC100" moveSpeed="50" startAngle="270" />
         <candy x="161" y="240" />
         <bubble x="160" y="240" />
