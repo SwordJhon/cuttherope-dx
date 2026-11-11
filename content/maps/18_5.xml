@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<map>
+    <layer name="settings">
+        <map gridSize="10" width="480" height="480" viewWidth="480" levelName="s5" />
+        <gameDesign ropePhysicsSpeed="1" />
+    </layer>
+    <layer name="Objects">
+        <target x="390" y="360" />
+        <grab x="90" y="30" length="60" radius="-1" />
+        <candy x="91" y="125" candyNumber="0" />
+        <bubble x="180" y="420" />
+        <star x="135" y="270" timeout="-1" path="RW45" moveSpeed="80" />
+        <star x="290" y="250" timeout="-1" path="RW50" moveSpeed="70" startAngle="90"/>
+        <star x="290" y="150" timeout="-1" path="RC50" moveSpeed="70" startAngle="270"/>
+        <spike4 x="45" y="180" angle="0" size="3" toggled="1" toggleDurationMultiplier="0.6" />
+        <spike4 x="135" y="270" angle="0" size="3" toggled="3" toggleDurationMultiplier="0.6" toggleAngle="-90" />
+        <spike4 x="45" y="360" angle="0" size="3" toggled="2" toggleDurationMultiplier="0.6" />
+        <pipe x="90" y="420" angle="0" />
+        <hand x="340" y="60" segmentsCount="1" segment1Angle="180" segment1Length="50" segment1Rotatable="true" />
+        <grab x="290" y="380" radius="30" moveLength="-1" />
+    </layer>
+</map>

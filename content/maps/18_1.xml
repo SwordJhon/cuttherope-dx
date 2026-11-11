@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <map>
     <layer name="settings">
-        <map gridSize="10" width="320" height="480" viewHeight="540" />
-        <gameDesign ropePhysicsSpeed="1" twoParts="false" />
+        <map gridSize="10" width="320" height="480" viewHeight="520" levelName="Saw and blade" />
+        <gameDesign ropePhysicsSpeed="1" />
     </layer>
     <layer name="Objects">
-        <grab x="160" y="130" length="90" radius="-1" candyNumber="0" part="L" />
-        <candy x="161" y="250" isDriven="false" candyNumber="0" candyType="54" />
-        <grab x="160" y="130" length="90" radius="-1" candyNumber="1" part="R" />
-        <grab x="40" y="60" length="40" radius="-1" candyNumber="1" part="R" />
-        <candy x="41" y="130" isDriven="false" candyNumber="1" />
-        <target x="270" y="240" targetType="10" />
-        <target x="100" y="380" path="120,0" moveSpeed="50" supportTheme="extras" supportQuad="2" />
-        <tutorialText x="100" y="45" text="Expect levels here to constantly change!" width="180" locale="en" />
-        <pauseSwitcher x="60" y="240" />
+        <grab x="160" y="40" length="60" radius="-1" />
+        <candy x="161" y="120" />
+        <spikes x="220" y="190" angle="0" size="4" toggled="3" toggleAngle="-90" />
+        <star x="160" y="260" timeout="-1" path="RW20" moveSpeed="50" startAngle="0" />
+        <star x="160" y="260" timeout="-1" path="RW20" moveSpeed="50" startAngle="120" />
+        <star x="160" y="260" timeout="-1" path="RW20" moveSpeed="50" startAngle="240" />
+        <spikes x="100" y="330" angle="0" size="4" toggled="5" />
+        <target x="160" y="400" />
     </layer>
 </map>

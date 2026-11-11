@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<map>
+    <layer name="settings">
+        <map gridSize="10" width="320" height="480" viewHeight="520" levelName="Cloudy" />
+        <gameDesign ropePhysicsSpeed="1" />
+    </layer>
+    <layer name="Objects">
+        <grab x="280" y="40" length="30" radius="-1" moveLength="200" moveOffset="200" />
+        <candy x="281" y="95" />
+        <spikes x="220" y="150" angle="0" spikesAmount="10" />
+        <bouncer x="60" y="420" angle="-90" size="2" path="0,0" rotateSpeed="15" />
+        <star x="130" y="320" timeout="-1" path="RC25" moveSpeed="80" />
+        <star x="175" y="290" timeout="-1" path="RW30" moveSpeed="50" startAngle="90" />
+        <star x="190" y="340" timeout="-1" path="RC40" moveSpeed="30" startAngle="180" />
+        <target x="160" y="410" targetType="1" supportTheme="extras" supportQuad="2" path="70,-30,100,-100,70,-30" moveSpeed="30" startAngle="90" />
+    </layer>
+</map>

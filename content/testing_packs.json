@@ -6,7 +6,7 @@
         "boxCover": ["bgr_testing_cover"],
         "boxHoleBgColor": [39, 52, 0],
         "ghostGrabColor": [102, 179, 255],
-        "levelCount": 2,
+        "levelCount": 5,
         "musicPack": ["all"],
         "packSpritesheet": "3",
         "packQuadIndex": 4,
