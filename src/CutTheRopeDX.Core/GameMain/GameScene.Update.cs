@@ -532,6 +532,7 @@ namespace CutTheRopeDX.GameMain
                 {
                     t.support.x = t.targetObject.x + t.supportOffset.X;
                     t.support.y = t.targetObject.y + t.supportOffset.Y;
+                    t.support.rotation = t.targetObject.rotation + t.supportRotationOffset;
                 }
                 t.animation?.SyncAdditionalOverlayPosition(t.targetObject.x, t.targetObject.y);
             }

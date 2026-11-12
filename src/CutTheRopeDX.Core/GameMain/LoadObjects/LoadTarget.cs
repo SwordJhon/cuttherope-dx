@@ -48,6 +48,9 @@ namespace CutTheRopeDX.GameMain
                     targetType,
                     OmNomSkinRegistry.GetSelectedSkinIndex(),
                     OmNomSkinRegistry.TotalSkinCount));
+            string supportThemeOverride = xmlNode.Attribute("supportTheme")?.Value ?? string.Empty;
+            int supportQuadOverride = ParseIntOrZero(xmlNode.Attribute("supportQuad")?.Value ?? string.Empty);
+            bool supportPaddingtonOverride = supportThemeOverride == "xmas" && supportQuadOverride == PaddingtonSupportQuad;
             bool isPaddington = SpecialEvents.IsJanuary && isClassicSkin;
 
             bool isPrimaryTarget = targets.Count == 0;
@@ -81,10 +84,13 @@ namespace CutTheRopeDX.GameMain
             int sourceY = ParseCoordinateIntOrZero(yAttribute);
             float transformedY = (sourceY * scale) + offsetY + mapOffsetY;
             targetObj.y = support.y = transformedY;
-            if (isPaddington)
+            if (isPaddington || supportPaddingtonOverride)
             {
                 support.y += PaddingtonSupportOffsetY;
             }
+
+            float rotationAttribute = ParseFloatOrZero(xmlNode.Attribute("angle")?.Value);
+            targetObj.rotation = support.rotation = rotationAttribute;
 
             // Mouth hitbox, center-relative so skins of any size keep the same mouth line.
             // Desktop: derived from classic char_animations (640x640): bb = (264, 350, 108, 2).
@@ -103,6 +109,7 @@ namespace CutTheRopeDX.GameMain
                 targetObject = targetObj,
                 support = support,
                 supportOffset = Vect(support.x - targetObj.x, support.y - targetObj.y),
+                supportRotationOffset = support.rotation - targetObj.rotation,
                 baseScaleX = targetBaseScaleX,
                 baseScaleY = targetBaseScaleY,
             });
@@ -142,6 +149,7 @@ namespace CutTheRopeDX.GameMain
                 int quad = ParseIntOrZero(xmlNode.Attribute("supportQuad")?.Value ?? string.Empty);
                 return overrideTheme switch
                 {
+                    "xmas" => (Resources.Img.CharSupportsXmas, quad),
                     "experiments" => (Resources.Img.CharSupportExperiments, quad is >= 0 and < ExperimentsSupportCount ? quad : pack % ExperimentsSupportCount),
                     "extras" => (Resources.Img.CharSupportsExtras, quad is >= 0 and < ExtrasSupportCount ? quad : pack % ExtrasSupportCount),
                     _ => (Resources.Img.CharSupports, quad),
