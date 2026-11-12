@@ -469,6 +469,7 @@ namespace CutTheRopeDX.GameMain
             public const string WaterTile = "water_tile";
             public const string ObjSnail = "obj_snail";
             public const string ObjRoboHand = "obj_robohand";
+            public const string ObjRoboHandReverse = "obj_robohand_reverse";
             public const string ObjBambooTube = "obj_bamboo_tube";
             public const string ObjMetalTube = "obj_metal_tube";
             public const string FingerTraceSkinOptions = "fingertrace_skin";

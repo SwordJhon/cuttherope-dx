@@ -81,7 +81,8 @@ namespace CutTheRopeDX.GameMain
         /// <param name="segmentLength">Segment length in world units.</param>
         /// <param name="segmentAngle">Initial segment angle in degrees.</param>
         /// <param name="rotatable">Whether the segment can be rotated by player input.</param>
-        public void AddSegmentWithLengthAngleRotatable(float segmentLength, float segmentAngle, bool rotatable)
+        /// <param name="reversed">Whether the segment rotates counterclockwise.</param>
+        public void AddSegmentWithLengthAngleRotatable(float segmentLength, float segmentAngle, bool rotatable, bool reversed)
         {
             Vector start = Vect(0f, 0f);
             segments ??= [];
@@ -90,7 +91,7 @@ namespace CutTheRopeDX.GameMain
                 start = LastSegment().endPosition;
             }
 
-            MechanicalHandSegment segment = new MechanicalHandSegment().InitWithPositionLengthAngleRotatable(Vect(start.X, start.Y), segmentLength, segmentAngle, rotatable);
+            MechanicalHandSegment segment = new MechanicalHandSegment().InitWithPositionLengthAngleRotatable(Vect(start.X, start.Y), segmentLength, segmentAngle, rotatable, reversed);
             segment.anchor = 18;
             segment.parentAnchor = 18;
             segment.theHand = this;

@@ -37,7 +37,8 @@ namespace CutTheRopeDX.GameMain
 
                 float length = ParseFloatOrZero(xmlNode.Attribute($"segment{i}Length")?.Value) * scale;
                 _ = bool.TryParse(xmlNode.Attribute($"segment{i}Rotatable")?.Value, out bool rotatable);
-                hand.AddSegmentWithLengthAngleRotatable(length, angle, rotatable);
+                _ = bool.TryParse(xmlNode.Attribute($"segment{i}Reversed")?.Value, out bool reversed);
+                hand.AddSegmentWithLengthAngleRotatable(length, angle, rotatable, reversed);
             }
 
             CalculateTopLeft(hand.TheClaw());
