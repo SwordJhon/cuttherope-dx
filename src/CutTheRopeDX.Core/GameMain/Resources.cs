@@ -470,6 +470,7 @@ namespace CutTheRopeDX.GameMain
             public const string ObjSnail = "obj_snail";
             public const string ObjRoboHand = "obj_robohand";
             public const string ObjBambooTube = "obj_bamboo_tube";
+            public const string ObjMetalTube = "obj_metal_tube";
             public const string FingerTraceSkinOptions = "fingertrace_skin";
             public const string FingerTraces = "traces_ctr2";
             public const string FingerTraceGlow = "traces_ctr2_glow";

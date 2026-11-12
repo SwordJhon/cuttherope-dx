@@ -146,6 +146,7 @@ namespace CutTheRopeDX.GameMain
                         break;
                     case "pipe":
                         _ = resources.Add(Resources.Img.ObjBambooTube);
+                        _ = resources.Add(Resources.Img.ObjMetalTube);
                         _ = resources.Add(Resources.Snd.ExpBambooChute);
                         break;
                     case "ants":

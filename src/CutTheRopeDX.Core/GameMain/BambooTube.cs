@@ -21,11 +21,14 @@ namespace CutTheRopeDX.GameMain
         /// </summary>
         /// <param name="position">World-space centre position of the tube.</param>
         /// <param name="angle">Initial rotation in degrees.</param>
+        /// <param name="rotatable">Choose between the bamboo and the metal variants.</param>
         /// <param name="scale">Interaction scale factor that drives bounding-box size and capture radius.</param>
         /// <returns>This instance, for fluent initialisation.</returns>
-        public BambooTube InitWithPositionAngle(Vector position, float angle, float scale = 1f)
+        public BambooTube InitWithPositionAngle(Vector position, float angle, bool rotatable, float scale = 1f)
         {
-            _ = InitWithTexture(Application.GetTexture(Resources.Img.ObjBambooTube));
+            isMetal = !rotatable;
+            variantTexture = isMetal ? Resources.Img.ObjMetalTube : Resources.Img.ObjBambooTube;
+            _ = InitWithTexture(Application.GetTexture(variantTexture));
             DoRestoreCutTransparency();
             SetDrawQuad(BambooCoreQuad);
             anchor = 18;
@@ -80,7 +83,7 @@ namespace CutTheRopeDX.GameMain
         /// <returns><see langword="true"/> if the caller should track subsequent move/end events for this touch index.</returns>
         public bool HandleBambooTouchWithIndex(Vector touchPoint, int touchIndex)
         {
-            if (isRotatingBamboo)
+            if (isRotatingBamboo || isMetal)
             {
                 return false;
             }
@@ -230,7 +233,7 @@ namespace CutTheRopeDX.GameMain
                 return;
             }
 
-            Image grid = FromResource(Resources.Img.ObjBambooTube);
+            Image grid = FromResource(variantTexture);
             grid.DoRestoreCutTransparency();
             float angle = float.RadiansToDegrees(VectAngleNormalized(VectSub(bambooHoleOut, Vect(x, y))));
             if (new LeafParticles().Init(5, angle, grid, 0f) is LeafParticles bambooParticles)
@@ -340,13 +343,13 @@ namespace CutTheRopeDX.GameMain
         /// </summary>
         private void SetupBambooShellSprites()
         {
-            bambooBackSprite = FromResource(Resources.Img.ObjBambooTube, BambooBackQuad);
+            bambooBackSprite = FromResource(variantTexture, BambooBackQuad);
             bambooBackSprite.DoRestoreCutTransparency();
             bambooBackSprite.anchor = 9;
             bambooBackSprite.parentAnchor = 9;
             _ = AddChild(bambooBackSprite);
 
-            bambooFrontSprite = FromResource(Resources.Img.ObjBambooTube, BambooFrontQuad);
+            bambooFrontSprite = FromResource(variantTexture, BambooFrontQuad);
             bambooFrontSprite.DoRestoreCutTransparency();
             bambooFrontSprite.anchor = 9;
             bambooFrontSprite.parentAnchor = 9;
@@ -373,6 +376,12 @@ namespace CutTheRopeDX.GameMain
 
         /// <summary>Scale factor applied to bounding box and capture radius.</summary>
         private float interactionScale = 1f;
+
+        /// <summary>What texture is this tube using.</summary>
+        private string variantTexture;
+
+        /// <summary>Chooses whether a tube is the metal or the bamboo variant.</summary>
+        private bool isMetal;
 
         /// <summary><see langword="true"/> while the tube is animating toward <see cref="bambooTargetRotation"/>.</summary>
         private bool isRotatingBamboo;
