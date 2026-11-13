@@ -84,7 +84,7 @@ namespace CutTheRopeDX.GameMain
             int sourceY = ParseCoordinateIntOrZero(yAttribute);
             float transformedY = (sourceY * scale) + offsetY + mapOffsetY;
             targetObj.y = support.y = transformedY;
-            if (isPaddington || supportPaddingtonOverride)
+            if (string.IsNullOrEmpty(supportThemeOverride) ? isPaddington : supportPaddingtonOverride)
             {
                 support.y += PaddingtonSupportOffsetY;
             }
