@@ -199,6 +199,7 @@ namespace CutTheRopeDX.GameMain
                         break;
                     case "hand":
                         _ = resources.Add(Resources.Img.ObjRoboHand);
+                        _ = resources.Add(Resources.Img.ObjRoboHandReverse);
                         _ = resources.Add(Resources.Snd.ExpHandCatch);
                         _ = resources.Add(Resources.Snd.ExpHandDrop);
                         _ = resources.Add(Resources.Snd.ExpHandRotate);
