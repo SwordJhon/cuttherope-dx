@@ -16,10 +16,9 @@ namespace CutTheRopeDX.GameMain
         /// <param name="pos">Local segment origin.</param>
         /// <param name="segmentLength">Segment length in world units.</param>
         /// <param name="angleDegrees">Initial segment angle in degrees.</param>
-        /// <param name="isRotatable">Whether the segment exposes a rotate button.</param>
-        /// <param name="isReversed">Whether the segment rotates counterclockwise.</param>
+        /// <param name="segmentRotationStep">How much the segment rotates by player input.</param>
         /// <returns>The initialized segment instance.</returns>
-        public MechanicalHandSegment InitWithPositionLengthAngleRotatable(Vector pos, float segmentLength, float angleDegrees, bool isRotatable, bool isReversed)
+        public MechanicalHandSegment InitWithPositionLengthAngleRotatable(Vector pos, float segmentLength, float angleDegrees, float segmentRotationStep)
         {
             x = pos.X;
             y = pos.Y;
@@ -27,8 +26,8 @@ namespace CutTheRopeDX.GameMain
             prevRotation = angleDegrees;
             length = segmentLength;
             endPosition = Vect(length, 0f);
-            rotatable = isRotatable;
-            reversed = isReversed;
+            rotationStep = segmentRotationStep;
+            rotatable = rotationStep != 0;
             endsWithHand = true;
             passTransformationsToChilds = true;
 
@@ -45,7 +44,7 @@ namespace CutTheRopeDX.GameMain
             buttonNone = Image.FromResource(Resources.Img.ObjRoboHand, 2);
             if (rotatable)
             {
-                string buttonResource = reversed ? Resources.Img.ObjRoboHandReverse : Resources.Img.ObjRoboHand;
+                string buttonResource = rotationStep < 0 ? Resources.Img.ObjRoboHandReverse : Resources.Img.ObjRoboHand;
                 Image buttonUp = Image.FromResource(buttonResource, 1);
                 Image buttonDown = Image.FromResource(buttonResource, 0);
                 button = (MechanicalHandButton)new MechanicalHandButton().InitWithUpElementDownElementandID(buttonUp, buttonDown, 0);
@@ -87,7 +86,7 @@ namespace CutTheRopeDX.GameMain
             rotateOnceAgain = false;
             rotationTime = 0f;
 
-            float finalRotation = reversed ? rotation - DEG_90 : rotation + DEG_90;
+            float finalRotation = rotation + rotationStep;
             Timeline timeline = new Timeline().InitWithMaxKeyFramesOnTrack(2);
             timeline.AddKeyFrame(KeyFrame.MakeRotation((int)rotation, KeyFrame.TransitionType.FRAME_TRANSITION_LINEAR, 0));
             timeline.AddKeyFrame(KeyFrame.MakeRotation((int)finalRotation, KeyFrame.TransitionType.FRAME_TRANSITION_LINEAR, 0.25f));
@@ -228,8 +227,8 @@ namespace CutTheRopeDX.GameMain
         /// <summary>Whether this segment exposes a rotate button.</summary>
         private bool rotatable;
 
-        /// <summary>Whether this segment rotates counterclockwise.</summary>
-        private bool reversed;
+        /// <summary>How much this segment rotates by player input.</summary>
+        private float rotationStep;
 
         /// <summary>Whether this segment currently owns the claw child at its end.</summary>
         public bool endsWithHand;
