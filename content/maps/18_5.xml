@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <map>
     <layer name="settings">
-        <map gridSize="10" width="480" height="480" viewWidth="480" levelName="" />
+        <map gridSize="10" width="480" height="480" viewWidth="480" levelName="Tooling around" />
         <gameDesign ropePhysicsSpeed="1" />
     </layer>
     <layer name="Objects">
