@@ -16,7 +16,7 @@
         <spike4 x="45" y="360" angle="0" size="3" toggled="2" toggleDurationMultiplier="0.6" />
         <pipe x="90" y="420" angle="0" rotatable="false" />
         <grab x="290" y="380" radius="30" moveLength="-1" />
-        <hand x="340" y="60" segmentsCount="1" segment1Angle="180" segment1Length="50" segment1Rotatable="true" segment1Reversed="true" />
+        <hand x="340" y="60" segmentsCount="1" segment1Angle="180" segment1Length="50" segment1RotationStep="-45" />
         <spikes x="290" y="20" angle="0" spikesAmount="3" />
         <target x="390" y="360" supportTheme="experiments" supportQuad="5" />
     </layer>
