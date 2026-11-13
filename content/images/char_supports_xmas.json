@@ -13,8 +13,8 @@
             "frame": { "x": 1, "y": 1, "w": 404, "h": 383 },
             "rotated": false,
             "trimmed": true,
-            "spriteSourceSize": { "x": 118, "y": 183, "w": 404, "h": 383 },
-            "sourceSize": { "w": 640, "h": 640 }
+            "spriteSourceSize": { "x": 118, "y": 383, "w": 404, "h": 383 },
+            "sourceSize": { "w": 640, "h": 840 }
         }
     ],
     "meta": {

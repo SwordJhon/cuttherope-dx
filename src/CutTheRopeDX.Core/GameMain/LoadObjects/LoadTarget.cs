@@ -14,13 +14,6 @@ namespace CutTheRopeDX.GameMain
         /// <summary>Quad holding Paddington's suitcase on the Christmas support sheet.</summary>
         private const int PaddingtonSupportQuad = 1;
 
-        /// <summary>
-        /// Downward nudge applied to the suitcase so Om Nom sits on its lid rather than inside it.
-        /// The iOS release offsets by 32/64/128 px across its resolution tiers, all of which are
-        /// 32 px in its 205 px quad space; scaled onto this port's 640 px quads that is 100.
-        /// </summary>
-        private const float PaddingtonSupportOffsetY = 100f;
-
         /// <summary>Number of platforms on the Experiments support sheet, one per Experiments pack.</summary>
         private const int ExperimentsSupportCount = 8;
 
@@ -50,7 +43,6 @@ namespace CutTheRopeDX.GameMain
                     OmNomSkinRegistry.TotalSkinCount));
             string supportThemeOverride = xmlNode.Attribute("supportTheme")?.Value ?? string.Empty;
             int supportQuadOverride = ParseIntOrZero(xmlNode.Attribute("supportQuad")?.Value ?? string.Empty);
-            bool supportPaddingtonOverride = supportThemeOverride == "xmas" && supportQuadOverride == PaddingtonSupportQuad;
             bool isPaddington = SpecialEvents.IsJanuary && isClassicSkin;
 
             bool isPrimaryTarget = targets.Count == 0;
@@ -84,10 +76,6 @@ namespace CutTheRopeDX.GameMain
             int sourceY = ParseCoordinateIntOrZero(yAttribute);
             float transformedY = (sourceY * scale) + offsetY + mapOffsetY;
             targetObj.y = support.y = transformedY;
-            if (string.IsNullOrEmpty(supportThemeOverride) ? isPaddington : supportPaddingtonOverride)
-            {
-                support.y += PaddingtonSupportOffsetY;
-            }
 
             float rotationAttribute = ParseFloatOrZero(xmlNode.Attribute("angle")?.Value);
             targetObj.rotation = support.rotation = rotationAttribute;
