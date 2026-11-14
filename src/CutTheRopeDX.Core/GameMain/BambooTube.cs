@@ -21,13 +21,16 @@ namespace CutTheRopeDX.GameMain
         /// </summary>
         /// <param name="position">World-space centre position of the tube.</param>
         /// <param name="angle">Initial rotation in degrees.</param>
-        /// <param name="rotatable">Choose between the bamboo and the metal variants.</param>
+        /// <param name="rotDen">Determines the snapping angles of a tube.</param>
         /// <param name="scale">Interaction scale factor that drives bounding-box size and capture radius.</param>
         /// <returns>This instance, for fluent initialisation.</returns>
-        public BambooTube InitWithPositionAngle(Vector position, float angle, bool rotatable, float scale = 1f)
+        public BambooTube InitWithPositionAngle(Vector position, float angle, float rotDen, float scale = 1f)
         {
-            isMetal = !rotatable;
-            variantTexture = isMetal ? Resources.Img.ObjMetalTube : Resources.Img.ObjBambooTube;
+            rotationDenominator = rotDen;
+            snapStep = DEG_360 / rotationDenominator;
+            dragStep = MathF.Abs(snapStep);
+            dragThreshold = dragStep / 3f;
+            variantTexture = rotationDenominator == 0 ? Resources.Img.ObjMetalTube : Resources.Img.ObjBambooTube;
             _ = InitWithTexture(Application.GetTexture(variantTexture));
             DoRestoreCutTransparency();
             SetDrawQuad(BambooCoreQuad);
@@ -40,7 +43,7 @@ namespace CutTheRopeDX.GameMain
             interactionScale = Math.Max(0.1f, scale);
             bb = MakeRectangle(0f, 0f, BambooBaseBbSize * interactionScale, BambooBaseBbSize * interactionScale);
             rotatedBB = true;
-            scaleX = 0.9f;
+            scaleX = rotationDenominator < 0 ? -0.9f : 0.9f;
             scaleY = 0.9f;
             SetupBambooShellSprites();
             BambooTouchIndex = -1;
@@ -83,7 +86,7 @@ namespace CutTheRopeDX.GameMain
         /// <returns><see langword="true"/> if the caller should track subsequent move/end events for this touch index.</returns>
         public bool HandleBambooTouchWithIndex(Vector touchPoint, int touchIndex)
         {
-            if (isRotatingBamboo || isMetal)
+            if (isRotatingBamboo || rotationDenominator == 0)
             {
                 return false;
             }
@@ -109,8 +112,8 @@ namespace CutTheRopeDX.GameMain
 
         /// <summary>
         /// Updates the tube rotation in response to a touch-move event.
-        /// Advances <c>bambooStartRotation</c> by 90° steps so the snap on release
-        /// always targets the nearest 90° boundary from the gesture origin.
+        /// Advances <c>bambooStartRotation</c> by dragStep steps so the snap on release
+        /// always targets the nearest dragStep boundary from the gesture origin.
         /// </summary>
         /// <param name="touchPoint">Current world-space touch position.</param>
         public void HandleBambooRotate(Vector touchPoint)
@@ -120,15 +123,15 @@ namespace CutTheRopeDX.GameMain
             bambooVisualRotation += angleDelta;
 
             float fromStart = AngleTo180(bambooVisualRotation - bambooStartRotation);
-            if (MathF.Abs(fromStart) > 60f)
+            if (MathF.Abs(fromStart) > dragThreshold * 2)
             {
-                if (fromStart > 30f)
+                if (fromStart > dragThreshold)
                 {
-                    bambooStartRotation += DEG_90;
+                    bambooStartRotation += dragStep;
                 }
-                else if (fromStart < -30f)
+                else if (fromStart < -dragThreshold)
                 {
-                    bambooStartRotation -= DEG_90;
+                    bambooStartRotation -= dragStep;
                 }
             }
 
@@ -137,16 +140,16 @@ namespace CutTheRopeDX.GameMain
         }
 
         /// <summary>
-        /// Snaps the tube to the nearest 90° boundary when a drag is cancelled or lifted.
+        /// Snaps the tube to the nearest dragStep boundary when a drag is cancelled or lifted.
         /// Initiates the animated rotation and clears the touch owner.
         /// </summary>
         public void HandleBambooCancel()
         {
             float fromStart = AngleTo180(bambooVisualRotation - bambooStartRotation);
-            bambooTargetRotation = fromStart > 30f
-                ? bambooStartRotation + DEG_90
-                : fromStart < -30f
-                    ? bambooStartRotation - DEG_90
+            bambooTargetRotation = fromStart > dragThreshold
+                ? bambooStartRotation + dragStep
+                : fromStart < -dragThreshold
+                    ? bambooStartRotation - dragStep
                     : bambooStartRotation;
 
             isRotatingBamboo = true;
@@ -257,7 +260,7 @@ namespace CutTheRopeDX.GameMain
         public Vector HoleOut => bambooHoleOut;
 
         /// <summary>
-        /// Begins an animated 90° CCW snap if no snap is already running.
+        /// Begins an animated snapStep CCW snap if no snap is already running.
         /// </summary>
         private void RotateBambooCounterClockwise()
         {
@@ -266,7 +269,7 @@ namespace CutTheRopeDX.GameMain
                 return;
             }
 
-            bambooTargetRotation = bambooVisualRotation + DEG_90;
+            bambooTargetRotation = bambooVisualRotation + snapStep;
             isRotatingBamboo = true;
         }
 
@@ -331,8 +334,9 @@ namespace CutTheRopeDX.GameMain
             float rotationRadians = float.DegreesToRadians(bambooVisualRotation - DEG_90);
             bambooHole1 = VectRotateAround(bambooHole1, rotationRadians, x, y);
             bambooHole2 = VectRotateAround(bambooHole2, rotationRadians, x, y);
-            bambooBackSprite.rotation = bambooVisualRotation;
-            bambooFrontSprite.rotation = bambooVisualRotation;
+            float shellRotation = rotationDenominator < 0 ? -bambooVisualRotation : bambooVisualRotation;
+            bambooBackSprite.rotation = shellRotation;
+            bambooFrontSprite.rotation = shellRotation;
             RotateWithBB(bambooVisualRotation);
             rotation = 0f;
         }
@@ -354,6 +358,12 @@ namespace CutTheRopeDX.GameMain
             bambooFrontSprite.anchor = 9;
             bambooFrontSprite.parentAnchor = 9;
             _ = AddChild(bambooFrontSprite);
+
+            if (rotationDenominator < 0)
+            {
+                bambooBackSprite.scaleX *= -1;
+                bambooFrontSprite.scaleX *= -1;
+            }
         }
 
         /// <summary>Bounding-box half-size in unscaled points.</summary>
@@ -380,8 +390,20 @@ namespace CutTheRopeDX.GameMain
         /// <summary>What texture is this tube using.</summary>
         private string variantTexture;
 
-        /// <summary>Chooses whether a tube is the metal or the bamboo variant.</summary>
-        private bool isMetal;
+        /// <summary>
+        /// Determines the snapping angles of a tube.
+        /// When 0 it switches the tube into the metal variant.
+        /// </summary>
+        private float rotationDenominator;
+
+        /// <summary>Determines the snapping angles of a tube when tapping.</summary>
+        private float snapStep;
+
+        /// <summary>Determines the snapping angles of a tube when dragging.</summary>
+        private float dragStep;
+
+        /// <summary>Angle threshold of a tube when dragging.</summary>
+        private float dragThreshold;
 
         /// <summary><see langword="true"/> while the tube is animating toward <see cref="bambooTargetRotation"/>.</summary>
         private bool isRotatingBamboo;

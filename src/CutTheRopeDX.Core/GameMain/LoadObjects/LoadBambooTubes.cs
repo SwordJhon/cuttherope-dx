@@ -20,8 +20,8 @@ namespace CutTheRopeDX.GameMain
             float x = (ParseCoordinateIntOrZero(xmlNode.Attribute("x")?.Value) * scale) + offsetX + mapOffsetX;
             float y = (ParseCoordinateIntOrZero(xmlNode.Attribute("y")?.Value) * scale) + offsetY + mapOffsetY;
             float angle = ParseFloatOrZero(xmlNode.Attribute("angle")?.Value);
-            bool rotatable = GetBoolAttribute(xmlNode, "rotatable", defaultValue: true);
-            BambooTube bambooTube = new BambooTube().InitWithPositionAngle(Vect(x, y), angle, rotatable, scale);
+            float rotationDenominator = ParseFloatOrDefault(xmlNode.Attribute("rotationDenominator")?.Value, 4f);
+            BambooTube bambooTube = new BambooTube().InitWithPositionAngle(Vect(x, y), angle, rotationDenominator, scale);
             bambooTubes.Add(bambooTube);
         }
     }

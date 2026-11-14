@@ -14,10 +14,10 @@
         <spike4 x="45" y="180" angle="0" size="3" toggled="1" toggleDurationMultiplier="0.6" />
         <spike4 x="135" y="270" angle="0" size="3" toggled="3" toggleDurationMultiplier="0.6" toggleAngle="-90" />
         <spike4 x="45" y="360" angle="0" size="3" toggled="2" toggleDurationMultiplier="0.6" />
-        <pipe x="90" y="420" angle="0" rotatable="false" />
+        <pipe x="90" y="420" angle="0" rotationDenominator="0" />
         <grab x="290" y="380" radius="30" moveLength="-1" />
-        <hand x="340" y="60" segmentsCount="1" segment1Angle="180" segment1Length="50" segment1RotationStep="-45" />
-        <spikes x="290" y="20" angle="0" spikesAmount="3" />
-        <target x="390" y="360" supportTheme="experiments" supportQuad="5" />
+        <hand x="340" y="60" segmentsCount="1" segment1Angle="180" segment1Length="50" segment1RotationStep="-60" />
+        <spikes x="340" y="20" angle="0" spikesAmount="8" />
+        <target x="410" y="360" supportTheme="experiments" supportQuad="5" />
     </layer>
 </map>
