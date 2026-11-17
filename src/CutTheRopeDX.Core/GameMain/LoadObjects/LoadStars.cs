@@ -20,12 +20,14 @@ namespace CutTheRopeDX.GameMain
         private void LoadStar(XElement xmlNode, float scale, float offsetX, float offsetY, int mapOffsetX, int mapOffsetY)
         {
             Star star = Image.InitializeFromResource(new Star(), Resources.Img.ObjStarIdle);
-            if (nightLevel)
+            string forceNight = xmlNode.Attribute("forceNight")?.Value;
+            if (string.IsNullOrEmpty(forceNight) ? nightLevel : forceNight == "true")
             {
                 star.EnableNightMode();
             }
             star.x = (ParseCoordinateIntOrZero(xmlNode.Attribute("x")?.Value) * scale) + offsetX + mapOffsetX;
             star.y = (ParseCoordinateIntOrZero(xmlNode.Attribute("y")?.Value) * scale) + offsetY + mapOffsetY;
+            star.rotation = ParseFloatOrZero(xmlNode.Attribute("angle")?.Value);
             star.timeout = ParseFloatOrZero(xmlNode.Attribute("timeout")?.Value);
             star.CreateAnimations();
             star.bb = GetStarBoundingBox();

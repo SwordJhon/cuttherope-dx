@@ -564,7 +564,7 @@ namespace CutTheRopeDX.GameMain
                         star.PlayTimeline(1);
                         break;
                     }
-                    bool canCollect = !nightLevel || star.IsLit;
+                    bool canCollect = !star.IsNightMode || star.IsLit;
                     if (!canCollect)
                     {
                         continue;
@@ -604,11 +604,11 @@ namespace CutTheRopeDX.GameMain
                         _ = aniPool.AddChild(starDisappear);
                         conveyors.Remove(star);
                         _ = stars.Remove(star);
-                        SoundMgr.PlaySound(starsCollected switch
+                        SoundMgr.PlaySound((starsCollected % 3) switch
                         {
                             1 => Resources.Snd.Star1,
                             2 => Resources.Snd.Star2,
-                            3 => Resources.Snd.Star3,
+                            0 => Resources.Snd.Star3,
                             _ => Resources.Snd.Star1
                         });
                         for (int ti = 0; ti < targets.Count; ti++)

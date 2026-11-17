@@ -201,15 +201,14 @@ namespace CutTheRopeDX.GameMain
         /// <summary>Updates night-star illumination independently of Om Nom's animation clock.</summary>
         private void UpdateNightStarLighting()
         {
-            if (!nightLevel)
-            {
-                return;
-            }
-
             // Update star lit states based on proximity to light bulbs.
             foreach (Star star in stars)
             {
                 if (star == null)
+                {
+                    continue;
+                }
+                if (!star.IsNightMode)
                 {
                     continue;
                 }
