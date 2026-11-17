@@ -2,12 +2,12 @@
     {
         "packName": "Pillow Box (DX)",
         "boxBackground": ["bgr_16_p1", "bgr_16_p2"],
-        "boxBackgroundP2Y": 860.625
+        "boxBackgroundP2Y": 612
     },
     {
         "packName": "Mechanical Box (DX)",
         "boxBackground": ["bgr_17_p1", "bgr_17_p2"],
-        "boxBackgroundP2Y": 825.46875
+        "boxBackgroundP2Y": 587
     },
     {
         "packName": "Kitchen Box",

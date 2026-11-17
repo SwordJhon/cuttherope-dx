@@ -196,7 +196,7 @@
     {
         "packName": "BOX16_LABEL",
         "boxBackground": ["bgr_16_p1", "bgr_16_p2"],
-        "boxBackgroundP2Y": 861,
+        "boxBackgroundP2Y": 612,
         "boxCover": ["bgr_16_cover"],
         "boxHoleBgColor": [37, 32, 104],
         "levelCount": 25,
