@@ -1,20 +1,33 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <map>
     <layer name="settings">
-        <map width="320" height="480" gridSize="32" />
-        <gameDesign twoParts="false" ropePhysicsSpeed="1" water="0" waterSpeed="0" nightLevel="false" />
+        <map gridSize="32" width="400" height="720" />
+        <gameDesign ropePhysicsSpeed="1" useMobilePhysics="true" />
     </layer>
     <layer name="Objects">
-        <grab x="94" y="47" length="55" wheel="false" gun="false" kickable="false" kicked="false" radius="-1" invisible="false" moveLength="-1" moveVertical="false" moveOffset="0" spider="false" helicopter="false" part="L" hidePath="false" bindBulb="false" bulbNumber="first" />
-        <candy x="91" y="147" />
-        <grab x="100" y="253" length="110" wheel="false" gun="false" kickable="false" kicked="false" radius="-1" invisible="false" moveLength="-1" moveVertical="false" moveOffset="0" spider="false" helicopter="false" part="L" hidePath="false" bindBulb="true" bulbNumber="first" />
-        <grab x="220" y="253" length="110" wheel="false" gun="false" kickable="false" kicked="false" radius="-1" invisible="false" moveLength="-1" moveVertical="false" moveOffset="0" spider="false" helicopter="false" part="L" hidePath="false" bindBulb="true" bulbNumber="first" />
-        <lightBulb x="160" y="214" bulbNumber="first" litRadius="97" />
-        <target x="96" y="401" />
-        <grab x="160" y="118" length="70" wheel="false" gun="false" kickable="false" kicked="false" radius="-1" invisible="false" moveLength="-1" moveVertical="false" moveOffset="0" spider="false" helicopter="false" part="L" hidePath="false" bindBulb="true" bulbNumber="first" />
-        <hiddenElement x="227" y="156" radius="30" />
-        <star x="95" y="330" timeout="-1" forceNight="true" />
-        <star x="78" y="356" timeout="-1" forceNight="true" />
-        <star x="111" y="356" timeout="-1" forceNight="true" />
+        <grab x="50" y="410" length="70" radius="-1" />
+        <candy x="51" y="510" />
+        <grab x="265" y="700" length="70" radius="-1" bindBulb="true" bulbNumber="0" />
+        <lightBulb x="266" y="600" litRadius="90" bulbNumber="0" />
+        <grab x="80" y="375" radius="50" />
+        <bouncer x="40" y="570" size="1" angle="10" />
+        <bouncer x="108" y="582" size="1" angle="10" />
+        <bouncer x="176" y="594" size="1" angle="10" />
+        <bouncer x="360" y="440" size="1" angle="15" />
+        <bouncer x="293" y="422" size="1" angle="15" />
+        <bouncer x="226" y="404" size="1" angle="15" />
+        <bouncer x="159" y="386" size="1" angle="15" />
+        <bouncer x="40" y="200" size="1" angle="-15" />
+        <bouncer x="107" y="182" size="1" angle="-15" />
+        <bouncer x="174" y="164" size="1" angle="-15" />
+        <bouncer x="241" y="146" size="1" angle="-15" />
+        <bubble x="265" y="600" />
+        <bubble x="340" y="625" />
+        <bubble x="150" y="295" />
+        <bubble x="217" y="277" />
+        <star x="265" y="600" timeout="-1" forceNight="true" path="RC40" moveSpeed="70" />
+        <star x="50" y="240" timeout="-1" forceNight="true" path="201,-54" moveSpeed="70" />
+        <star x="219" y="279" timeout="-1" forceNight="true" />
+        <target x="320" y="35" />
     </layer>
 </map>
