@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<map>
+    <layer name="Settings">
+        <map gridSize="24" width="320" height="480" viewHeight="569" />
+        <gameDesign ropePhysicsSpeed="1" useMobilePhysics="true" />
+    </layer>
+    <layer name="challenge_1_20.prefab">
+        <candy x="304" y="455" />
+        <grab x="160" y="143" length="90" radius="98" candyPadding="false" />
+        <grab x="16" y="455" length="361" radius="-1" spider="true" spiderSpeed="0.5" />
+        <grab x="160" y="456" length="113" radius="-1" />
+        <star x="280" y="143" timeout="-1" />
+        <star x="208" y="302" timeout="15" />
+        <star x="40" y="143" timeout="15" />
+        <target x="40" y="383" />
+        <spikes x="160" y="350" angle="-90" spikesAmount="5" />
+        <spikes x="160" y="143" angle="0" spikesAmount="7" />
+        <pump x="280" y="239" angle="180" />
+        <pump x="40" y="47" angle="0" />
+        <bubble x="304" y="455" />
+        <decal x="262" y="48" texture="obj_decals_kitchen" quad="4" angle="0" scaleX="0.703125" scaleY="0.703125" flipX="true" flipY="false" />
+    </layer>
+</map>
