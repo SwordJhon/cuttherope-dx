@@ -54,6 +54,7 @@ namespace CutTheRopeDX.GameMain
                 grabCandyNumber,
                 xmlNode.Attribute("bombNumber")?.Value,
                 bombed);
+            bool candyPadding = GetBoolAttribute(xmlNode, "candyPadding", defaultValue: true);
             Grab grab = new()
             {
                 BombsHighPriority = HasTrueAttribute(xmlNode, "bombsHighPriority"),
@@ -100,6 +101,7 @@ namespace CutTheRopeDX.GameMain
             {
                 grabRadius *= scale;
             }
+            grab.doCandyPadding = candyPadding;
 
             // One place decides which axes this grab has. Everything below only builds visuals for
             // the axes it was given.

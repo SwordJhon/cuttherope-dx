@@ -635,6 +635,9 @@ namespace CutTheRopeDX.GameMain
         /// <summary>Gets this grab's radius source, or <see langword="null"/> when it has none.</summary>
         public AutoRadiusSource RadiusSource => Source as AutoRadiusSource;
 
+        /// <summary>Whether to add <see cref="ActivePhysicsConstants.CandyGrabPadding"/> to an auto-attaching radius grab.</summary>
+        public bool doCandyPadding;
+
         /// <summary>
         /// Gets or sets whether this radius grab prefers bombs and axes over candy when it picks
         /// what to auto-attach to (the map's <c>bombsHighPriority</c>).
