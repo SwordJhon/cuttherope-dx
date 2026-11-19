@@ -107,6 +107,7 @@ namespace CutTheRopeDX.GameMain
                     case "bouncer2":
                     case "bouncer":
                         _ = resources.Add(Resources.Img.ObjBouncer);
+                        _ = resources.Add(Resources.Img.ObjHook);
                         _ = resources.Add(Resources.Snd.Bouncer);
                         break;
                     case "pump":

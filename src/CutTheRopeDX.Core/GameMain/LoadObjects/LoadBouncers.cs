@@ -21,8 +21,27 @@ namespace CutTheRopeDX.GameMain
             float y = (ParseCoordinateIntOrZero(xmlNode.Attribute("y")?.Value) * scale) + offsetY + mapOffsetY;
             int size = ParseIntOrZero(xmlNode.Attribute("size")?.Value);
             float angle = ParseIntOrZero(xmlNode.Attribute("angle")?.Value);
+            float k = ParseFloatOrZero(xmlNode.Attribute("moveLength")?.Value) * scale;
+            _ = bool.TryParse(xmlNode.Attribute("moveVertical")?.Value, out bool v);
+            float a = ParseFloatOrDefault(xmlNode.Attribute("moveAngle")?.Value, v ? DEG_90 : 0);
+            float o = ParseFloatOrZero(xmlNode.Attribute("moveOffset")?.Value) * scale;
             Bouncer bouncer = new Bouncer().InitWithPosXYWidthAndAngle(x, y, size, angle);
             bouncer.ParseMover(xmlNode);
+            GrabAxes axes = GrabAxisResolver.Resolve(
+                new GrabAxisRequest(
+                    Gun: false,
+                    Wheel: false,
+                    Kickable: false,
+                    Radius: 0,
+                    MoveLength: k,
+                    HasMover: bouncer.mover != null,
+                    MoveAngle: a,
+                    MoveOffset: o,
+                    AnchorX: x,
+                    AnchorY: y),
+                startsKicked: false);
+            bouncer.Motion = axes.Motion;
+            bouncer.CreateRailVisuals();
             bouncers.Add(bouncer);
         }
     }

@@ -5,6 +5,8 @@ using CutTheRopeDX.Framework.Core;
 using CutTheRopeDX.Framework.Helpers;
 using CutTheRopeDX.Framework.Visual;
 
+using Vector2 = System.Numerics.Vector2;
+
 namespace CutTheRopeDX.GameMain
 {
     /// <summary>
@@ -50,7 +52,7 @@ namespace CutTheRopeDX.GameMain
         public override void Update(float delta)
         {
             base.Update(delta);
-            if (mover != null)
+            if (mover != null || Rail != null)
             {
                 UpdateRotation();
             }
@@ -58,6 +60,24 @@ namespace CutTheRopeDX.GameMain
             if (timeElapsedFromLastMove >= 0f)
             {
                 timeElapsedFromLastMove += delta;
+            }
+        }
+
+        /// <inheritdoc />
+        public override void Draw()
+        {
+            Rail?.Background?.Draw();
+            base.Draw();
+            if (Rail != null)
+            {
+                if (Rail.DraggingTouch != -1)
+                {
+                    Rail.MoverHighlight?.Draw();
+                }
+                else
+                {
+                    Rail.Mover?.Draw();
+                }
             }
         }
 
@@ -197,5 +217,68 @@ namespace CutTheRopeDX.GameMain
 
         /// <summary>Instantaneous velocity computed from the most recent <see cref="SetBindPoint"/> displacement.</summary>
         public Vector instantVelocity;
+
+        /// <summary>
+        /// Creates the rail's three images, when this object was resolved onto a rail. Purely visual:
+        /// the rail's geometry belongs to <see cref="RailMotion"/>.
+        /// </summary>
+        public void CreateRailVisuals()
+        {
+            if (Rail is not RailMotion rail)
+            {
+                return;
+            }
+
+            float l = rail.Length;
+            float a = rail.Angle;
+            Vector2 o = rail.Direction * rail.Offset;
+
+            HorizontallyTiledImage moveBackground = InitializeFromResource(new HorizontallyTiledImage(), Resources.Img.ObjHook);
+            moveBackground.SetTileHorizontallyLeftCenterRight(MovableRailLeftQuad, MovableRailCenterQuad, MovableRailRightQuad);
+            moveBackground.width = (int)(l + 142f);
+            moveBackground.rotationCenterX = 0f - MathF.Round(moveBackground.width / 2) + 74f;
+            moveBackground.x = -74f;
+            Image objectMoverHighlight = FromResource(Resources.Img.ObjHook, MovableObjHighlightQuad);
+            objectMoverHighlight.visible = false;
+            objectMoverHighlight.anchor = objectMoverHighlight.parentAnchor = 18;
+            _ = AddChild(objectMoverHighlight);
+            Image objectMover = FromResource(Resources.Img.ObjHook, MovableObjQuad);
+            objectMover.visible = false;
+            objectMover.anchor = objectMover.parentAnchor = 18;
+            _ = AddChild(objectMover);
+            _ = objectMover.AddChild(moveBackground);
+            moveBackground.rotation = a;
+            moveBackground.x += x - o.X;
+            moveBackground.y += y - o.Y;
+            objectMover.rotation = a;
+            objectMoverHighlight.rotation = a;
+            moveBackground.anchor = 17;
+            moveBackground.visible = false;
+
+            rail.Background = moveBackground;
+            rail.Mover = objectMover;
+            rail.MoverHighlight = objectMoverHighlight;
+        }
+
+        /// <summary>Gets the object that supplies this bouncer's position.</summary>
+        public AnchorMotion Motion { get; internal set; } = new StaticMotion();
+
+        /// <summary>Gets this bouncer's rail, or <see langword="null"/> when it has none.</summary>
+        public RailMotion Rail => Motion as RailMotion;
+
+        /// <summary>Movable rail left cap quad.</summary>
+        private const int MovableRailLeftQuad = 6;
+
+        /// <summary>Movable rail right cap quad.</summary>
+        private const int MovableRailRightQuad = 7;
+
+        /// <summary>Movable rail center tile quad.</summary>
+        private const int MovableRailCenterQuad = 8;
+
+        /// <summary>Movable object highlight quad.</summary>
+        private const int MovableObjHighlightQuad = 9;
+
+        /// <summary>Movable object foreground quad.</summary>
+        private const int MovableObjQuad = 10;
     }
 }

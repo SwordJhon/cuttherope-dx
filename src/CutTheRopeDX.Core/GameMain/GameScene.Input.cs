@@ -120,6 +120,14 @@ namespace CutTheRopeDX.GameMain
                     rail.EndDrag(rail.DraggingTouch);
                 }
             }
+
+            foreach (Bouncer bouncer in bouncers)
+            {
+                if (bouncer.Rail is RailMotion rail)
+                {
+                    rail.EndDrag(rail.DraggingTouch);
+                }
+            }
         }
 
         /// <summary>Resolves a supported pointer index before any gesture state is accessed.</summary>
@@ -496,6 +504,13 @@ namespace CutTheRopeDX.GameMain
                     return true;
                 }
             }
+            foreach (Bouncer bouncer in bouncers)
+            {
+                if (bouncer.Rail?.TryBeginDrag(bouncer, camera.ScreenToWorldX(tx), camera.ScreenToWorldY(ty), ti) == true)
+                {
+                    return true;
+                }
+            }
             if (conveyors.OnPointerDown(worldX, worldY, ti))
             {
                 gesture.Cancel();
@@ -672,6 +687,10 @@ namespace CutTheRopeDX.GameMain
                         }
                     }
                 }
+            }
+            foreach (Bouncer bouncer in bouncers)
+            {
+                bouncer.Rail?.EndDrag(ti);
             }
             _ = conveyors.OnPointerUp(camera.ScreenToWorldX(tx), camera.ScreenToWorldY(ty), ti);
             if (overOmNom)
@@ -896,6 +915,19 @@ namespace CutTheRopeDX.GameMain
                         VectLength(VectSub(gesture.StartPosition, vector)) > Grab.KICK_MOVE_LENGTH)
                     {
                         dragMount.CancelSticking();
+                    }
+                }
+            }
+            int bouncerCount = bouncers.Count;
+            for (int m = 0; m < bouncerCount; m++)
+            {
+                Bouncer bouncer = bouncers[m];
+                if (bouncer != null)
+                {
+                    if (bouncer.Rail is RailMotion rail && rail.DraggingTouch == ti)
+                    {
+                        rail.DragTo(bouncer, camera.ScreenToWorldX(tx), camera.ScreenToWorldY(ty));
+                        return true;
                     }
                 }
             }

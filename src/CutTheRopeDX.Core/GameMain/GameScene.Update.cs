@@ -1761,6 +1761,14 @@ namespace CutTheRopeDX.GameMain
                         break;
                     }
                 }
+                foreach (Bouncer bouncer in bouncers)
+                {
+                    if (bouncer.Rail is RailMotion rail && (PointInRect(p.X, p.Y, bouncer.x - 65f, bouncer.y - 65f, 130f, 130f) || rail.DraggingTouch != -1))
+                    {
+                        tapHitsControl = true;
+                        break;
+                    }
+                }
                 if (!tapHitsControl)
                 {
                     Vector cutPoint = default;
