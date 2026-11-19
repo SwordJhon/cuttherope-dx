@@ -2,32 +2,23 @@
 <map>
     <layer name="settings">
         <map gridSize="32" width="400" height="720" />
-        <gameDesign ropePhysicsSpeed="1" useMobilePhysics="true" />
+        <gameDesign ropePhysicsSpeed="1" />
     </layer>
     <layer name="Objects">
         <grab x="50" y="410" length="70" radius="-1" />
         <candy x="51" y="510" />
-        <grab x="265" y="700" length="70" radius="-1" bindBulb="true" bulbNumber="0" />
-        <lightBulb x="266" y="600" litRadius="90" bulbNumber="0" />
+        <grab x="265" y="700" length="20" radius="-1" bindBulb="true" bulbNumber="0" />
+        <lightBulb x="266" y="650" litRadius="75" bulbNumber="0" />
         <grab x="80" y="375" radius="50" />
-        <bouncer x="40" y="570" size="1" angle="10" />
-        <bouncer x="108" y="582" size="1" angle="10" />
-        <bouncer x="176" y="594" size="1" angle="10" />
-        <bouncer x="360" y="440" size="1" angle="15" />
-        <bouncer x="293" y="422" size="1" angle="15" />
-        <bouncer x="226" y="404" size="1" angle="15" />
-        <bouncer x="159" y="386" size="1" angle="15" />
-        <bouncer x="40" y="200" size="1" angle="-15" />
-        <bouncer x="107" y="182" size="1" angle="-15" />
-        <bouncer x="174" y="164" size="1" angle="-15" />
-        <bouncer x="241" y="146" size="1" angle="-15" />
-        <bubble x="265" y="600" />
+        <bouncer x="50" y="570" size="2" angle="10" moveLength="210" moveAngle="10" />
+        <bouncer x="360" y="440" size="2" angle="15" moveLength="210" moveAngle="15" moveOffset="220" />
+        <bouncer x="50" y="200" size="2" angle="-15" moveLength="210" moveAngle="-15" />
+        <bubble x="265" y="650" />
         <bubble x="340" y="625" />
-        <bubble x="150" y="295" />
         <bubble x="217" y="277" />
-        <star x="265" y="600" timeout="-1" forceNight="true" path="RC40" moveSpeed="70" />
-        <star x="50" y="240" timeout="-1" forceNight="true" path="201,-54" moveSpeed="70" />
-        <star x="219" y="279" timeout="-1" forceNight="true" />
-        <target x="320" y="35" />
+        <star x="340" y="625" timeout="-1" forceNight="true" path="RC40" moveSpeed="70" startAngle="135" />
+        <star x="60" y="235" timeout="-1" forceNight="true" path="201,-54" moveSpeed="70" />
+        <star x="218" y="278" timeout="-1" forceNight="true" />
+        <target x="320" y="45" />
     </layer>
 </map>
