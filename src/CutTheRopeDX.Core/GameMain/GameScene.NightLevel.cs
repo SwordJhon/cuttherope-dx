@@ -208,7 +208,7 @@ namespace CutTheRopeDX.GameMain
                 {
                     continue;
                 }
-                if (!star.IsNightMode)
+                if (!star.nightMode)
                 {
                     continue;
                 }

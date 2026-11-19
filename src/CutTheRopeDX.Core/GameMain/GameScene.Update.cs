@@ -564,7 +564,7 @@ namespace CutTheRopeDX.GameMain
                         star.PlayTimeline(1);
                         break;
                     }
-                    bool canCollect = !star.IsNightMode || star.IsLit;
+                    bool canCollect = !star.nightMode || star.IsLit;
                     if (!canCollect)
                     {
                         continue;

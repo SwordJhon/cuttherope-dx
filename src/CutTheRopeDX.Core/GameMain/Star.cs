@@ -267,11 +267,6 @@ namespace CutTheRopeDX.GameMain
         }
 
         /// <summary>
-        /// Gets whether the star is in night mode.
-        /// </summary>
-        public bool IsNightMode => nightMode;
-
-        /// <summary>
         /// Gets whether the star is currently lit in night mode.
         /// </summary>
         public bool IsLit => isLit == true;
@@ -343,7 +338,7 @@ namespace CutTheRopeDX.GameMain
         public Animation timedAnim;
 
         /// <summary>Whether this star uses night-mode visuals.</summary>
-        private bool nightMode;
+        public bool nightMode;
 
         /// <summary>Current night-mode light state, or <see langword="null"/> before initialization.</summary>
         private bool? isLit;
