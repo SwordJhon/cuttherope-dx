@@ -6,6 +6,8 @@ using CutTheRopeDX.Framework.Helpers;
 using CutTheRopeDX.Framework.Platform;
 using CutTheRopeDX.Framework.Visual;
 
+using Vector2 = System.Numerics.Vector2;
+
 namespace CutTheRopeDX.GameMain
 {
     /// <summary>
@@ -405,8 +407,8 @@ namespace CutTheRopeDX.GameMain
             }
 
             float l = rail.Length;
-            bool v = rail.IsVertical;
-            float o = rail.Offset;
+            float a = rail.Angle;
+            Vector2 o = rail.Direction * rail.Offset;
 
             HorizontallyTiledImage moveBackground = InitializeFromResource(new HorizontallyTiledImage(), Resources.Img.ObjHook);
             moveBackground.SetTileHorizontallyLeftCenterRight(MovableRailLeftQuad, MovableRailCenterQuad, MovableRailRightQuad);
@@ -422,20 +424,12 @@ namespace CutTheRopeDX.GameMain
             grabMover.anchor = grabMover.parentAnchor = 18;
             _ = AddChild(grabMover);
             _ = grabMover.AddChild(moveBackground);
-            if (v)
-            {
-                moveBackground.rotation = DEG_90;
-                moveBackground.y = 0f - o;
-                grabMover.rotation = DEG_90;
-                grabMoverHighlight.rotation = DEG_90;
-            }
-            else
-            {
-                moveBackground.x += 0f - o;
-            }
+            moveBackground.rotation = a;
+            moveBackground.x += x - o.X;
+            moveBackground.y += y - o.Y;
+            grabMover.rotation = a;
+            grabMoverHighlight.rotation = a;
             moveBackground.anchor = 17;
-            moveBackground.x += x;
-            moveBackground.y += y;
             moveBackground.visible = false;
 
             rail.Background = moveBackground;

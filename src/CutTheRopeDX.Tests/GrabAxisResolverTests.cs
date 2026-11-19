@@ -18,7 +18,7 @@ namespace CutTheRopeDX.Tests
             return GrabAxisResolver.Resolve(new GrabAxisRequest(
                 Gun: gun, Wheel: wheel, Kickable: kickable,
                 Radius: radius, MoveLength: moveLength, HasMover: hasMover,
-                MoveVertical: false, MoveOffset: 0f, AnchorX: 0f, AnchorY: 0f));
+                MoveAngle: 0f, MoveOffset: 0f, AnchorX: 0f, AnchorY: 0f));
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace CutTheRopeDX.Tests
                 new GrabAxisRequest(
                     Gun: false, Wheel: false, Kickable: true,
                     Radius: -1f, MoveLength: -1f, HasMover: false,
-                    MoveVertical: false, MoveOffset: 0f, AnchorX: 0f, AnchorY: 0f),
+                    MoveAngle: 0f, MoveOffset: 0f, AnchorX: 0f, AnchorY: 0f),
                 startsKicked: true);
 
             Assert.False(axes.Mount.IsMounted);

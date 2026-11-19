@@ -1,5 +1,7 @@
 using System;
+using System.Numerics;
 
+using CutTheRopeDX.Framework.Helpers;
 using CutTheRopeDX.Framework.Visual;
 
 using static CutTheRopeDX.Framework.Helpers.MathHelper;
@@ -18,43 +20,36 @@ namespace CutTheRopeDX.GameMain
 
         /// <summary>Initializes a rail.</summary>
         /// <param name="length">Rail length in world units.</param>
-        /// <param name="isVertical">Whether the rail runs vertically.</param>
-        /// <param name="offset">The hook's offset along the rail from its authored end.</param>
-        /// <param name="anchorX">The hook's authored X position.</param>
-        /// <param name="anchorY">The hook's authored Y position.</param>
-        public RailMotion(float length, bool isVertical, float offset, float anchorX, float anchorY)
+        /// <param name="angle">The angle of the rail in degrees.</param>
+        /// <param name="offset">The object's offset along the rail from its authored end.</param>
+        /// <param name="anchorX">The object's authored X position.</param>
+        /// <param name="anchorY">The object's authored Y position.</param>
+        public RailMotion(float length, float angle, float offset, float anchorX, float anchorY)
         {
             Length = length;
-            IsVertical = isVertical;
+            Angle = angle;
             Offset = offset;
             DraggingTouch = -1;
 
-            if (isVertical)
-            {
-                MinValue = anchorY - offset;
-                MaxValue = anchorY + (length - offset);
-            }
-            else
-            {
-                MinValue = anchorX - offset;
-                MaxValue = anchorX + (length - offset);
-            }
+            float radians = Angle * MathF.PI / 180;
+            Direction = new Vector2(MathF.Cos(radians), MathF.Sin(radians));
+            StartPos = new Vector2(anchorX, anchorY) - (Direction * Offset);
         }
 
         /// <summary>Gets the rail length.</summary>
         public float Length { get; }
 
-        /// <summary>Gets whether the rail runs vertically.</summary>
-        public bool IsVertical { get; }
+        /// <summary>Gets the angle of the rail.</summary>
+        public float Angle { get; }
 
         /// <summary>Gets the hook's offset along the rail from its authored end.</summary>
         public float Offset { get; }
 
-        /// <summary>Gets the lowest coordinate the hook may slide to.</summary>
-        public float MinValue { get; }
+        /// <summary>Gets the direction of the hook.</summary>
+        public Vector2 Direction { get; }
 
-        /// <summary>Gets the highest coordinate the hook may slide to.</summary>
-        public float MaxValue { get; }
+        /// <summary>Gets the start position of the hook.</summary>
+        private Vector2 StartPos { get; }
 
         /// <summary>Gets the touch index currently dragging the hook, or -1 when idle.</summary>
         public int DraggingTouch { get; private set; }
@@ -72,16 +67,16 @@ namespace CutTheRopeDX.GameMain
         public override bool CanBind => false;
 
         /// <summary>Starts a drag when a touch lands on the hook.</summary>
-        /// <param name="grab">The hook being dragged.</param>
+        /// <param name="obj">The object being dragged.</param>
         /// <param name="worldX">Touch X in world space.</param>
         /// <param name="worldY">Touch Y in world space.</param>
         /// <param name="touchIndex">Touch index.</param>
-        /// <returns><see langword="true"/> when this touch now owns the hook.</returns>
-        public bool TryBeginDrag(Grab grab, float worldX, float worldY, int touchIndex)
+        /// <returns><see langword="true"/> when this touch now owns the object.</returns>
+        public bool TryBeginDrag(GameObject obj, float worldX, float worldY, int touchIndex)
         {
             if (!PointInRect(
                     worldX, worldY,
-                    grab.x - DragTapRadius, grab.y - DragTapRadius,
+                    obj.x - DragTapRadius, obj.y - DragTapRadius,
                     DragTapRadius * 2f, DragTapRadius * 2f))
             {
                 return false;
@@ -91,20 +86,18 @@ namespace CutTheRopeDX.GameMain
             return true;
         }
 
-        /// <summary>Slides the hook to follow an active drag.</summary>
-        /// <param name="grab">The hook being dragged.</param>
+        /// <summary>Slides the object to follow an active drag.</summary>
+        /// <param name="obj">The object being dragged.</param>
         /// <param name="worldX">Touch X in world space.</param>
         /// <param name="worldY">Touch Y in world space.</param>
-        public void DragTo(Grab grab, float worldX, float worldY)
+        public void DragTo(GameObject obj, float worldX, float worldY)
         {
-            if (IsVertical)
-            {
-                grab.y = Math.Clamp(worldY, MinValue, MaxValue);
-            }
-            else
-            {
-                grab.x = Math.Clamp(worldX, MinValue, MaxValue);
-            }
+            Vector2 touchPos = new(worldX, worldY);
+            float distance = Vector2.Dot(touchPos - StartPos, Direction);
+            float clampedDistance = Math.Clamp(distance, 0f, Length);
+            Vector2 finalPos = StartPos + (clampedDistance * Direction);
+            obj.x = finalPos.X;
+            obj.y = finalPos.Y;
         }
 
         /// <summary>Ends the drag if this touch owns it.</summary>

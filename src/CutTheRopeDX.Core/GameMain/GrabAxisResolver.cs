@@ -9,7 +9,7 @@ namespace CutTheRopeDX.GameMain
     /// <param name="Radius">The <c>radius</c> attribute, or -1 for a fixed hook.</param>
     /// <param name="MoveLength">The <c>moveLength</c> attribute, or a non-positive value for none.</param>
     /// <param name="HasMover">Whether the grab parsed a path mover.</param>
-    /// <param name="MoveVertical">The <c>moveVertical</c> attribute.</param>
+    /// <param name="MoveAngle">The <c>moveAngle</c> attribute.</param>
     /// <param name="MoveOffset">The <c>moveOffset</c> attribute.</param>
     /// <param name="AnchorX">The grab's authored X position.</param>
     /// <param name="AnchorY">The grab's authored Y position.</param>
@@ -20,7 +20,7 @@ namespace CutTheRopeDX.GameMain
         float Radius,
         float MoveLength,
         bool HasMover,
-        bool MoveVertical,
+        float MoveAngle,
         float MoveOffset,
         float AnchorX,
         float AnchorY);
@@ -60,7 +60,7 @@ namespace CutTheRopeDX.GameMain
             // move the same hook, and the path wins.
             AnchorMotion motion = request.HasMover ? new PathMotion()
                 : request.MoveLength > 0f
-                    ? new RailMotion(request.MoveLength, request.MoveVertical, request.MoveOffset, request.AnchorX, request.AnchorY)
+                    ? new RailMotion(request.MoveLength, request.MoveAngle, request.MoveOffset, request.AnchorX, request.AnchorY)
                     : new StaticMotion();
 
             return new GrabAxes(

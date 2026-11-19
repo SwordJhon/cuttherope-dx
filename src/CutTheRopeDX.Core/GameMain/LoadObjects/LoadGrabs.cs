@@ -32,6 +32,7 @@ namespace CutTheRopeDX.GameMain
             _ = bool.TryParse(xmlNode.Attribute("invisible")?.Value, out bool invisible);
             float k = ParseFloatOrZero(xmlNode.Attribute("moveLength")?.Value) * scale;
             _ = bool.TryParse(xmlNode.Attribute("moveVertical")?.Value, out bool v);
+            float a = ParseFloatOrDefault(xmlNode.Attribute("moveAngle")?.Value, v ? DEG_90 : 0);
             float o = ParseFloatOrZero(xmlNode.Attribute("moveOffset")?.Value) * scale;
             _ = bool.TryParse(xmlNode.Attribute("spider")?.Value, out bool spider);
             bool isLeftPart = xmlNode.Attribute("part")?.Value == "L";
@@ -113,7 +114,7 @@ namespace CutTheRopeDX.GameMain
                     Radius: grabRadius,
                     MoveLength: k,
                     HasMover: grab.mover != null,
-                    MoveVertical: v,
+                    MoveAngle: a,
                     MoveOffset: o,
                     AnchorX: hx,
                     AnchorY: hy),

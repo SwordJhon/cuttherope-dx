@@ -193,7 +193,7 @@ namespace CutTheRopeDX.GameMain
                         new GrabAxisRequest(
                             Gun: false, Wheel: false, Kickable: false,
                             Radius: grabRadius, MoveLength: 0f, HasMover: false,
-                            MoveVertical: false, MoveOffset: 0f, AnchorX: x, AnchorY: y)).Source;
+                            MoveAngle: 0f, MoveOffset: 0f, AnchorX: x, AnchorY: y)).Source;
                     grab.CreateAxisVisuals();
                     if (grabRadius == -1f)
                     {
