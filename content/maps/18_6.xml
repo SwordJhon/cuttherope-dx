@@ -11,7 +11,7 @@
         <lightBulb x="266" y="650" litRadius="75" bulbNumber="0" />
         <grab x="80" y="375" radius="50" />
         <bouncer x="50" y="570" size="2" angle="10" moveLength="210" moveAngle="10" />
-        <bouncer x="360" y="440" size="2" angle="15" moveLength="210" moveAngle="15" moveOffset="220" />
+        <bouncer x="360" y="440" size="2" angle="15" moveLength="210" moveAngle="15" moveOffset="210" />
         <bouncer x="50" y="200" size="2" angle="-15" moveLength="210" moveAngle="-15" />
         <bubble x="265" y="650" />
         <bubble x="340" y="625" />
