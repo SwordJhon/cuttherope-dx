@@ -541,6 +541,10 @@ namespace CutTheRopeDX.GameMain
             public const string ObjCandyOrigins = "candies/obj_candy_origins";
             public const string ObjCandyLicorice = "candies/obj_candy_licorice";
             public const string ObjCandyPlaceholder = "candies/obj_candy_placeholder";
+
+            // Decals
+            public const string DecalsKitchen = "decals_kitchen";
+            public const string DecalsCardboard = "decals_cardboard";
         }
 
         /// <summary>
