@@ -79,6 +79,8 @@ namespace CutTheRopeDX.GameMain
 
             mice = [];
             miceManager = null;
+            backDecals = [];
+            frontDecals = [];
             pollenDrawer = new PollenDrawer();
             parkedGhostBubble = null;
             pendingLanternCapture = null;

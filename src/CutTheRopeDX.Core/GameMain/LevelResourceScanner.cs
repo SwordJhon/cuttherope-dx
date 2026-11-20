@@ -231,6 +231,13 @@ namespace CutTheRopeDX.GameMain
                         _ = resources.Add(Resources.Snd.ScratchIn);
                         _ = resources.Add(Resources.Snd.ScratchOut);
                         break;
+                    case "decal":
+                        string texture = node.Attribute("texture")?.Value;
+                        if (!string.IsNullOrEmpty(texture))
+                        {
+                            _ = resources.Add(texture);
+                        }
+                        break;
                     default:
                         break;
                 }

@@ -1243,6 +1243,16 @@ namespace CutTheRopeDX.GameMain
         /// </summary>
         private List<AntsPath> antsPaths;
 
+        /// <summary>
+        /// All decals on the back layer.
+        /// </summary>
+        private List<Decal> backDecals;
+
+        /// <summary>
+        /// All decals on the front layer.
+        /// </summary>
+        private List<Decal> frontDecals;
+
         /// <summary>Atlas quad holding the left split-candy sprite.</summary>
         private const int SplitCandyLeftQuad = 8;
 

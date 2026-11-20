@@ -1781,6 +1781,23 @@ namespace CutTheRopeDX.GameMain
             {
                 HoldFrozenPoints();
             }
+            if (!timeFrozen)
+            {
+                if (backDecals != null)
+                {
+                    foreach (Decal decal in backDecals)
+                    {
+                        decal.Update(delta);
+                    }
+                }
+                if (frontDecals != null)
+                {
+                    foreach (Decal decal in frontDecals)
+                    {
+                        decal.Update(delta);
+                    }
+                }
+            }
             _ = AdvanceRestartFlow(delta);
         }
 

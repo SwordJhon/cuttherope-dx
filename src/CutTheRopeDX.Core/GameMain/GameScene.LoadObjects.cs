@@ -149,6 +149,9 @@ namespace CutTheRopeDX.GameMain
                         case "mouse":
                             LoadMouse(node, scale, offsetX + mapOffsetX, offsetY + mapOffsetY, 0, 0);
                             break;
+                        case "decal":
+                            LoadDecal(node, scale, offsetX + mapOffsetX, offsetY + mapOffsetY, 0, 0);
+                            break;
                         default:
                             break;
                     }

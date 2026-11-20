@@ -117,6 +117,10 @@ namespace CutTheRopeDX.GameMain
             Renderer.PopMatrix();
             Renderer.Enable(Renderer.GL_BLEND);
             Renderer.SetBlendFunc(BlendingFactor.GLONE, BlendingFactor.GLONEMINUSSRCALPHA);
+            foreach (Decal decal in backDecals)
+            {
+                decal.Draw();
+            }
             pollenDrawer.Draw();
             gravityState.DrawButtons();
             miceManager?.DrawHoles();
@@ -354,6 +358,10 @@ namespace CutTheRopeDX.GameMain
                 {
                     drawnRider.Animation.Draw();
                 }
+            }
+            foreach (Decal decal in frontDecals)
+            {
+                decal.Draw();
             }
             aniPool.Draw();
             Renderer.SetColor(Color.White);
