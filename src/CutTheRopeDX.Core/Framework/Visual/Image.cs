@@ -390,6 +390,17 @@ namespace CutTheRopeDX.Framework.Visual
         /// </summary>
         public bool useFullColorTint;
 
+        /// <summary>Tries to apply a tint.</summary>
+        /// <param name="tint">The tint to apply.</param>
+        public void TryApplyTint(RGBAColor? tint)
+        {
+            if (tint != null)
+            {
+                color = (RGBAColor)tint;
+                useFullColorTint = true;
+            }
+        }
+
         /// <summary>
         /// Index of the quad to draw, or -1 to draw the full image.
         /// </summary>

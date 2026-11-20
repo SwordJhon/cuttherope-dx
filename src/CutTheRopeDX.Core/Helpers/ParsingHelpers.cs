@@ -1,4 +1,7 @@
+using System;
 using System.Globalization;
+
+using CutTheRopeDX.Framework;
 
 namespace CutTheRopeDX.Helpers
 {
@@ -76,6 +79,77 @@ namespace CutTheRopeDX.Helpers
         public static float ParseFloatOrDefault(string value, float fallback)
         {
             return float.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out float parsed) ? parsed : fallback;
+        }
+
+        /// <summary>Parses an authored <c>#RRGGBB</c> color.</summary>
+        /// <param name="value">Authored value, or <see langword="null"/> for no override.</param>
+        /// <returns>The parsed color, or <see langword="null"/> when value is invalid.</returns>
+        public static RGBAColor? ParseColor(string value)
+        {
+            return value is null
+                ? null
+                : value.StartsWith('#')
+                    ? ParseHex(value)
+                    : ParseChannels(value);
+        }
+
+        /// <summary>
+        /// Parses a <c>R,G,B</c> quatruplet of 0-255 channels, the way pack configs already spell a
+        /// color (<c>boxHoleBgColor: [70, 37, 0]</c>). Spaces around a channel are allowed so a
+        /// value can be copied straight across.
+        /// </summary>
+        /// <param name="value">Authored quatruplet.</param>
+        /// <returns>The parsed color.</returns>
+        private static RGBAColor? ParseChannels(string value)
+        {
+            string[] parts = value.Split(',');
+            return parts.Length == 4
+                ? RGBAColor.MakeRGBA(
+                    Channel(parts[0]),
+                    Channel(parts[1]),
+                    Channel(parts[2]),
+                    Channel(parts[3]))
+                : parts.Length == 3
+                ? RGBAColor.MakeRGBA(
+                    Channel(parts[0]),
+                    Channel(parts[1]),
+                    Channel(parts[2]),
+                    1f) : null;
+        }
+
+        private static float Channel(string part)
+        {
+            return int.TryParse(
+                part.Trim(),
+                NumberStyles.Integer,
+                CultureInfo.InvariantCulture,
+                out int channel)
+                && channel is >= 0 and <= 255
+                    ? channel / 255f
+                    : 1f;
+        }
+
+        private static RGBAColor? ParseHex(string value)
+        {
+            return int.TryParse(
+                    value.AsSpan(1),
+                    NumberStyles.HexNumber,
+                    CultureInfo.InvariantCulture,
+                    out int packed)
+                    ? value.Length == 9
+                    ? RGBAColor.MakeRGBA(
+                        ((packed >> 24) & 0xFF) / 255f,
+                        ((packed >> 16) & 0xFF) / 255f,
+                        ((packed >> 8) & 0xFF) / 255f,
+                        (packed & 0xFF) / 255f)
+                        : value.Length == 7
+                        ? RGBAColor.MakeRGBA(
+                        ((packed >> 16) & 0xFF) / 255f,
+                        ((packed >> 8) & 0xFF) / 255f,
+                        (packed & 0xFF) / 255f
+                        , 1f)
+                        : null
+                    : null;
         }
     }
 }
