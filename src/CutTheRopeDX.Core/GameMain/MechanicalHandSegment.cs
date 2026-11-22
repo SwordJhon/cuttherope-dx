@@ -44,7 +44,7 @@ namespace CutTheRopeDX.GameMain
             buttonNone = Image.FromResource(Resources.Img.ObjRoboHand, 2);
             if (rotatable)
             {
-                string buttonResource = rotationStep < 0 ? Resources.Img.ObjRoboHandReverse : Resources.Img.ObjRoboHand;
+                string buttonResource = rotationStep < 0 ? Resources.Img.ObjRoboHandAlt : Resources.Img.ObjRoboHand;
                 Image buttonUp = Image.FromResource(buttonResource, 1);
                 Image buttonDown = Image.FromResource(buttonResource, 0);
                 button = (MechanicalHandButton)new MechanicalHandButton().InitWithUpElementDownElementandID(buttonUp, buttonDown, 0);

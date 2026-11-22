@@ -13,5 +13,7 @@
         <star x="160" y="260" timeout="-1" path="RW20" moveSpeed="50" startAngle="240" />
         <spikes x="100" y="330" angle="0" size="4" toggled="5" />
         <target x="160" y="400" />
+        <decal x="100" y="90" angle="30" texture="decals_paper" quad="0" />
+        <decal x="250" y="400" angle="-10" texture="decals_paper" quad="1" />
     </layer>
 </map>

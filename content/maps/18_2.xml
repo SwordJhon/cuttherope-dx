@@ -24,5 +24,7 @@
         <bubble x="210" y="420" />
         <star x="270" y="240" timeout="15" />
         <target x="270" y="70" />
+        <decal x="85" y="395" angle="0" texture="decals_paper" quad="3" />
+        <decal x="208" y="422" angle="20" texture="decals_paper" quad="4" scaleX="0.65" scaleY="0.65" />
     </layer>
 </map>

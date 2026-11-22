@@ -1,9 +1,9 @@
 {
   "frames":[
     {
-      "filename":"box_challenge1.png",
+      "filename":"box_base.png",
       "frame":{
-        "h":541,
+        "h":535,
         "w":500,
         "x":507,
         "y":2
@@ -14,20 +14,41 @@
         "w":660
       },
       "spriteSourceSize":{
-        "h":541,
+        "h":535,
         "w":500,
-        "x":80,
-        "y":66
+        "x":81,
+        "y":67
+      },
+      "trimmed":true
+    },
+    {
+      "filename":"box_challenge1.png",
+      "frame":{
+        "h":535,
+        "w":500,
+        "x":507,
+        "y":539
+      },
+      "rotated":false,
+      "sourceSize":{
+        "h":660,
+        "w":660
+      },
+      "spriteSourceSize":{
+        "h":535,
+        "w":500,
+        "x":81,
+        "y":67
       },
       "trimmed":true
     },
     {
       "filename":"box_challenge2.png",
       "frame":{
-        "h":541,
+        "h":535,
         "w":500,
-        "x":1009,
-        "y":2
+        "x":2,
+        "y":548
       },
       "rotated":false,
       "sourceSize":{
@@ -35,20 +56,20 @@
         "w":660
       },
       "spriteSourceSize":{
-        "h":541,
+        "h":535,
         "w":500,
-        "x":80,
-        "y":66
+        "x":81,
+        "y":67
       },
       "trimmed":true
     },
     {
       "filename":"box_challenge3.png",
       "frame":{
-        "h":541,
+        "h":535,
         "w":500,
-        "x":1511,
-        "y":2
+        "x":504,
+        "y":1076
       },
       "rotated":false,
       "sourceSize":{
@@ -56,20 +77,20 @@
         "w":660
       },
       "spriteSourceSize":{
-        "h":541,
+        "h":535,
         "w":500,
-        "x":80,
-        "y":66
+        "x":81,
+        "y":67
       },
       "trimmed":true
     },
     {
       "filename":"box_challenge4.png",
       "frame":{
-        "h":541,
+        "h":535,
         "w":500,
-        "x":2013,
-        "y":2
+        "x":2,
+        "y":1085
       },
       "rotated":false,
       "sourceSize":{
@@ -77,10 +98,10 @@
         "w":660
       },
       "spriteSourceSize":{
-        "h":541,
+        "h":535,
         "w":500,
-        "x":80,
-        "y":66
+        "x":81,
+        "y":67
       },
       "trimmed":true
     },
@@ -112,10 +133,10 @@
     "image":"menu_pack_selection3.png",
     "scale":"1",
     "size":{
-      "h":548,
-      "w":2515
+      "h":1622,
+      "w":1009
     },
-    "smartupdate":"$TexturePacker:SmartUpdate:9120228a6023ddcb23f3245824d92437:eccfb1e8f20f6576e77cad58ed47703a:c40a7eb12a02a444f38e101d42c83350$",
+    "smartupdate":"$TexturePacker:SmartUpdate:663a07ed26ee6f60e8c314c92af7ce74:27b579b548ddb1c1b3fe93abc235ced5:690c6db0ffd53952ec449915fb1771b6$",
     "version":"3.0"
   }
 }

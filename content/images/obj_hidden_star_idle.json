@@ -26,8 +26,8 @@
       "frame":{
         "h":76,
         "w":77,
-        "x":179,
-        "y":207
+        "x":87,
+        "y":561
       },
       "rotated":false,
       "sourceSize":{
@@ -47,8 +47,8 @@
       "frame":{
         "h":76,
         "w":70,
-        "x":188,
-        "y":364
+        "x":2,
+        "y":641
       },
       "rotated":false,
       "sourceSize":{
@@ -68,8 +68,8 @@
       "frame":{
         "h":76,
         "w":64,
-        "x":188,
-        "y":521
+        "x":165,
+        "y":639
       },
       "rotated":false,
       "sourceSize":{
@@ -89,8 +89,8 @@
       "frame":{
         "h":76,
         "w":58,
-        "x":103,
-        "y":641
+        "x":166,
+        "y":561
       },
       "rotated":false,
       "sourceSize":{
@@ -110,8 +110,8 @@
       "frame":{
         "h":76,
         "w":51,
-        "x":2,
-        "y":658
+        "x":145,
+        "y":796
       },
       "rotated":false,
       "sourceSize":{
@@ -131,8 +131,8 @@
       "frame":{
         "h":76,
         "w":46,
-        "x":2,
-        "y":736
+        "x":179,
+        "y":286
       },
       "rotated":false,
       "sourceSize":{
@@ -152,8 +152,8 @@
       "frame":{
         "h":77,
         "w":40,
-        "x":149,
-        "y":757
+        "x":179,
+        "y":443
       },
       "rotated":false,
       "sourceSize":{
@@ -173,8 +173,8 @@
       "frame":{
         "h":77,
         "w":34,
-        "x":191,
-        "y":757
+        "x":97,
+        "y":797
       },
       "rotated":false,
       "sourceSize":{
@@ -194,8 +194,8 @@
       "frame":{
         "h":78,
         "w":28,
-        "x":231,
-        "y":82
+        "x":2,
+        "y":798
       },
       "rotated":false,
       "sourceSize":{
@@ -215,8 +215,8 @@
       "frame":{
         "h":78,
         "w":28,
-        "x":231,
-        "y":2
+        "x":198,
+        "y":796
       },
       "rotated":false,
       "sourceSize":{
@@ -236,8 +236,8 @@
       "frame":{
         "h":77,
         "w":35,
-        "x":221,
-        "y":678
+        "x":60,
+        "y":797
       },
       "rotated":false,
       "sourceSize":{
@@ -257,8 +257,8 @@
       "frame":{
         "h":77,
         "w":42,
-        "x":105,
-        "y":719
+        "x":179,
+        "y":364
       },
       "rotated":false,
       "sourceSize":{
@@ -278,8 +278,8 @@
       "frame":{
         "h":77,
         "w":48,
-        "x":55,
-        "y":719
+        "x":179,
+        "y":207
       },
       "rotated":false,
       "sourceSize":{
@@ -299,8 +299,8 @@
       "frame":{
         "h":77,
         "w":56,
-        "x":163,
-        "y":678
+        "x":2,
+        "y":719
       },
       "rotated":false,
       "sourceSize":{
@@ -320,8 +320,8 @@
       "frame":{
         "h":77,
         "w":63,
-        "x":188,
-        "y":599
+        "x":165,
+        "y":717
       },
       "rotated":false,
       "sourceSize":{
@@ -341,8 +341,8 @@
       "frame":{
         "h":77,
         "w":69,
-        "x":188,
-        "y":442
+        "x":74,
+        "y":718
       },
       "rotated":false,
       "sourceSize":{
@@ -362,8 +362,8 @@
       "frame":{
         "h":77,
         "w":76,
-        "x":179,
-        "y":285
+        "x":87,
+        "y":639
       },
       "rotated":false,
       "sourceSize":{
@@ -383,7 +383,7 @@
       "frame":{
         "h":78,
         "w":83,
-        "x":103,
+        "x":2,
         "y":561
       },
       "rotated":false,
@@ -440,27 +440,6 @@
         "y":184
       },
       "trimmed":true
-    },
-    {
-      "filename":"frame_0021.png",
-      "frame":{
-        "h":95,
-        "w":99,
-        "x":2,
-        "y":561
-      },
-      "rotated":false,
-      "sourceSize":{
-        "h":552,
-        "w":552
-      },
-      "spriteSourceSize":{
-        "h":95,
-        "w":99,
-        "x":222,
-        "y":222
-      },
-      "trimmed":true
     }
   ],
   "meta":{
@@ -469,10 +448,10 @@
     "image":"obj_hidden_star_idle.png",
     "scale":"1",
     "size":{
-      "h":836,
-      "w":261
+      "h":878,
+      "w":231
     },
-    "smartupdate":"$TexturePacker:SmartUpdate:9c5283bf99a2c001e88681ea58ca2d9d:3d0fdc233f07a782c2b8f3dc3c83a37e:52ea6d3b7691272e0cea9050a40d15e2$",
+    "smartupdate":"$TexturePacker:SmartUpdate:522797bd0293ccd96a39321f856826cd:f780141fa2a0d25ddec6727a81214a81:061591211b224b1ab491f54cb2fe4dee$",
     "version":"3.0"
   }
 }

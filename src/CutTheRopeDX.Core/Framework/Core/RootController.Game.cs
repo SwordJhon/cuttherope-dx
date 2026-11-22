@@ -796,6 +796,7 @@ namespace CutTheRopeDX.Framework.Core
             Resources.Img.MenuPackSelection3,
             Resources.Img.MenuPackUI,
             Resources.Img.MenuExtraButtons,
+            Resources.Img.MenuExtras,
             Resources.Img.MenuBgrShadow,
             Resources.Img.MenuBgrXmas,
             .. SpecialEvents.IsHalloween
@@ -828,6 +829,7 @@ namespace CutTheRopeDX.Framework.Core
         /// <summary>Resource pack loaded for gameplay (HUD, candy, spider, etc.).</summary>
         private static readonly string[] PackGame = [
             Resources.Img.MenuButtons,
+            Resources.Img.MenuExtraButtons,
             Resources.Img.HudUi,
             CandySkinHelper.GetCandyResource(Preferences.GetIntForKey("PREFS_SELECTED_CANDY")),
             Resources.Img.ObjCandyFx,

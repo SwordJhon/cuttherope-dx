@@ -326,10 +326,24 @@ namespace CutTheRopeDX.GameMain
                 // The logo is design-space content: it belongs to the fitted group where the scene
                 // has one, and to the backdrop where it does not.
                 BaseElement logoParent = designGroup ?? baseElement;
-                Image logo = Image.FromResource(Resources.Img.MenuLogoNew, 0);
-                logo.anchor = 10;
-                logo.parentAnchor = 10;
+                int selectedLogoSkin = Preferences.GetIntForKey("PREFS_SELECTED_LOGO");
+                Image logo = Image.FromResource(Resources.Img.MenuLogoNew, StartingLogoBaseQuad + selectedLogoSkin);
+                logo.restoreCutTransparency = true;
+                logo.anchor = logo.parentAnchor = 10;
+                logo.x = -40f;
                 logo.y = 55f;
+
+                //int selectedRopeSkin = Preferences.GetIntForKey("PREFS_SELECTED_ROPE");
+                Image rope = Image.FromResource(Resources.Img.MenuLogoNew, StartingLogoRopeQuad);
+                rope.restoreCutTransparency = true;
+                rope.anchor = rope.parentAnchor = 9;
+                _ = logo.AddChild(rope);
+
+                int selectedDXSkin = Preferences.GetIntForKey("PREFS_SELECTED_DX");
+                Image dx = Image.FromResource(Resources.Img.MenuLogoNew, StartingLogoDXQuad + selectedDXSkin);
+                dx.restoreCutTransparency = true;
+                dx.anchor = dx.parentAnchor = 9;
+                _ = logo.AddChild(dx);
 
                 // Candy on rope (positioned under the logo)
                 // Get selected candy skin from preferences
@@ -359,10 +373,10 @@ namespace CutTheRopeDX.GameMain
                     Timeline glowTimeline = new Timeline().InitWithMaxKeyFramesOnTrack(6);
                     // Rapid pulse: normal -> shrink -> expand -> shrink -> normal, then pause
                     glowTimeline.AddKeyFrame(KeyFrame.MakeScale(1, 1, KeyFrame.TransitionType.FRAME_TRANSITION_LINEAR, 0));
-                    glowTimeline.AddKeyFrame(KeyFrame.MakeScale(0.85, 0.85, KeyFrame.TransitionType.FRAME_TRANSITION_EASE_OUT, 0.3));
-                    glowTimeline.AddKeyFrame(KeyFrame.MakeScale(1.15, 1.15, KeyFrame.TransitionType.FRAME_TRANSITION_EASE_IN, 0.3));
-                    glowTimeline.AddKeyFrame(KeyFrame.MakeScale(0.85, 0.85, KeyFrame.TransitionType.FRAME_TRANSITION_EASE_OUT, 0.3));
-                    glowTimeline.AddKeyFrame(KeyFrame.MakeScale(1, 1, KeyFrame.TransitionType.FRAME_TRANSITION_EASE_IN, 0.3));
+                    glowTimeline.AddKeyFrame(KeyFrame.MakeScale(0.85f, 0.85f, KeyFrame.TransitionType.FRAME_TRANSITION_EASE_OUT, 0.3f));
+                    glowTimeline.AddKeyFrame(KeyFrame.MakeScale(1.15f, 1.15f, KeyFrame.TransitionType.FRAME_TRANSITION_EASE_IN, 0.3f));
+                    glowTimeline.AddKeyFrame(KeyFrame.MakeScale(0.85f, 0.85f, KeyFrame.TransitionType.FRAME_TRANSITION_EASE_OUT, 0.3f));
+                    glowTimeline.AddKeyFrame(KeyFrame.MakeScale(1, 1, KeyFrame.TransitionType.FRAME_TRANSITION_EASE_IN, 0.3f));
                     glowTimeline.AddKeyFrame(KeyFrame.MakeScale(1, 1, KeyFrame.TransitionType.FRAME_TRANSITION_LINEAR, 1));  // Pause
                     glowTimeline.SetTimelineLoopType(Timeline.LoopType.TIMELINE_REPLAY);
                     _ = glowImage.AddTimeline(glowTimeline);
@@ -437,6 +451,9 @@ namespace CutTheRopeDX.GameMain
             LayOutBackdrop(backdrop, VisibleBounds);
             return baseElement;
         }
+        private const int StartingLogoBaseQuad = 0;
+        private const int StartingLogoRopeQuad = 3;
+        private const int StartingLogoDXQuad = 1;
 
         /// <summary>
         /// Creates the menu background with an optional logo and the default shadow layer.

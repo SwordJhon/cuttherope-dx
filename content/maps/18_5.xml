@@ -19,5 +19,9 @@
         <hand x="340" y="60" segmentsCount="1" segment1Angle="180" segment1Length="50" segment1RotationStep="-60" />
         <spikes x="340" y="20" angle="0" spikesAmount="8" />
         <target x="410" y="360" supportTheme="experiments" supportQuad="5" />
+        <decal x="30" y="420" angle="-45" texture="decals_paper" quad="2" />
+        <decal x="45" y="465" angle="-90" texture="decals_paper" quad="2" />
+        <decal x="90" y="480" angle="-135" texture="decals_paper" quad="2" />
+        <decal x="288" y="342" angle="0" texture="decals_paper" quad="3" />
     </layer>
 </map>

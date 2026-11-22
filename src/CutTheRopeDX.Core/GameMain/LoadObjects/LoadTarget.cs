@@ -18,7 +18,7 @@ namespace CutTheRopeDX.GameMain
         private const int ExperimentsSupportCount = 8;
 
         /// <summary>Number of platforms on the extra support sheet.</summary>
-        private const int ExtrasSupportCount = 3;
+        private const int ExtrasSupportCount = 4;
 
         /// <summary>
         /// Loads Om Nom from XML node data

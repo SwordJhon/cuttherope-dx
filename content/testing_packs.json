@@ -9,9 +9,9 @@
         "levelCount": 7,
         "musicPack": ["all"],
         "packSpritesheet": "3",
-        "packQuadIndex": 4,
+        "packQuadIndex": 5,
         "sittingPlatformTheme": "extras",
-        "extraSittingPlatform": 0,
+        "extraSittingPlatform": 1,
         "unlockStars": 0
     }
 ]

@@ -22,6 +22,7 @@ namespace CutTheRopeDX.Framework.Core
                 SetBooleanForKey(true, "PREFS_EXIST", true);
                 SetIntForKey(0, "PREFS_GAME_STARTS", true);
                 SetIntForKey(0, "PREFS_LEVELS_WON", true);
+                SetIntForKey(1, "PREFS_SELECTED_DX", true);
                 ResetToDefaults();
                 ResetMusicSound();
             }
@@ -637,6 +638,8 @@ namespace CutTheRopeDX.Framework.Core
             SetIntForKey(0, "PREFS_CANDIES_LOST", true);
             SetIntForKey(0, "PREFS_CANDIES_UNITED", true);
             SetIntForKey(0, "PREFS_SOCKS_USED", true);
+            SetIntForKey(0, "PREFS_SELECTED_LOGO", true);
+            SetIntForKey(1, "PREFS_SELECTED_DX", true);
             SetIntForKey(0, "PREFS_SELECTED_CANDY", true);
             SetIntForKey(0, "PREFS_SELECTED_ROPE", true);
             SetIntForKey(0, "PREFS_SELECTED_OMNOM", true);

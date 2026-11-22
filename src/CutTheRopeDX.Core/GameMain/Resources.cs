@@ -352,6 +352,7 @@ namespace CutTheRopeDX.GameMain
             public const string MenuPackSelection2 = "menu_pack_selection2";
             public const string MenuPackSelection3 = "menu_pack_selection3";
             public const string MenuExtraButtons = "menu_extra_buttons";
+            public const string MenuExtras = "menu_extras";
             public const string MenuScrollbar = "menu_scrollbar";
             public const string MenuLeaderboard = "menu_leaderboard";
             public const string MenuProcessingHd = "menu_processing_hd";
@@ -359,6 +360,7 @@ namespace CutTheRopeDX.GameMain
             public const string MenuButtonAchivCup = "menu_button_achiv_cup";
             public const string MenuBgrShadow = "menu_bgr_shadow";
             public const string MenuLevelUi = "menu_level_ui";
+            public const string MenuLevelSelection = "menu_level_selection";
             public const string HudUi = "hud_ui";
             public const string ObjSpider = "obj_spider";
             public const string ConfettiParticles = "confetti_particles";
@@ -381,17 +383,24 @@ namespace CutTheRopeDX.GameMain
             public const string MenuExpPauseTop = "menu_pause_top_horiz";
             public const string ConfettiParticlesExp = "confetti_particles_exp";
             public const string ProfessorHand = "professor_hand";
+            public const string ObjHiddenUnlocker = "obj_hidden_unlocker";
             public const string ObjStarDisappear = "obj_star_disappear";
+            public const string ObjHiddenStarDisappear = "obj_hidden_star_disappear";
             public const string ObjBubble = "obj_bubble";
             public const string ObjHook = "obj_hook";
             public const string ObjExpChain = "obj_exp_chain";
+            public const string ObjChain = "obj_chain";
+            public const string ObjGravityButtonOrigins = "obj_gravity_button_origins";
             public const string ObjStarIdle = "obj_star_idle";
+            public const string ObjHiddenStarIdle = "obj_hidden_star_idle";
             public const string ObjStarNight = "obj_star_night";
+            public const string ObjHiddenStarNight = "obj_hidden_star_night";
             public const string CharAnimations = "char_animations";
             public const string CharAnimationsSmooth = "char_animations_smooth";
             public const string CharAnimationsSleeping = "char_animations_sleeping";
             public const string CharAnimationsPaddington = "char_animations_paddington";
             public const string CharAnimationsExperiments = "char_animations_experiments";
+            public const string CharAnimationsProgrammerArt = "char_animations_programmer_art";
             public const string FxSleep = "fx_sleep";
             public const string FxBubbles = "fx_bubbles";
             public const string FxCutChain = "fx_cut_chain";
@@ -400,11 +409,13 @@ namespace CutTheRopeDX.GameMain
             public const string HatXmas = "hat_xmas";
             public const string CharAnimationsPrehistoric = "char_animations_body_prehistoric";
             public const string ObjGun = "obj_gun";
+            public const string ObjGunAlt = "obj_gun_alt";
             public const string ObjSticker = "obj_sticker";
             public const string ObjPump = "obj_pump";
             public const string TutorialSigns = "tutorial_signs";
             public const string ObjHat = "obj_hat";
             public const string ObjHatMaskable = "obj_hat_maskable";
+            public const string ObjHatMaskableAlt = "obj_hat_maskable_alt";
             public const string ObjBouncer = "obj_bouncer";
             public const string ObjSpikes = "obj_spikes";
             public const string ObjRotatableSpikesButton = "obj_rotatable_spikes_button";
@@ -458,6 +469,7 @@ namespace CutTheRopeDX.GameMain
             public const string ObjPause = "obj_pause";
             public const string Bgr16Cover = "bgr_16_cover";
             public const string ObjLighter = "obj_lighter";
+            public const string ObjDarkBulb = "obj_darkbulb";
             public const string Bgr17Cover = "bgr_17_cover";
             public const string BoxLabel = "box_label";
             public const string ObjConveyor = "obj_conveyor";
@@ -469,7 +481,7 @@ namespace CutTheRopeDX.GameMain
             public const string WaterTile = "water_tile";
             public const string ObjSnail = "obj_snail";
             public const string ObjRoboHand = "obj_robohand";
-            public const string ObjRoboHandReverse = "obj_robohand_reverse";
+            public const string ObjRoboHandAlt = "obj_robohand_alt";
             public const string ObjBambooTube = "obj_bamboo_tube";
             public const string ObjMetalTube = "obj_metal_tube";
             public const string FingerTraceSkinOptions = "fingertrace_skin";
@@ -482,6 +494,10 @@ namespace CutTheRopeDX.GameMain
             public const string BgrChallenge3Cover = "bgr_challenge3_cover";
             public const string BgrChallenge4Cover = "bgr_challenge4_cover";
             public const string BgrTestingCover = "bgr_testing_cover";
+            public const string ObjCommon = "obj_common";
+            public const string ObjOrigins = "obj_origins";
+            public const string ObjIce = "obj_ice";
+            public const string Polar = "polar";
 
             // Candies
             public const string ObjCandyFx = "candies/obj_candy_fx";
@@ -545,6 +561,7 @@ namespace CutTheRopeDX.GameMain
             // Decals
             public const string DecalsKitchen = "decals_kitchen";
             public const string DecalsCardboard = "decals_cardboard";
+            public const string DecalsPaper = "decals_paper";
         }
 
         /// <summary>

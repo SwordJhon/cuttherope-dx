@@ -18,6 +18,6 @@
         <pump x="280" y="239" angle="180" />
         <pump x="40" y="47" angle="0" />
         <bubble x="304" y="455" />
-        <decal x="262" y="48" angle="0" texture="decals_kitchen" quad="4" color="#4CDD4C" retinaScale="true" flipX="true" flipY="false" />
+        <decal x="262" y="48" angle="0" texture="decals_paper" quad="9" color="#4CDD4C" retinaScale="true" flipX="true" flipY="false" />
     </layer>
 </map>

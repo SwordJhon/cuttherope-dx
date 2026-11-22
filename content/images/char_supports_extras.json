@@ -1,7 +1,28 @@
 {
   "frames":[
     {
-      "filename":"frame_0000_OmNomPillow18.png",
+      "filename":"frame_00_blank.png",
+      "frame":{
+        "h":1,
+        "w":1,
+        "x":272,
+        "y":282
+      },
+      "rotated":false,
+      "sourceSize":{
+        "h":1,
+        "w":1
+      },
+      "spriteSourceSize":{
+        "h":1,
+        "w":1,
+        "x":0,
+        "y":0
+      },
+      "trimmed":false
+    },
+    {
+      "filename":"frame_01_OmNomPillow18.png",
       "frame":{
         "h":198,
         "w":268,
@@ -22,7 +43,7 @@
       "trimmed":true
     },
     {
-      "filename":"frame_0001_char_support_18.png",
+      "filename":"frame_02_char_support_18.png",
       "frame":{
         "h":320,
         "w":261,
@@ -43,7 +64,7 @@
       "trimmed":true
     },
     {
-      "filename":"frame_0002_cloud.png",
+      "filename":"frame_03_cloud.png",
       "frame":{
         "h":278,
         "w":315,
@@ -73,7 +94,7 @@
       "h":804,
       "w":319
     },
-    "smartupdate":"$TexturePacker:SmartUpdate:fdc0e8497b91ad0d13841f9f9c54ec09:97bb70fab40b1dd5da03e121ab083419:17d308102264cbf9248928268d6a0dd5$",
+    "smartupdate":"$TexturePacker:SmartUpdate:92daa4521e576693d3b7981073640cb7:97bb70fab40b1dd5da03e121ab083419:9e549be6e2b35fc8b97f5f6a478eee9c$",
     "version":"3.0"
   }
 }

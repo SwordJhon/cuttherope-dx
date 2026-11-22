@@ -12,6 +12,7 @@
         <star x="130" y="320" timeout="-1" path="RC25" moveSpeed="80" />
         <star x="175" y="290" timeout="-1" path="RW30" moveSpeed="50" startAngle="90" />
         <star x="190" y="340" timeout="-1" path="RC40" moveSpeed="30" startAngle="180" />
-        <target x="160" y="410" supportTheme="extras" supportQuad="2" path="70,-30,100,-100,70,-30" moveSpeed="30" startAngle="90" />
+        <target x="160" y="410" supportTheme="extras" supportQuad="3" path="70,-30,100,-100,70,-30" moveSpeed="30" startAngle="90" />
+        <decal x="280" y="125" angle="0" texture="decals_paper" quad="2" />
     </layer>
 </map>

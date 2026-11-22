@@ -1,10 +1,10 @@
 {
   "frames":[
     {
-      "filename":"frame_0000_logo.png",
+      "filename":"frame_base.png",
       "frame":{
-        "h":710,
-        "w":820,
+        "h":514,
+        "w":821,
         "x":2,
         "y":2
       },
@@ -14,20 +14,83 @@
         "w":822
       },
       "spriteSourceSize":{
-        "h":710,
-        "w":820,
+        "h":514,
+        "w":821,
         "x":0,
         "y":0
       },
       "trimmed":true
     },
     {
-      "filename":"frame_0001_strategicmusic_logo.png",
+      "filename":"frame_dx_0.png",
+      "frame":{
+        "h":1,
+        "w":1,
+        "x":783,
+        "y":518
+      },
+      "rotated":false,
+      "sourceSize":{
+        "h":1,
+        "w":1
+      },
+      "spriteSourceSize":{
+        "h":1,
+        "w":1,
+        "x":0,
+        "y":0
+      },
+      "trimmed":false
+    },
+    {
+      "filename":"frame_dx_1.png",
+      "frame":{
+        "h":204,
+        "w":297,
+        "x":476,
+        "y":518
+      },
+      "rotated":false,
+      "sourceSize":{
+        "h":710,
+        "w":822
+      },
+      "spriteSourceSize":{
+        "h":204,
+        "w":297,
+        "x":155,
+        "y":506
+      },
+      "trimmed":true
+    },
+    {
+      "filename":"frame_rope_0.png",
+      "frame":{
+        "h":346,
+        "w":189,
+        "x":285,
+        "y":518
+      },
+      "rotated":false,
+      "sourceSize":{
+        "h":710,
+        "w":822
+      },
+      "spriteSourceSize":{
+        "h":346,
+        "w":189,
+        "x":370,
+        "y":191
+      },
+      "trimmed":true
+    },
+    {
+      "filename":"frame_strategicmusic_logo.png",
       "frame":{
         "h":135,
         "w":305,
-        "x":285,
-        "y":714
+        "x":476,
+        "y":724
       },
       "rotated":false,
       "sourceSize":{
@@ -43,12 +106,12 @@
       "trimmed":true
     },
     {
-      "filename":"frame_0002_zeptolab_logo.png",
+      "filename":"frame_zeptolab_logo.png",
       "frame":{
         "h":316,
         "w":281,
         "x":2,
-        "y":714
+        "y":518
       },
       "rotated":false,
       "sourceSize":{
@@ -70,10 +133,10 @@
     "image":"menu_logo_new.png",
     "scale":"1",
     "size":{
-      "h":1032,
-      "w":824
+      "h":866,
+      "w":825
     },
-    "smartupdate":"$TexturePacker:SmartUpdate:b78324898f6703c534f53a511c27daa9:c07811a2a42391067e1c72acfff156b2:e9fb94f5d00db11b2cbb9e2f29ff761f$",
+    "smartupdate":"$TexturePacker:SmartUpdate:43acc4b6d3311b751fc634d090038fe1:fdf148ba397b42efe1fddbc1071ee1f3:a0a24787a351058e47d7abc0cc3b1c02$",
     "version":"3.0"
   }
 }
