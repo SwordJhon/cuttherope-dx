@@ -65,6 +65,7 @@ namespace CutTheRopeDX.Framework.Core
             EnsureVoicePreference();
             SetRpcPreferenceInJson(); // temporary hack, remove after setting UI is implemented
             SetUpdateCheckPreferenceInJson(); // temporary hack, remove after setting UI is implemented
+            SetDXSubtitlePreferenceInJson(); // temporary hack, remove after setting UI is implemented
             return isFirstLaunch;
         }
 
@@ -124,6 +125,20 @@ namespace CutTheRopeDX.Framework.Core
         public static bool IsUpdateCheckEnabled()
         {
             return GetBooleanForKey("PREFS_UPDATE_CHECK");
+        }
+
+        /// <summary>
+        /// Ensures the dx subtitle preference exists until settings UI can create it.
+        /// </summary>
+        /// <remarks>
+        /// Todo: Remove after setting UI is implemented
+        /// </remarks>
+        private static void SetDXSubtitlePreferenceInJson()
+        {
+            if (!ContainsKey("PREFS_SELECTED_DX"))
+            {
+                SetIntForKey(1, "PREFS_SELECTED_DX", true);
+            }
         }
 
         /// <summary>
