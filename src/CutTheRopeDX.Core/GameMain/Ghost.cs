@@ -19,18 +19,24 @@ namespace CutTheRopeDX.GameMain
         /// </summary>
         /// <param name="position">World position of the ghost.</param>
         /// <param name="possibleForms">Ghost forms that this ghost may cycle through.</param>
+        /// <param name="demorphable">Whether the ghost can demorph.</param>
         /// <param name="grabRadius">Grab radius used when the ghost morphs into a grab.</param>
+        /// <param name="grabCandyPadding">Whether to do candy padding when the ghost morphs into a grab.</param>
         /// <param name="bouncerAngle">Bouncer angle used when the ghost morphs into a bouncer.</param>
+        /// <param name="bouncerSize">Bouncer size used when the ghost morphs into a bouncer.</param>
         /// <param name="bubbles">Scene bubble collection that receives ghost-created bubbles.</param>
         /// <param name="bungees">Scene grab collection that receives ghost-created grabs.</param>
         /// <param name="bouncers">Scene bouncer collection that receives ghost-created bouncers.</param>
         /// <param name="owner">Owning game scene.</param>
         /// <returns>The initialized ghost.</returns>
-        public Ghost InitWithPositionPossibleFormsGrabRadiusBouncerAngleBubblesBungeesBouncers(
+        public Ghost InitWithPositionPossibleForms(
             Vector position,
             GhostForm possibleForms,
+            bool demorphable,
             float grabRadius,
+            bool grabCandyPadding,
             float bouncerAngle,
+            int bouncerSize,
             List<Bubble> bubbles,
             List<Grab> bungees,
             List<Bouncer> bouncers,
@@ -42,8 +48,11 @@ namespace CutTheRopeDX.GameMain
             Apparition = null;
             MorphPhase = null;
             retiringApparitions.Clear();
+            this.demorphable = demorphable;
             this.bouncerAngle = bouncerAngle;
+            this.bouncerSize = bouncerSize;
             this.grabRadius = grabRadius;
+            this.grabCandyPadding = grabCandyPadding;
             gsBubbles = bubbles;
             gsBungees = bungees;
             gsBouncers = bouncers;
@@ -219,13 +228,14 @@ namespace CutTheRopeDX.GameMain
                             hostScene?.RegisterRope(autoRope, grab);
                         }
                     }
+                    grab.doCandyPadding = grabCandyPadding;
                     gsBungees.Add(grab);
                     Apparition = grab;
                     grab.AddTimelinewithID(morphIn, 10);
                     grab.PlayTimeline(10);
                     break;
                 case GhostForm.Bouncer:
-                    GhostBouncer bouncer = (GhostBouncer)new GhostBouncer().InitWithPosXYWidthAndAngle(x, y, 1, bouncerAngle);
+                    GhostBouncer bouncer = (GhostBouncer)new GhostBouncer().InitWithPosXYWidthAndAngle(x, y, bouncerSize, bouncerAngle);
                     gsBouncers.Add(bouncer);
                     Apparition = bouncer;
                     bouncer.AddTimelinewithID(morphIn, 10);
@@ -257,7 +267,7 @@ namespace CutTheRopeDX.GameMain
                 nextForm = (GhostForm)((int)nextForm << 1);
                 if ((int)nextForm == 16)
                 {
-                    nextForm = GhostForm.Bubble;
+                    nextForm = demorphable ? GhostForm.Idle : GhostForm.Bubble;
                 }
             }
             while ((nextForm & possibleForms) == 0);
@@ -459,11 +469,20 @@ namespace CutTheRopeDX.GameMain
         /// <summary>The outgoing/incoming form pair while the newest morph-in is active.</summary>
         internal GhostMorphPhase? MorphPhase { get; private set; }
 
+        /// <summary>Whether the ghost can demorph.</summary>
+        public bool demorphable;
+
         /// <summary>Grab radius used when the ghost morphs into a grab.</summary>
         public float grabRadius;
 
+        /// <summary>Whether to do candy padding when the ghost morphs into a grab.</summary>
+        public bool grabCandyPadding;
+
         /// <summary>Bouncer angle used when the ghost morphs into a bouncer.</summary>
         public float bouncerAngle;
+
+        /// <summary>Bouncer size used when the ghost morphs into a bouncer.</summary>
+        public int bouncerSize;
 
         /// <summary>Root element for the ghost body and face images.</summary>
         public BaseElement ghostImage;

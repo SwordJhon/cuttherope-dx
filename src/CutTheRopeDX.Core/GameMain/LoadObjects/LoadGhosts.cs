@@ -19,23 +19,29 @@ namespace CutTheRopeDX.GameMain
         {
             float px = (ParseCoordinateIntOrZero(xmlNode.Attribute("x")?.Value) * scale) + offsetX + mapOffsetX;
             float py = (ParseCoordinateIntOrZero(xmlNode.Attribute("y")?.Value) * scale) + offsetY + mapOffsetY;
-            float grabRadius = ParseFloatOrZero(xmlNode.Attribute("radius")?.Value);
+            float grabRadius = ParseFloatOrDefault(xmlNode.Attribute("grabRadius")?.Value, ParseFloatOrZero(xmlNode.Attribute("radius")?.Value));
             if (grabRadius != -1f)
             {
                 grabRadius *= scale;
             }
-            float bouncerAngle = ParseFloatOrZero(xmlNode.Attribute("angle")?.Value);
+            bool grabCandyPadding = GetBoolAttribute(xmlNode, "grabCandyPadding", defaultValue: true);
+            float bouncerAngle = ParseFloatOrDefault(xmlNode.Attribute("bouncerAngle")?.Value, ParseFloatOrZero(xmlNode.Attribute("angle")?.Value));
+            int bouncerSize = ParseIntOrDefault(xmlNode.Attribute("bouncerSize")?.Value, ParseIntOrDefault(xmlNode.Attribute("size")?.Value, 1));
+            _ = bool.TryParse(xmlNode.Attribute("demorphable")?.Value, out bool demorphable);
             _ = bool.TryParse(xmlNode.Attribute("grab")?.Value, out bool useGrab);
             _ = bool.TryParse(xmlNode.Attribute("bubble")?.Value, out bool useBubble);
             _ = bool.TryParse(xmlNode.Attribute("bouncer")?.Value, out bool useBouncer);
             GhostForm possibleForms = (useBouncer ? GhostForm.Bouncer : GhostForm.None)
                 | (useBubble ? GhostForm.Bubble : GhostForm.None)
                 | (useGrab ? GhostForm.Grab : GhostForm.None);
-            Ghost ghost = new Ghost().InitWithPositionPossibleFormsGrabRadiusBouncerAngleBubblesBungeesBouncers(
+            Ghost ghost = new Ghost().InitWithPositionPossibleForms(
                 Vect(px, py),
                 possibleForms,
+                demorphable,
                 grabRadius,
+                grabCandyPadding,
                 bouncerAngle,
+                bouncerSize,
                 bubbles,
                 bungees,
                 bouncers,

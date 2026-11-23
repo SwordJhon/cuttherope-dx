@@ -275,11 +275,14 @@ namespace CutTheRopeDX.Tests
             List<Bubble> bubbles = [];
             List<Grab> grabs = [];
             List<Bouncer> bouncers = [];
-            Ghost ghost = new Ghost().InitWithPositionPossibleFormsGrabRadiusBouncerAngleBubblesBungeesBouncers(
+            Ghost ghost = new Ghost().InitWithPositionPossibleForms(
                 new Vector(100f, 100f),
                 GhostForm.Bubble | GhostForm.Grab | GhostForm.Bouncer,
+                false,
                 80f,
+                true,
                 0f,
+                1,
                 bubbles,
                 grabs,
                 bouncers,

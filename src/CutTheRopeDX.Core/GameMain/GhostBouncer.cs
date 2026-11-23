@@ -19,7 +19,7 @@ namespace CutTheRopeDX.GameMain
             if (base.InitWithPosXYWidthAndAngle(px, py, width, angle) != null)
             {
                 backCloud2 = FromResource(Resources.Img.ObjGhost, 4);
-                float radius = MathF.Sqrt(9000);
+                float radius = MathF.Sqrt(9000) + (55 * (width - 1));
                 backCloud2.x = x + (radius * MathF.Cos(float.DegreesToRadians(170 + angle)));
                 backCloud2.y = y + (radius * MathF.Sin(float.DegreesToRadians(170 + angle)));
                 backCloud2.anchor = 18;
@@ -41,9 +41,8 @@ namespace CutTheRopeDX.GameMain
                 backCloud2.PlayTimeline(0);
 
                 backCloud = FromResource(Resources.Img.ObjGhost, 4);
-                float radius2 = MathF.Sqrt(9000);
-                backCloud.x = x + (radius2 * MathF.Cos(float.DegreesToRadians(10 + angle)));
-                backCloud.y = y + (radius2 * MathF.Sin(float.DegreesToRadians(10 + angle)));
+                backCloud.x = x + (radius * MathF.Cos(float.DegreesToRadians(10 + angle)));
+                backCloud.y = y + (radius * MathF.Sin(float.DegreesToRadians(10 + angle)));
                 backCloud.anchor = 18;
                 backCloud.visible = false;
                 _ = AddChild(backCloud);
@@ -63,7 +62,7 @@ namespace CutTheRopeDX.GameMain
                 backCloud.PlayTimeline(0);
 
                 Image frontCloud = FromResource(Resources.Img.ObjGhost, 3);
-                frontCloud.x = x + 60f;
+                frontCloud.x = x + (60f * width);
                 frontCloud.y = y + 55f;
                 frontCloud.anchor = 18;
                 //frontCloud.DoRestoreCutTransparency();
@@ -83,8 +82,55 @@ namespace CutTheRopeDX.GameMain
                 frontCloud.AddTimelinewithID(frontCloudTimeline, 0);
                 frontCloud.PlayTimeline(0);
 
+                if (width == 2)
+                {
+                    Image middleCloud = FromResource(Resources.Img.ObjGhost, 5);
+                    middleCloud.x = x + 55f;
+                    middleCloud.y = y + 55f;
+                    middleCloud.rotation = -10;
+                    middleCloud.anchor = 18;
+                    //middleCloud.DoRestoreCutTransparency();
+                    _ = AddChild(middleCloud);
+                    Timeline middleCloudTimeline = new Timeline().InitWithMaxKeyFramesOnTrack(5);
+                    middleCloudTimeline.SetTimelineLoopType(Timeline.LoopType.TIMELINE_REPLAY);
+                    middleCloudTimeline.AddKeyFrame(KeyFrame.MakeScale(1.0f, 1.0f, KeyFrame.TransitionType.FRAME_TRANSITION_IMMEDIATE, 0));
+                    middleCloudTimeline.AddKeyFrame(KeyFrame.MakeScale(0.9f, 0.9f, KeyFrame.TransitionType.FRAME_TRANSITION_EASE_IN, 0.467f));
+                    middleCloudTimeline.AddKeyFrame(KeyFrame.MakeScale(0.8f, 0.8f, KeyFrame.TransitionType.FRAME_TRANSITION_EASE_OUT, 0.467f));
+                    middleCloudTimeline.AddKeyFrame(KeyFrame.MakeScale(0.9f, 0.9f, KeyFrame.TransitionType.FRAME_TRANSITION_EASE_IN, 0.467f));
+                    middleCloudTimeline.AddKeyFrame(KeyFrame.MakeScale(1.0f, 1.0f, KeyFrame.TransitionType.FRAME_TRANSITION_EASE_OUT, 0.467f));
+                    middleCloudTimeline.AddKeyFrame(KeyFrame.MakePos((int)middleCloud.x, (int)(middleCloud.y + 1f), KeyFrame.TransitionType.FRAME_TRANSITION_IMMEDIATE, 0));
+                    middleCloudTimeline.AddKeyFrame(KeyFrame.MakePos((int)middleCloud.x, (int)middleCloud.y, KeyFrame.TransitionType.FRAME_TRANSITION_EASE_IN, 0.467f));
+                    middleCloudTimeline.AddKeyFrame(KeyFrame.MakePos((int)middleCloud.x, (int)(middleCloud.y - 1f), KeyFrame.TransitionType.FRAME_TRANSITION_EASE_OUT, 0.467f));
+                    middleCloudTimeline.AddKeyFrame(KeyFrame.MakePos((int)middleCloud.x, (int)middleCloud.y, KeyFrame.TransitionType.FRAME_TRANSITION_EASE_IN, 0.467f));
+                    middleCloudTimeline.AddKeyFrame(KeyFrame.MakePos((int)middleCloud.x, (int)(middleCloud.y + 1f), KeyFrame.TransitionType.FRAME_TRANSITION_EASE_OUT, 0.467f));
+                    middleCloud.AddTimelinewithID(middleCloudTimeline, 0);
+                    middleCloud.PlayTimeline(0);
+
+                    Image middle2Cloud = FromResource(Resources.Img.ObjGhost, 3);
+                    middle2Cloud.x = x - 8f;
+                    middle2Cloud.y = y + 55f;
+                    middle2Cloud.rotation = 10;
+                    middle2Cloud.anchor = 18;
+                    //middle2Cloud.DoRestoreCutTransparency();
+                    _ = AddChild(middle2Cloud);
+                    Timeline middle2CloudTimeline = new Timeline().InitWithMaxKeyFramesOnTrack(5);
+                    middle2CloudTimeline.SetTimelineLoopType(Timeline.LoopType.TIMELINE_REPLAY);
+                    middle2CloudTimeline.AddKeyFrame(KeyFrame.MakeScale(1.0f, 1.0f, KeyFrame.TransitionType.FRAME_TRANSITION_IMMEDIATE, 0));
+                    middle2CloudTimeline.AddKeyFrame(KeyFrame.MakeScale(0.9f, 0.9f, KeyFrame.TransitionType.FRAME_TRANSITION_EASE_IN, 0.483f));
+                    middle2CloudTimeline.AddKeyFrame(KeyFrame.MakeScale(0.8f, 0.8f, KeyFrame.TransitionType.FRAME_TRANSITION_EASE_OUT, 0.483f));
+                    middle2CloudTimeline.AddKeyFrame(KeyFrame.MakeScale(0.9f, 0.9f, KeyFrame.TransitionType.FRAME_TRANSITION_EASE_IN, 0.483f));
+                    middle2CloudTimeline.AddKeyFrame(KeyFrame.MakeScale(1.0f, 1.0f, KeyFrame.TransitionType.FRAME_TRANSITION_EASE_OUT, 0.483f));
+                    middle2CloudTimeline.AddKeyFrame(KeyFrame.MakePos((int)middle2Cloud.x, (int)(middle2Cloud.y + 1f), KeyFrame.TransitionType.FRAME_TRANSITION_IMMEDIATE, 0));
+                    middle2CloudTimeline.AddKeyFrame(KeyFrame.MakePos((int)middle2Cloud.x, (int)middle2Cloud.y, KeyFrame.TransitionType.FRAME_TRANSITION_EASE_IN, 0.483f));
+                    middle2CloudTimeline.AddKeyFrame(KeyFrame.MakePos((int)middle2Cloud.x, (int)(middle2Cloud.y - 1f), KeyFrame.TransitionType.FRAME_TRANSITION_EASE_OUT, 0.483f));
+                    middle2CloudTimeline.AddKeyFrame(KeyFrame.MakePos((int)middle2Cloud.x, (int)middle2Cloud.y, KeyFrame.TransitionType.FRAME_TRANSITION_EASE_IN, 0.483f));
+                    middle2CloudTimeline.AddKeyFrame(KeyFrame.MakePos((int)middle2Cloud.x, (int)(middle2Cloud.y + 1f), KeyFrame.TransitionType.FRAME_TRANSITION_EASE_OUT, 0.483f));
+                    middle2Cloud.AddTimelinewithID(middle2CloudTimeline, 0);
+                    middle2Cloud.PlayTimeline(0);
+                }
+
                 Image bigCloud = FromResource(Resources.Img.ObjGhost, 2);
-                bigCloud.x = x - 50f;
+                bigCloud.x = x - (50f * width);
                 bigCloud.y = y + 55f;
                 bigCloud.anchor = 18;
                 //bigCloud.DoRestoreCutTransparency();
