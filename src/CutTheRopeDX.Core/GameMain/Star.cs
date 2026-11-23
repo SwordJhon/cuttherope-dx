@@ -146,8 +146,11 @@ namespace CutTheRopeDX.GameMain
             idleBobTimeline.AddKeyFrame(KeyFrame.MakePos((int)x, (int)y, KeyFrame.TransitionType.FRAME_TRANSITION_EASE_IN, 0.5f));
             idleBobTimeline.SetTimelineLoopType(Timeline.LoopType.TIMELINE_REPLAY);
             AddTimelinewithID(idleBobTimeline, 0);
-            PlayTimeline(0);
-            Timeline.UpdateTimeline(idleBobTimeline, RND_RANGE(0, 20) / 10f);
+            if (!bindToDisc)
+            {
+                PlayTimeline(0);
+                Timeline.UpdateTimeline(idleBobTimeline, RND_RANGE(0, 20) / 10f);
+            }
 
             // Add glow sprite
             if (!nightMode)
@@ -385,5 +388,20 @@ namespace CutTheRopeDX.GameMain
 
         /// <summary>Night-mode light-down transition animation.</summary>
         private Animation lightDownAnim;
+
+        /// <summary>Initial grab rotation used when restoring state.</summary>
+        public float initial_rotation;
+
+        /// <summary>Initial X position used when restoring state.</summary>
+        public float initial_x;
+
+        /// <summary>Initial Y position used when restoring state.</summary>
+        public float initial_y;
+
+        /// <summary>Initial rotated-circle binding used when restoring state.</summary>
+        public RotatedCircle initial_rotatedCircle;
+
+        /// <summary>Whether this object would bind to a disc.</summary>
+        public bool bindToDisc;
     }
 }

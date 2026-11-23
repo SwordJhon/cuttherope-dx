@@ -27,6 +27,7 @@ namespace CutTheRopeDX.GameMain
             bubble.initial_y = bubble.y = (ParseCoordinateIntOrZero(xmlNode.Attribute("y")?.Value) * scale) + offsetY + mapOffsetY;
             bubble.initial_rotation = 0f;
             bubble.initial_rotatedCircle = null;
+            bubble.bindToDisc = GetBoolAttribute(xmlNode, "bindToDisc", true);
             bubble.anchor = 18;
             bubble.popped = false;
             Image image = Image.FromResource(Resources.Img.ObjBubble, 0);

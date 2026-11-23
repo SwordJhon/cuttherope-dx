@@ -33,9 +33,10 @@ namespace CutTheRopeDX.GameMain
             float catchCenterY = (rocket.height / 2f) + ActivePhysicsConstants.RocketCatchBoxCenterOffsetY;
             rocket.bb = MakeRectangle(catchCenterX - (catchWidth / 2f), catchCenterY - (catchHeight / 2f), catchWidth, catchHeight);
 
-            rocket.x = (ParseCoordinateIntOrZero(xmlNode.Attribute("x")?.Value) * scale) + offsetX + mapOffsetX;
-            rocket.y = (ParseCoordinateIntOrZero(xmlNode.Attribute("y")?.Value) * scale) + offsetY + mapOffsetY;
+            rocket.initial_x = rocket.x = (ParseCoordinateIntOrZero(xmlNode.Attribute("x")?.Value) * scale) + offsetX + mapOffsetX;
+            rocket.initial_y = rocket.y = (ParseCoordinateIntOrZero(xmlNode.Attribute("y")?.Value) * scale) + offsetY + mapOffsetY;
             rocket.rotation = ParseFloatOrZero(xmlNode.Attribute("angle")?.Value) - DEG_180;
+            rocket.bindToDisc = GetBoolAttribute(xmlNode, "bindToDisc", false);
             rocket.impulse = ParseFloatOrZero(xmlNode.Attribute("impulse")?.Value);
             rocket.impulseFactor = ParseFloatOrZero(xmlNode.Attribute("impulseFactor")?.Value);
             if (rocket.impulseFactor == 0f)

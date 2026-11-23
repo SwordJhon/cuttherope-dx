@@ -27,6 +27,7 @@ namespace CutTheRopeDX.GameMain
             pump.initial_y = pump.y = (ParseCoordinateIntOrZero(xmlNode.Attribute("y")?.Value) * scale) + offsetY + mapOffsetY;
             pump.initial_rotation = 0f;
             pump.initial_rotatedCircle = null;
+            pump.bindToDisc = GetBoolAttribute(xmlNode, "bindToDisc", true);
             pump.rotation = ParseFloatOrZero(xmlNode.Attribute("angle")?.Value) + DEG_90;
             pump.UpdateRotation();
             pump.anchor = 18;

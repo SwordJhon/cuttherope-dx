@@ -29,8 +29,8 @@ namespace CutTheRopeDX.GameMain
             SharedCandyPoint = null;
             AllLanterns.Add(this);
 
-            x = position.X;
-            y = position.Y;
+            initial_x = x = position.X;
+            initial_y = y = position.Y;
             lanternState = LanternStateInactive;
 
             delayedDispatcher ??= new DelayedDispatcher();
@@ -415,5 +415,20 @@ namespace CutTheRopeDX.GameMain
             /// <summary>Fire bounce timeline.</summary>
             FireBounce
         }
+
+        /// <summary>Initial grab rotation used when restoring state.</summary>
+        public float initial_rotation;
+
+        /// <summary>Initial X position used when restoring state.</summary>
+        public float initial_x;
+
+        /// <summary>Initial Y position used when restoring state.</summary>
+        public float initial_y;
+
+        /// <summary>Initial rotated-circle binding used when restoring state.</summary>
+        public RotatedCircle initial_rotatedCircle;
+
+        /// <summary>Whether this object would bind to a disc.</summary>
+        public bool bindToDisc;
     }
 }

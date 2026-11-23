@@ -25,10 +25,11 @@ namespace CutTheRopeDX.GameMain
             {
                 star.EnableNightMode();
             }
-            star.x = (ParseCoordinateIntOrZero(xmlNode.Attribute("x")?.Value) * scale) + offsetX + mapOffsetX;
-            star.y = (ParseCoordinateIntOrZero(xmlNode.Attribute("y")?.Value) * scale) + offsetY + mapOffsetY;
+            star.initial_x = star.x = (ParseCoordinateIntOrZero(xmlNode.Attribute("x")?.Value) * scale) + offsetX + mapOffsetX;
+            star.initial_y = star.y = (ParseCoordinateIntOrZero(xmlNode.Attribute("y")?.Value) * scale) + offsetY + mapOffsetY;
             star.rotation = ParseFloatOrZero(xmlNode.Attribute("angle")?.Value);
             star.timeout = ParseFloatOrZero(xmlNode.Attribute("timeout")?.Value);
+            star.bindToDisc = GetBoolAttribute(xmlNode, "bindToDisc", false);
             star.CreateAnimations();
             star.bb = GetStarBoundingBox();
             star.ParseMover(xmlNode);

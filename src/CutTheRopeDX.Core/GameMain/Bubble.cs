@@ -42,6 +42,9 @@ namespace CutTheRopeDX.GameMain
         /// <summary>Initial rotated-circle binding used when restoring state.</summary>
         public RotatedCircle initial_rotatedCircle;
 
+        /// <summary>Whether this object would bind to a disc.</summary>
+        public bool bindToDisc = true;
+
         /// <summary>Whether the bubble should skip drawing its own shadow.</summary>
         public bool withoutShadow;
 

@@ -39,8 +39,8 @@ namespace CutTheRopeDX.GameMain
             isLarge = w == LargeBouncerWidth;
             SetDrawQuad(firstQuad);
             rotation = an;
-            x = px;
-            y = py;
+            initial_x = x = px;
+            initial_y = y = py;
             UpdateRotation();
             int lastQuad = firstQuad + 4;
             int i = AddAnimationDelayLoopFirstLast(0.04f, Timeline.LoopType.TIMELINE_NO_LOOP, firstQuad, lastQuad);
@@ -280,5 +280,20 @@ namespace CutTheRopeDX.GameMain
 
         /// <summary>Movable object foreground quad.</summary>
         private const int MovableObjQuad = 10;
+
+        /// <summary>Initial grab rotation used when restoring state.</summary>
+        public float initial_rotation;
+
+        /// <summary>Initial X position used when restoring state.</summary>
+        public float initial_x;
+
+        /// <summary>Initial Y position used when restoring state.</summary>
+        public float initial_y;
+
+        /// <summary>Initial rotated-circle binding used when restoring state.</summary>
+        public RotatedCircle initial_rotatedCircle;
+
+        /// <summary>Whether this object would bind to a disc.</summary>
+        public bool bindToDisc;
     }
 }

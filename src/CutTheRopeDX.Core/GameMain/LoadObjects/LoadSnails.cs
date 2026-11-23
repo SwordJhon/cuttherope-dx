@@ -24,8 +24,9 @@ namespace CutTheRopeDX.GameMain
 
             Snail snail = Image.InitializeFromResource(new Snail(), Resources.Img.ObjSnail, 8);
             snail.anchor = 18;
-            snail.x = x;
-            snail.y = y;
+            snail.initial_x = snail.x = x;
+            snail.initial_y = snail.y = y;
+            snail.bindToDisc = GetBoolAttribute(xmlNode, "bindToDisc", false);
             snailobjects.Add(snail);
         }
     }

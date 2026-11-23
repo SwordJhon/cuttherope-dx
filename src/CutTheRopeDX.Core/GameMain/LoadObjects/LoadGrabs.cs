@@ -56,6 +56,7 @@ namespace CutTheRopeDX.GameMain
                 xmlNode.Attribute("bombNumber")?.Value,
                 bombed);
             bool candyPadding = GetBoolAttribute(xmlNode, "candyPadding", defaultValue: true);
+            bool bindToDisc = GetBoolAttribute(xmlNode, "bindToDisc", true);
             Grab grab = new()
             {
                 BombsHighPriority = HasTrueAttribute(xmlNode, "bombsHighPriority"),
@@ -63,6 +64,7 @@ namespace CutTheRopeDX.GameMain
             grab.initial_x = grab.x = hx;
             grab.initial_y = grab.y = hy;
             grab.initial_rotation = 0f;
+            grab.bindToDisc = bindToDisc;
             HookModifiers modifiers = HookModifiers.None;
             if (invisible)
             {

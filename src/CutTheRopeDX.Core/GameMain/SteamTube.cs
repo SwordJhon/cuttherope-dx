@@ -38,8 +38,8 @@ namespace CutTheRopeDX.GameMain
         /// <returns>This instance for chaining.</returns>
         public SteamTube InitWithPositionAngle(Vector position, float angle, float heightScale = 1f)
         {
-            x = position.X;
-            y = position.Y;
+            initial_x = x = position.X;
+            initial_y = y = position.Y;
             HeightScale = heightScale;
             rotation = angle;
             anchor = 18;
@@ -407,6 +407,21 @@ namespace CutTheRopeDX.GameMain
 
         /// <summary>Elapsed time used for sine wave modulation of steam height.</summary>
         private float phase;
+
+        /// <summary>Initial grab rotation used when restoring state.</summary>
+        public float initial_rotation;
+
+        /// <summary>Initial X position used when restoring state.</summary>
+        public float initial_x;
+
+        /// <summary>Initial Y position used when restoring state.</summary>
+        public float initial_y;
+
+        /// <summary>Initial rotated-circle binding used when restoring state.</summary>
+        public RotatedCircle initial_rotatedCircle;
+
+        /// <summary>Whether this object would bind to a disc.</summary>
+        public bool bindToDisc;
 
     }
 }

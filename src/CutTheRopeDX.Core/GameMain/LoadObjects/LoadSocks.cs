@@ -47,8 +47,9 @@ namespace CutTheRopeDX.GameMain
             sock.CreateAnimations(resource);
             sock.scaleX = sock.scaleY = 0.7f;
             sock.DoRestoreCutTransparency();
-            sock.x = (ParseCoordinateIntOrZero(xmlNode.Attribute("x")?.Value) * scale) + offsetX + mapOffsetX;
-            sock.y = (ParseCoordinateIntOrZero(xmlNode.Attribute("y")?.Value) * scale) + offsetY + mapOffsetY;
+            sock.initial_x = sock.x = (ParseCoordinateIntOrZero(xmlNode.Attribute("x")?.Value) * scale) + offsetX + mapOffsetX;
+            sock.initial_y = sock.y = (ParseCoordinateIntOrZero(xmlNode.Attribute("y")?.Value) * scale) + offsetY + mapOffsetY;
+            sock.bindToDisc = GetBoolAttribute(xmlNode, "bindToDisc", false);
             sock.anchor = 10;
             sock.rotationCenterY -= (sock.height / 2f) - 85f;
             sock.SetDrawQuad(pattern);

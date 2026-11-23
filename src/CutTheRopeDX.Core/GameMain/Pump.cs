@@ -71,6 +71,9 @@ namespace CutTheRopeDX.GameMain
         /// </summary>
         public RotatedCircle initial_rotatedCircle;
 
+        /// <summary>Whether this object would bind to a disc.</summary>
+        public bool bindToDisc = true;
+
         /// <inheritdoc />
         public float PositionOnTransporter { get; set; }
 

@@ -813,7 +813,7 @@ namespace CutTheRopeDX.GameMain
                             {
                                 continue;
                             }
-                            if (VectDistance(Vect(grab.x, grab.y), Vect(rotatedCircle.x, rotatedCircle.y)) <= rotatedCircle.sizeInPixels + 5f)
+                            if (grab.bindToDisc && VectDistance(Vect(grab.x, grab.y), Vect(rotatedCircle.x, rotatedCircle.y)) <= rotatedCircle.sizeInPixels + 5f)
                             {
                                 if (grab.initial_rotatedCircle != rotatedCircle)
                                 {
@@ -829,12 +829,13 @@ namespace CutTheRopeDX.GameMain
                                 grab.y = rotatedGrabPos.Y;
                                 grab.SyncRopeAnchor();
                                 grab.ReCalcCircle();
+                                grab.Draw();
                             }
                         }
                         for (int k = 0; k < pumps.Count; k++)
                         {
                             Pump pump = pumps[k];
-                            if (VectDistance(Vect(pump.x, pump.y), Vect(rotatedCircle.x, rotatedCircle.y)) <= rotatedCircle.sizeInPixels + 5f)
+                            if (pump.bindToDisc && VectDistance(Vect(pump.x, pump.y), Vect(rotatedCircle.x, rotatedCircle.y)) <= rotatedCircle.sizeInPixels + 5f)
                             {
                                 if (pump.initial_rotatedCircle != rotatedCircle)
                                 {
@@ -861,7 +862,7 @@ namespace CutTheRopeDX.GameMain
                             {
                                 continue;
                             }
-                            if (VectDistance(Vect(bubble.x, bubble.y), Vect(rotatedCircle.x, rotatedCircle.y)) <= rotatedCircle.sizeInPixels + 10f && CandyBodyForBubbleOrNull(bubble) == null)
+                            if (bubble.bindToDisc && VectDistance(Vect(bubble.x, bubble.y), Vect(rotatedCircle.x, rotatedCircle.y)) <= rotatedCircle.sizeInPixels + 10f && CandyBodyForBubbleOrNull(bubble) == null)
                             {
                                 if (bubble.initial_rotatedCircle != rotatedCircle)
                                 {
@@ -875,6 +876,188 @@ namespace CutTheRopeDX.GameMain
                                 Vector rotatedBubblePos = VectRotateAround(Vect(bubble.initial_x, bubble.initial_y), bubbleAngle, rotatedCircle.x, rotatedCircle.y);
                                 bubble.x = rotatedBubblePos.X;
                                 bubble.y = rotatedBubblePos.Y;
+                            }
+                        }
+                        for (int k = 0; k < bouncers.Count; k++)
+                        {
+                            Bouncer bouncer = bouncers[k];
+                            if (bouncer.bindToDisc && VectDistance(Vect(bouncer.x, bouncer.y), Vect(rotatedCircle.x, rotatedCircle.y)) <= rotatedCircle.sizeInPixels + 5f)
+                            {
+                                if (bouncer.initial_rotatedCircle != rotatedCircle)
+                                {
+                                    bouncer.initial_x = bouncer.x;
+                                    bouncer.initial_y = bouncer.y;
+                                    bouncer.initial_rotatedCircle = rotatedCircle;
+                                    bouncer.initial_rotation = initial_rotation;
+                                }
+                                float bouncerAngle = float.DegreesToRadians(rotatedCircle.rotation) - bouncer.initial_rotation;
+                                bouncerAngle = FBOUND_PI(bouncerAngle);
+                                Vector rotatedBouncerPos = VectRotateAround(Vect(bouncer.initial_x, bouncer.initial_y), bouncerAngle, rotatedCircle.x, rotatedCircle.y);
+                                bouncer.x = rotatedBouncerPos.X;
+                                bouncer.y = rotatedBouncerPos.Y;
+                                bouncer.rotation += float.RadiansToDegrees(rotationDelta);
+                                bouncer.UpdateRotation();
+                            }
+                        }
+                        for (int k = 0; k < tubes.Count; k++)
+                        {
+                            SteamTube tube = tubes[k];
+                            if (tube.bindToDisc && VectDistance(Vect(tube.x, tube.y), Vect(rotatedCircle.x, rotatedCircle.y)) <= rotatedCircle.sizeInPixels + 5f)
+                            {
+                                if (tube.initial_rotatedCircle != rotatedCircle)
+                                {
+                                    tube.initial_x = tube.x;
+                                    tube.initial_y = tube.y;
+                                    tube.initial_rotatedCircle = rotatedCircle;
+                                    tube.initial_rotation = initial_rotation;
+                                }
+                                float tubeAngle = float.DegreesToRadians(rotatedCircle.rotation) - tube.initial_rotation;
+                                tubeAngle = FBOUND_PI(tubeAngle);
+                                Vector rotatedTubePos = VectRotateAround(Vect(tube.initial_x, tube.initial_y), tubeAngle, rotatedCircle.x, rotatedCircle.y);
+                                tube.x = rotatedTubePos.X;
+                                tube.y = rotatedTubePos.Y;
+                                tube.rotation += float.RadiansToDegrees(rotationDelta);
+                            }
+                        }
+                        for (int k = 0; k < rockets.Count; k++)
+                        {
+                            Rocket rocket = rockets[k];
+                            if (rocket.state == Rocket.STATE_ROCKET_IDLE && rocket.bindToDisc && VectDistance(Vect(rocket.x, rocket.y), Vect(rotatedCircle.x, rotatedCircle.y)) <= rotatedCircle.sizeInPixels + 5f)
+                            {
+                                if (rocket.initial_rotatedCircle != rotatedCircle)
+                                {
+                                    rocket.initial_x = rocket.x;
+                                    rocket.initial_y = rocket.y;
+                                    rocket.initial_rotatedCircle = rotatedCircle;
+                                    rocket.initial_rotation = initial_rotation;
+                                }
+                                float rocketAngle = float.DegreesToRadians(rotatedCircle.rotation) - rocket.initial_rotation;
+                                rocketAngle = FBOUND_PI(rocketAngle);
+                                Vector rotatedRocketPos = VectRotateAround(Vect(rocket.initial_x, rocket.initial_y), rocketAngle, rotatedCircle.x, rotatedCircle.y);
+                                rocket.point.prevPos = rocket.point.pos = rotatedRocketPos;
+                                rocket.rotation += float.RadiansToDegrees(rotationDelta);
+                                rocket.RotateWithBB(rocket.rotation);
+                                rocket.UpdateRotation();
+                            }
+                        }
+                        for (int k = 0; k < hands.Count; k++)
+                        {
+                            MechanicalHand hand = hands[k];
+                            if (hand.bindToDisc && VectDistance(Vect(hand.x, hand.y), Vect(rotatedCircle.x, rotatedCircle.y)) <= rotatedCircle.sizeInPixels + 5f)
+                            {
+                                if (hand.initial_rotatedCircle != rotatedCircle)
+                                {
+                                    hand.initial_x = hand.x;
+                                    hand.initial_y = hand.y;
+                                    hand.initial_rotatedCircle = rotatedCircle;
+                                    hand.initial_rotation = initial_rotation;
+                                }
+                                float handAngle = float.DegreesToRadians(rotatedCircle.rotation) - hand.initial_rotation;
+                                handAngle = FBOUND_PI(handAngle);
+                                Vector rotatedHandPos = VectRotateAround(Vect(hand.initial_x, hand.initial_y), handAngle, rotatedCircle.x, rotatedCircle.y);
+                                hand.x = rotatedHandPos.X;
+                                hand.y = rotatedHandPos.Y;
+                                hand.segments[0].rotation += float.RadiansToDegrees(rotationDelta);
+                                hand.Draw();
+                            }
+                        }
+                        for (int k = 0; k < Lantern.AllLanterns.Count; k++)
+                        {
+                            Lantern lantern = Lantern.AllLanterns[k];
+                            if (lantern.bindToDisc && VectDistance(Vect(lantern.x, lantern.y), Vect(rotatedCircle.x, rotatedCircle.y)) <= rotatedCircle.sizeInPixels + 5f)
+                            {
+                                if (lantern.initial_rotatedCircle != rotatedCircle)
+                                {
+                                    lantern.initial_x = lantern.x;
+                                    lantern.initial_y = lantern.y;
+                                    lantern.initial_rotatedCircle = rotatedCircle;
+                                    lantern.initial_rotation = initial_rotation;
+                                }
+                                float lanternAngle = float.DegreesToRadians(rotatedCircle.rotation) - lantern.initial_rotation;
+                                lanternAngle = FBOUND_PI(lanternAngle);
+                                Vector rotatedLanternPos = VectRotateAround(Vect(lantern.initial_x, lantern.initial_y), lanternAngle, rotatedCircle.x, rotatedCircle.y);
+                                lantern.x = rotatedLanternPos.X;
+                                lantern.y = rotatedLanternPos.Y;
+                            }
+                        }
+                        for (int k = 0; k < snailobjects.Count; k++)
+                        {
+                            Snail snail = snailobjects[k];
+                            if (snail.state == Snail.SNAIL_STATE_INACTIVE && snail.bindToDisc && VectDistance(Vect(snail.x, snail.y), Vect(rotatedCircle.x, rotatedCircle.y)) <= rotatedCircle.sizeInPixels + 5f)
+                            {
+                                if (snail.initial_rotatedCircle != rotatedCircle)
+                                {
+                                    snail.initial_x = snail.x;
+                                    snail.initial_y = snail.y;
+                                    snail.initial_rotatedCircle = rotatedCircle;
+                                    snail.initial_rotation = initial_rotation;
+                                }
+                                float snailAngle = float.DegreesToRadians(rotatedCircle.rotation) - snail.initial_rotation;
+                                snailAngle = FBOUND_PI(snailAngle);
+                                Vector rotatedSnailPos = VectRotateAround(Vect(snail.initial_x, snail.initial_y), snailAngle, rotatedCircle.x, rotatedCircle.y);
+                                snail.x = rotatedSnailPos.X;
+                                snail.y = rotatedSnailPos.Y;
+                            }
+                        }
+                        for (int k = 0; k < socks.Count; k++)
+                        {
+                            Sock sock = socks[k];
+                            if (sock.bindToDisc && VectDistance(Vect(sock.x, sock.y), Vect(rotatedCircle.x, rotatedCircle.y)) <= rotatedCircle.sizeInPixels + 5f)
+                            {
+                                if (sock.initial_rotatedCircle != rotatedCircle)
+                                {
+                                    sock.initial_x = sock.x;
+                                    sock.initial_y = sock.y;
+                                    sock.initial_rotatedCircle = rotatedCircle;
+                                    sock.initial_rotation = initial_rotation;
+                                }
+                                float sockAngle = float.DegreesToRadians(rotatedCircle.rotation) - sock.initial_rotation;
+                                sockAngle = FBOUND_PI(sockAngle);
+                                Vector rotatedSockPos = VectRotateAround(Vect(sock.initial_x, sock.initial_y), sockAngle, rotatedCircle.x, rotatedCircle.y);
+                                sock.x = rotatedSockPos.X;
+                                sock.y = rotatedSockPos.Y;
+                                sock.rotation += float.RadiansToDegrees(rotationDelta);
+                                sock.UpdateRotation();
+                            }
+                        }
+                        for (int k = 0; k < spikes.Count; k++)
+                        {
+                            Spikes spike = spikes[k];
+                            if (spike.bindToDisc && VectDistance(Vect(spike.x, spike.y), Vect(rotatedCircle.x, rotatedCircle.y)) <= rotatedCircle.sizeInPixels + 5f)
+                            {
+                                if (spike.initial_rotatedCircle != rotatedCircle)
+                                {
+                                    spike.initial_x = spike.x;
+                                    spike.initial_y = spike.y;
+                                    spike.initial_rotatedCircle = rotatedCircle;
+                                    spike.initial_rotation = initial_rotation;
+                                }
+                                float spikeAngle = float.DegreesToRadians(rotatedCircle.rotation) - spike.initial_rotation;
+                                spikeAngle = FBOUND_PI(spikeAngle);
+                                Vector rotatedSpikePos = VectRotateAround(Vect(spike.initial_x, spike.initial_y), spikeAngle, rotatedCircle.x, rotatedCircle.y);
+                                spike.x = rotatedSpikePos.X;
+                                spike.y = rotatedSpikePos.Y;
+                                spike.rotation += float.RadiansToDegrees(rotationDelta);
+                                spike.UpdateRotation();
+                            }
+                        }
+                        for (int k = 0; k < stars.Count; k++)
+                        {
+                            Star star = stars[k];
+                            if (star.bindToDisc && VectDistance(Vect(star.x, star.y), Vect(rotatedCircle.x, rotatedCircle.y)) <= rotatedCircle.sizeInPixels + 5f)
+                            {
+                                if (star.initial_rotatedCircle != rotatedCircle)
+                                {
+                                    star.initial_x = star.x;
+                                    star.initial_y = star.y;
+                                    star.initial_rotatedCircle = rotatedCircle;
+                                    star.initial_rotation = initial_rotation;
+                                }
+                                float starAngle = float.DegreesToRadians(rotatedCircle.rotation) - star.initial_rotation;
+                                starAngle = FBOUND_PI(starAngle);
+                                Vector rotatedStarPos = VectRotateAround(Vect(star.initial_x, star.initial_y), starAngle, rotatedCircle.x, rotatedCircle.y);
+                                star.x = rotatedStarPos.X;
+                                star.y = rotatedStarPos.Y;
                             }
                         }
                         for (int targetIndex = 0; targetIndex < targets.Count; targetIndex++)

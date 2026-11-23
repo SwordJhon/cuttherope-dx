@@ -26,6 +26,7 @@ namespace CutTheRopeDX.GameMain
             float a = ParseFloatOrDefault(xmlNode.Attribute("moveAngle")?.Value, v ? DEG_90 : 0);
             float o = ParseFloatOrZero(xmlNode.Attribute("moveOffset")?.Value) * scale;
             Bouncer bouncer = new Bouncer().InitWithPosXYWidthAndAngle(x, y, size, angle);
+            bouncer.bindToDisc = GetBoolAttribute(xmlNode, "bindToDisc", false);
             bouncer.ParseMover(xmlNode);
             GrabAxes axes = GrabAxisResolver.Resolve(
                 new GrabAxisRequest(

@@ -630,7 +630,7 @@ namespace CutTheRopeDX.GameMain
         public AutoRadiusSource RadiusSource => Source as AutoRadiusSource;
 
         /// <summary>Whether to add <see cref="ActivePhysicsConstants.CandyGrabPadding"/> to an auto-attaching radius grab.</summary>
-        public bool doCandyPadding;
+        public bool doCandyPadding = true;
 
         /// <summary>
         /// Gets or sets whether this radius grab prefers bombs and axes over candy when it picks
@@ -692,6 +692,9 @@ namespace CutTheRopeDX.GameMain
 
         /// <summary>Initial rotated-circle binding used when restoring state.</summary>
         public RotatedCircle initial_rotatedCircle;
+
+        /// <summary>Whether this object would bind to a disc.</summary>
+        public bool bindToDisc = true;
 
         /// <summary>Gets this grab's gun source, or <see langword="null"/> when it is not a gun.</summary>
         public GunSource GunSource => Source as GunSource;

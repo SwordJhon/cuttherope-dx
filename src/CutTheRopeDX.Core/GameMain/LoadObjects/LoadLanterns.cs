@@ -24,6 +24,7 @@ namespace CutTheRopeDX.GameMain
             _ = bool.TryParse(xmlNode.Attribute("candyCaptured")?.Value, out bool isCandyCaptured);
 
             Lantern lantern = new Lantern().InitWithPosition(Vect(x, y));
+            lantern.bindToDisc = GetBoolAttribute(xmlNode, "bindToDisc", false);
             lantern.ParseMover(xmlNode);
             if (isCandyCaptured)
             {
