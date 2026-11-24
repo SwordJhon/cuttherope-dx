@@ -20,7 +20,9 @@ namespace CutTheRopeDX.GameMain
             float x = (ParseCoordinateIntOrZero(xmlNode.Attribute("x")?.Value) * scale) + offsetX + mapOffsetX;
             float y = (ParseCoordinateIntOrZero(xmlNode.Attribute("y")?.Value) * scale) + offsetY + mapOffsetY;
             float angle = ParseFloatOrZero(xmlNode.Attribute("angle")?.Value);
-            SteamTube steamTube = new SteamTube().InitWithPositionAngle(Vect(x, y), angle, scale);
+            bool hasValve = GetBoolAttribute(xmlNode, "hasValve", true);
+            int steamState = ParseIntOrZero(xmlNode.Attribute("steamState")?.Value);
+            SteamTube steamTube = new SteamTube().InitWithPositionAngle(Vect(x, y), angle, scale, hasValve, steamState);
             steamTube.bindToDisc = GetBoolAttribute(xmlNode, "bindToDisc", false);
             tubes.Add(steamTube);
         }

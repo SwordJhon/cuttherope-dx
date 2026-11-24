@@ -35,13 +35,16 @@ namespace CutTheRopeDX.GameMain
         /// </param>
         /// <param name="position">World-space position of the tube base.</param>
         /// <param name="angle">Rotation angle in degrees.</param>
+        /// <param name="makeValve">Whether the player is able to change the <see cref="steamState"/>.</param>
+        /// <param name="startingSteamState">The starting <see cref="steamState"/>.</param>
         /// <returns>This instance for chaining.</returns>
-        public SteamTube InitWithPositionAngle(Vector position, float angle, float heightScale = 1f)
+        public SteamTube InitWithPositionAngle(Vector position, float angle, float heightScale = 1f, bool makeValve = true, int startingSteamState = 0)
         {
             initial_x = x = position.X;
             initial_y = y = position.Y;
             HeightScale = heightScale;
             rotation = angle;
+            steamState = startingSteamState;
             anchor = 18;
             steamBack = new BaseElement();
             steamBack.anchor = steamBack.parentAnchor = 18;
@@ -55,23 +58,26 @@ namespace CutTheRopeDX.GameMain
             _ = AddChild(tube);
             width = tube.width;
             height = tube.height;
-            valve = Image.FromResource(Resources.Img.ObjPipe, 1);
-            valve.x = 0f;
-            valve.y = 27f * heightScale;
-            valve.anchor = 18;
-            valve.parentAnchor = 18;
-            _ = AddChild(valve);
             _ = AddChild(steamBack);
             _ = AddChild(steamFront);
+            if (makeValve)
+            {
+                valve = Image.FromResource(Resources.Img.ObjPipe, 1);
+                valve.x = 0f;
+                valve.y = 27f * heightScale;
+                valve.anchor = 18;
+                valve.parentAnchor = 18;
+                _ = AddChild(valve);
+                Timeline timeline = new Timeline().InitWithMaxKeyFramesOnTrack(2);
+                timeline.AddKeyFrame(KeyFrame.MakeRotation(0, KeyFrame.TransitionType.FRAME_TRANSITION_LINEAR, 0));
+                timeline.AddKeyFrame(KeyFrame.MakeRotation(180, KeyFrame.TransitionType.FRAME_TRANSITION_LINEAR, 0.55f));
+                valve.AddTimelinewithID(timeline, 0);
+                timeline = new Timeline().InitWithMaxKeyFramesOnTrack(2);
+                timeline.AddKeyFrame(KeyFrame.MakeRotation(0, KeyFrame.TransitionType.FRAME_TRANSITION_LINEAR, 0));
+                timeline.AddKeyFrame(KeyFrame.MakeRotation(-180, KeyFrame.TransitionType.FRAME_TRANSITION_LINEAR, 0.55f));
+                valve.AddTimelinewithID(timeline, 1);
+            }
             AdjustSteam();
-            Timeline timeline = new Timeline().InitWithMaxKeyFramesOnTrack(2);
-            timeline.AddKeyFrame(KeyFrame.MakeRotation(0, KeyFrame.TransitionType.FRAME_TRANSITION_LINEAR, 0));
-            timeline.AddKeyFrame(KeyFrame.MakeRotation(180, KeyFrame.TransitionType.FRAME_TRANSITION_LINEAR, 0.55f));
-            valve.AddTimelinewithID(timeline, 0);
-            timeline = new Timeline().InitWithMaxKeyFramesOnTrack(2);
-            timeline.AddKeyFrame(KeyFrame.MakeRotation(0, KeyFrame.TransitionType.FRAME_TRANSITION_LINEAR, 0));
-            timeline.AddKeyFrame(KeyFrame.MakeRotation(-180, KeyFrame.TransitionType.FRAME_TRANSITION_LINEAR, 0.55f));
-            valve.AddTimelinewithID(timeline, 1);
             return this;
         }
 
@@ -82,7 +88,7 @@ namespace CutTheRopeDX.GameMain
         {
             PreDraw();
             tube.Draw();
-            valve.Draw();
+            valve?.Draw();
             steamBack.Draw();
             RestoreTransformations(this);
         }
@@ -142,9 +148,9 @@ namespace CutTheRopeDX.GameMain
             float touchZone = VectLength(VectSub(Vect(tx, ty), vector));
             // The Windows Phone reach of 40 grows with the tube like the valve offset above it, or
             // the valve would be a third of its authored size to tap in DX's larger world.
-            if (touchZone < 40f * HeightScale)
+            if (touchZone < 40f * HeightScale && valve != null)
             {
-                int valveTimelineIndex = 0;
+                int valveTimelineIndex;
                 switch (steamState)
                 {
                     case 0:
@@ -163,6 +169,9 @@ namespace CutTheRopeDX.GameMain
                         SoundMgr.PlaySound(Resources.Snd.SteamEnd);
                         break;
                     default:
+                        steamState = 0;
+                        valveTimelineIndex = 0;
+                        SoundMgr.PlaySound(Resources.Snd.SteamStart);
                         break;
                 }
                 AdjustSteam();
