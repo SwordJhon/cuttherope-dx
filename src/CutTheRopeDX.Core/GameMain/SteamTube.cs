@@ -12,7 +12,7 @@ namespace CutTheRopeDX.GameMain
     /// <summary>
     /// Steam tube object that emits animated steam puffs based on its valve state.
     /// </summary>
-    internal sealed class SteamTube : BaseElement, ITimelineDelegate, ITransporterItem, ITransporterBindAware, ITransporterScaleAware
+    internal sealed class SteamTube : GameObject, ITimelineDelegate, ITransporterItem, ITransporterBindAware, ITransporterScaleAware
     {
         /// <summary>
         /// Initializes a new steam tube with default state and an empty delayed dispatcher.
@@ -50,7 +50,7 @@ namespace CutTheRopeDX.GameMain
             steamBack.anchor = steamBack.parentAnchor = 18;
             steamFront = new BaseElement();
             steamFront.anchor = steamFront.parentAnchor = 18;
-            tube = Image.FromResource(Resources.Img.ObjPipe, 0);
+            tube = FromResource(Resources.Img.ObjPipe, 0);
             tube.x = 0f;
             tube.y = 0f;
             tube.anchor = 10;
@@ -62,7 +62,7 @@ namespace CutTheRopeDX.GameMain
             _ = AddChild(steamFront);
             if (makeValve)
             {
-                valve = Image.FromResource(Resources.Img.ObjPipe, 1);
+                valve = FromResource(Resources.Img.ObjPipe, 1);
                 valve.x = 0f;
                 valve.y = 27f * heightScale;
                 valve.anchor = 18;
@@ -361,7 +361,7 @@ namespace CutTheRopeDX.GameMain
                     {
                         horizontalOffset *= -steamState;
                     }
-                    Animation animation = Image.InitializeFromResource(new Animation(), Resources.Img.ObjPipe);
+                    Animation animation = InitializeFromResource(new Animation(), Resources.Img.ObjPipe);
                     animation.DoRestoreCutTransparency();
                     _ = animation.AddAnimationDelayLoopFirstLast(frameDelay, Timeline.LoopType.TIMELINE_REPLAY, animationStartFrame, animationEndFrame);
                     animation.anchor = animation.parentAnchor = 18;

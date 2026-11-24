@@ -25,6 +25,7 @@ namespace CutTheRopeDX.GameMain
             SteamTube steamTube = new SteamTube().InitWithPositionAngle(Vect(x, y), angle, scale, hasValve, steamState);
             steamTube.bindToDisc = GetBoolAttribute(xmlNode, "bindToDisc", false);
             steamTube.rotateInDisc = GetBoolAttribute(xmlNode, "rotateInDisc", true);
+            steamTube.ParseMover(xmlNode);
             tubes.Add(steamTube);
         }
     }
