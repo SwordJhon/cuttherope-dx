@@ -37,6 +37,7 @@ namespace CutTheRopeDX.GameMain
             rocket.initial_y = rocket.y = (ParseCoordinateIntOrZero(xmlNode.Attribute("y")?.Value) * scale) + offsetY + mapOffsetY;
             rocket.rotation = ParseFloatOrZero(xmlNode.Attribute("angle")?.Value) - DEG_180;
             rocket.bindToDisc = GetBoolAttribute(xmlNode, "bindToDisc", false);
+            rocket.rotateInDisc = GetBoolAttribute(xmlNode, "rotateInDisc", true);
             rocket.impulse = ParseFloatOrZero(xmlNode.Attribute("impulse")?.Value);
             rocket.impulseFactor = ParseFloatOrZero(xmlNode.Attribute("impulseFactor")?.Value);
             if (rocket.impulseFactor == 0f)

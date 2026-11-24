@@ -417,7 +417,7 @@ namespace CutTheRopeDX.GameMain
         /// <summary>Elapsed time used for sine wave modulation of steam height.</summary>
         private float phase;
 
-        /// <summary>Initial grab rotation used when restoring state.</summary>
+        /// <summary>Initial tube rotation used when restoring state.</summary>
         public float initial_rotation;
 
         /// <summary>Initial X position used when restoring state.</summary>
@@ -432,5 +432,7 @@ namespace CutTheRopeDX.GameMain
         /// <summary>Whether this object would bind to a disc.</summary>
         public bool bindToDisc;
 
+        /// <summary>Whether this object rotates in a disc.</summary>
+        public bool rotateInDisc;
     }
 }

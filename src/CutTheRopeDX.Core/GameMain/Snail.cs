@@ -324,7 +324,7 @@ namespace CutTheRopeDX.GameMain
         /// <summary>Sleep animation played when the snail detaches from candy.</summary>
         private Animation sleep;
 
-        /// <summary>Initial grab rotation used when restoring state.</summary>
+        /// <summary>Initial snail rotation used when restoring state.</summary>
         public float initial_rotation;
 
         /// <summary>Initial X position used when restoring state.</summary>

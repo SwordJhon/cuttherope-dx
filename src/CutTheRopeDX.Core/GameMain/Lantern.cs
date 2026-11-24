@@ -416,7 +416,7 @@ namespace CutTheRopeDX.GameMain
             FireBounce
         }
 
-        /// <summary>Initial grab rotation used when restoring state.</summary>
+        /// <summary>Initial lantern rotation used when restoring state.</summary>
         public float initial_rotation;
 
         /// <summary>Initial X position used when restoring state.</summary>

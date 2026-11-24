@@ -849,7 +849,10 @@ namespace CutTheRopeDX.GameMain
                                 Vector rotatedPumpPos = VectRotateAround(Vect(pump.initial_x, pump.initial_y), pumpAngle, rotatedCircle.x, rotatedCircle.y);
                                 pump.x = rotatedPumpPos.X;
                                 pump.y = rotatedPumpPos.Y;
-                                pump.rotation += float.RadiansToDegrees(rotationDelta);
+                                if (pump.rotateInDisc)
+                                {
+                                    pump.rotation += float.RadiansToDegrees(rotationDelta);
+                                }
                                 pump.UpdateRotation();
                             }
                         }
@@ -895,7 +898,10 @@ namespace CutTheRopeDX.GameMain
                                 Vector rotatedBouncerPos = VectRotateAround(Vect(bouncer.initial_x, bouncer.initial_y), bouncerAngle, rotatedCircle.x, rotatedCircle.y);
                                 bouncer.x = rotatedBouncerPos.X;
                                 bouncer.y = rotatedBouncerPos.Y;
-                                bouncer.rotation += float.RadiansToDegrees(rotationDelta);
+                                if (bouncer.rotateInDisc)
+                                {
+                                    bouncer.rotation += float.RadiansToDegrees(rotationDelta);
+                                }
                                 bouncer.UpdateRotation();
                             }
                         }
@@ -916,7 +922,10 @@ namespace CutTheRopeDX.GameMain
                                 Vector rotatedTubePos = VectRotateAround(Vect(tube.initial_x, tube.initial_y), tubeAngle, rotatedCircle.x, rotatedCircle.y);
                                 tube.x = rotatedTubePos.X;
                                 tube.y = rotatedTubePos.Y;
-                                tube.rotation += float.RadiansToDegrees(rotationDelta);
+                                if (tube.rotateInDisc)
+                                {
+                                    tube.rotation += float.RadiansToDegrees(rotationDelta);
+                                }
                             }
                         }
                         for (int k = 0; k < rockets.Count; k++)
@@ -935,7 +944,10 @@ namespace CutTheRopeDX.GameMain
                                 rocketAngle = FBOUND_PI(rocketAngle);
                                 Vector rotatedRocketPos = VectRotateAround(Vect(rocket.initial_x, rocket.initial_y), rocketAngle, rotatedCircle.x, rotatedCircle.y);
                                 rocket.point.prevPos = rocket.point.pos = rotatedRocketPos;
-                                rocket.rotation += float.RadiansToDegrees(rotationDelta);
+                                if (rocket.rotateInDisc)
+                                {
+                                    rocket.rotation += float.RadiansToDegrees(rotationDelta);
+                                }
                                 rocket.RotateWithBB(rocket.rotation);
                                 rocket.UpdateRotation();
                             }
@@ -957,7 +969,10 @@ namespace CutTheRopeDX.GameMain
                                 Vector rotatedHandPos = VectRotateAround(Vect(hand.initial_x, hand.initial_y), handAngle, rotatedCircle.x, rotatedCircle.y);
                                 hand.x = rotatedHandPos.X;
                                 hand.y = rotatedHandPos.Y;
-                                hand.segments[0].rotation += float.RadiansToDegrees(rotationDelta);
+                                if (hand.rotateInDisc)
+                                {
+                                    hand.segments[0].rotation += float.RadiansToDegrees(rotationDelta);
+                                }
                                 hand.Draw();
                             }
                         }
@@ -1016,7 +1031,10 @@ namespace CutTheRopeDX.GameMain
                                 Vector rotatedSockPos = VectRotateAround(Vect(sock.initial_x, sock.initial_y), sockAngle, rotatedCircle.x, rotatedCircle.y);
                                 sock.x = rotatedSockPos.X;
                                 sock.y = rotatedSockPos.Y;
-                                sock.rotation += float.RadiansToDegrees(rotationDelta);
+                                if (sock.rotateInDisc)
+                                {
+                                    sock.rotation += float.RadiansToDegrees(rotationDelta);
+                                }
                                 sock.UpdateRotation();
                             }
                         }
@@ -1037,7 +1055,11 @@ namespace CutTheRopeDX.GameMain
                                 Vector rotatedSpikePos = VectRotateAround(Vect(spike.initial_x, spike.initial_y), spikeAngle, rotatedCircle.x, rotatedCircle.y);
                                 spike.x = rotatedSpikePos.X;
                                 spike.y = rotatedSpikePos.Y;
-                                spike.rotation += float.RadiansToDegrees(rotationDelta);
+                                if (spike.rotateInDisc)
+                                {
+                                    spike.rotation += float.RadiansToDegrees(rotationDelta);
+                                    spike.origRotation += float.RadiansToDegrees(rotationDelta);
+                                }
                                 spike.UpdateRotation();
                             }
                         }

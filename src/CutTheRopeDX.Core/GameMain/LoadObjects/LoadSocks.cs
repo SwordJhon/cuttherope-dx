@@ -1,6 +1,5 @@
 using System.Xml.Linq;
 
-using CutTheRopeDX.Framework.Core;
 using CutTheRopeDX.Framework.Visual;
 
 using static CutTheRopeDX.Helpers.ParsingHelpers;
@@ -25,7 +24,6 @@ namespace CutTheRopeDX.GameMain
         /// <param name="mapOffsetY">The additional map Y offset applied during loading.</param>
         private void LoadSock(XElement xmlNode, float scale, float offsetX, float offsetY, int mapOffsetX, int mapOffsetY)
         {
-            RootController root = Application.SharedRootController();
             // Pairing uses the group exactly as the level authored it; only the art lookups
             // below round a malformed one up into range.
             int group = ParseIntOrZero(xmlNode.Attribute("group")?.Value);
@@ -50,6 +48,7 @@ namespace CutTheRopeDX.GameMain
             sock.initial_x = sock.x = (ParseCoordinateIntOrZero(xmlNode.Attribute("x")?.Value) * scale) + offsetX + mapOffsetX;
             sock.initial_y = sock.y = (ParseCoordinateIntOrZero(xmlNode.Attribute("y")?.Value) * scale) + offsetY + mapOffsetY;
             sock.bindToDisc = GetBoolAttribute(xmlNode, "bindToDisc", false);
+            sock.rotateInDisc = GetBoolAttribute(xmlNode, "rotateInDisc", true);
             sock.anchor = 10;
             sock.rotationCenterY -= (sock.height / 2f) - 85f;
             sock.SetDrawQuad(pattern);
@@ -60,10 +59,6 @@ namespace CutTheRopeDX.GameMain
             {
                 sock.mover.angle_ += DEG_90;
                 sock.mover.angle_initial = sock.mover.angle_;
-                if (root.Pack == 3 && root.Level == 24)
-                {
-                    sock.mover.use_angle_initial = true;
-                }
             }
             sock.UpdateRotation();
             socks.Add(sock);

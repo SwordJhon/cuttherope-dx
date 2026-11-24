@@ -389,7 +389,7 @@ namespace CutTheRopeDX.GameMain
         /// <summary>Night-mode light-down transition animation.</summary>
         private Animation lightDownAnim;
 
-        /// <summary>Initial grab rotation used when restoring state.</summary>
+        /// <summary>Initial star rotation used when restoring state.</summary>
         public float initial_rotation;
 
         /// <summary>Initial X position used when restoring state.</summary>

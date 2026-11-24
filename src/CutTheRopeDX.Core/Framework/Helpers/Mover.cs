@@ -79,7 +79,9 @@ namespace CutTheRopeDX.Framework.Helpers
                 angle_ = angle,
             };
             float startAngle = ParseFloatOrZero(xml.Attribute("startAngle")?.Value);
+            _ = bool.TryParse(xml.Attribute("lockAngle")?.Value, out bool lockAngle);
             mover.angle_initial = mover.angle_;
+            mover.use_angle_initial = lockAngle;
             mover.SetPathFromStringandStart(pathString, start, startAngle);
             mover.Start();
             return mover;

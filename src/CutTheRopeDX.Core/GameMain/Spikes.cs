@@ -332,7 +332,7 @@ namespace CutTheRopeDX.GameMain
         private bool spikesNormal;
 
         /// <summary>Original rotation in degrees.</summary>
-        private float origRotation;
+        public float origRotation;
 
         /// <summary>Button used to rotate linked spike sets.</summary>
         public Button rotateButton;
@@ -439,7 +439,7 @@ namespace CutTheRopeDX.GameMain
         /// <summary>Extendable spikes' alt spike quad.</summary>
         private const int exSpikeQuadAlt = 4;
 
-        /// <summary>Initial grab rotation used when restoring state.</summary>
+        /// <summary>Initial spikes rotation used when restoring state.</summary>
         public float initial_rotation;
 
         /// <summary>Initial X position used when restoring state.</summary>
@@ -453,5 +453,8 @@ namespace CutTheRopeDX.GameMain
 
         /// <summary>Whether this object would bind to a disc.</summary>
         public bool bindToDisc;
+
+        /// <summary>Whether this object rotates in a disc.</summary>
+        public bool rotateInDisc = true;
     }
 }

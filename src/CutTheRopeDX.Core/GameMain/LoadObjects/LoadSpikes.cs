@@ -38,6 +38,7 @@ namespace CutTheRopeDX.GameMain
             int spikesAmount = ParseIntOrDefault(xmlNode.Attribute("spikesAmount")?.Value, -1);
             Spikes spikes = new Spikes().InitWithPosXYWidthAndAngleToggled(px, py, w, an, toggledState, toggledAn, toggledDurMult, stickLength, spikesAmount);
             spikes.bindToDisc = GetBoolAttribute(xmlNode, "bindToDisc", false);
+            spikes.rotateInDisc = GetBoolAttribute(xmlNode, "rotateInDisc", toggledState <= 0);
             spikes.ParseMover(xmlNode);
             if (toggledState != 0)
             {

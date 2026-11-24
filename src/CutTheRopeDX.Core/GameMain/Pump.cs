@@ -74,6 +74,9 @@ namespace CutTheRopeDX.GameMain
         /// <summary>Whether this object would bind to a disc.</summary>
         public bool bindToDisc = true;
 
+        /// <summary>Whether this object rotates in a disc.</summary>
+        public bool rotateInDisc = true;
+
         /// <inheritdoc />
         public float PositionOnTransporter { get; set; }
 

@@ -247,7 +247,7 @@ namespace CutTheRopeDX.GameMain
             return 30f * ScalingCompensation;
         }
 
-        /// <summary>Initial grab rotation used when restoring state.</summary>
+        /// <summary>Initial sock rotation used when restoring state.</summary>
         public float initial_rotation;
 
         /// <summary>Initial X position used when restoring state.</summary>
@@ -261,5 +261,8 @@ namespace CutTheRopeDX.GameMain
 
         /// <summary>Whether this object would bind to a disc.</summary>
         public bool bindToDisc;
+
+        /// <summary>Whether this object rotates in a disc.</summary>
+        public bool rotateInDisc = true;
     }
 }

@@ -23,7 +23,8 @@ namespace CutTheRopeDX.GameMain
             {
                 x = (ParseCoordinateIntOrZero(xmlNode.Attribute("x")?.Value) * scale) + offsetX + mapOffsetX,
                 y = (ParseCoordinateIntOrZero(xmlNode.Attribute("y")?.Value) * scale) + offsetY + mapOffsetY,
-                bindToDisc = GetBoolAttribute(xmlNode, "bindToDisc", false)
+                bindToDisc = GetBoolAttribute(xmlNode, "bindToDisc", false),
+                rotateInDisc = GetBoolAttribute(xmlNode, "rotateInDisc", true)
             };
 
             CalculateTopLeft(hand);

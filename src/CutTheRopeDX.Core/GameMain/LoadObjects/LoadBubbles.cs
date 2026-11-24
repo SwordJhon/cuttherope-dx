@@ -30,6 +30,8 @@ namespace CutTheRopeDX.GameMain
             bubble.bindToDisc = GetBoolAttribute(xmlNode, "bindToDisc", true);
             bubble.anchor = 18;
             bubble.popped = false;
+            bubble.ParseMover(xmlNode);
+            bubble.withoutShadow = !GetBoolAttribute(xmlNode, "leaveStain", true);
             Image image = Image.FromResource(Resources.Img.ObjBubble, 0);
             image.DoRestoreCutTransparency();
             image.parentAnchor = image.anchor = 18;

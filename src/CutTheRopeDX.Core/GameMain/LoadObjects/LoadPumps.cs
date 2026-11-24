@@ -28,9 +28,16 @@ namespace CutTheRopeDX.GameMain
             pump.initial_rotation = 0f;
             pump.initial_rotatedCircle = null;
             pump.bindToDisc = GetBoolAttribute(xmlNode, "bindToDisc", true);
-            pump.rotation = ParseFloatOrZero(xmlNode.Attribute("angle")?.Value) + DEG_90;
-            pump.UpdateRotation();
+            pump.rotateInDisc = GetBoolAttribute(xmlNode, "rotateInDisc", true);
             pump.anchor = 18;
+            pump.ParseMover(xmlNode);
+            pump.rotation += DEG_90;
+            if (pump.mover != null)
+            {
+                pump.mover.angle_ += DEG_90;
+                pump.mover.angle_initial = pump.mover.angle_;
+            }
+            pump.UpdateRotation();
             pumps.Add(pump);
         }
     }
