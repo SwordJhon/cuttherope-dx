@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<map>
+    <layer name="settings">
+        <map width="320" height="480" />
+        <gameDesign ropePhysicsSpeed="1" />
+    </layer>
+    <layer name="Objects">
+        <target x="160" y="-1000" />
+        <grab x="160" y="0" length="0" radius="-1" invisible="true" />
+        <candy x="160" y="-1" />
+        <rotatedCircle x="160" y="240" size="140" handleAngle="90" oneHandle="false" />
+        <pump x="280" y="240" bindToDisc="true" rotateInDisc="false" />
+        <bouncer x="160" y="340" size="1" bindToDisc="true" rotateInDisc="false" />
+        <spikes x="160" y="300" size="1" bindToDisc="true" rotateInDisc="false" />
+        <rocket x="40" y="240" bindToDisc="true" rotateInDisc="false" />
+        <steamTube x="100" y="240" bindToDisc="true" rotateInDisc="true" />
+        <hand x="160" y="180" segmentsCount="2" bindToDisc="true" rotateInDisc="false"
+            segment1Angle="090" segment1Length="60" segment1Rotatable="true"
+            segment2Angle="270" segment2Length="60" segment2Rotatable="true" />
+        <sock x="100" y="180" bindToDisc="true" angle="0" rotateInDisc="false" />
+        <sock x="220" y="320" bindToDisc="true" angle="270" rotateInDisc="false" />
+        <steamTube x="260" y="140" bindToDisc="true" angle="0" rotateInDisc="false" />
+    </layer>
+</map>
