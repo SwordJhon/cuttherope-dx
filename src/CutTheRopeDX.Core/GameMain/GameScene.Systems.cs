@@ -492,13 +492,13 @@ namespace CutTheRopeDX.GameMain
             {
                 timeline.AddKeyFrame(KeyFrame.MakePos((int)g.Spider.Animation.x, (int)g.Spider.Animation.y, KeyFrame.TransitionType.FRAME_TRANSITION_EASE_OUT, 0));
                 timeline.AddKeyFrame(KeyFrame.MakePos((int)g.Spider.Animation.x, (int)(g.Spider.Animation.y + 50), KeyFrame.TransitionType.FRAME_TRANSITION_EASE_OUT, 0.3f));
-                timeline.AddKeyFrame(KeyFrame.MakePos((int)g.Spider.Animation.x, (int)(g.Spider.Animation.y - SCREEN_HEIGHT), KeyFrame.TransitionType.FRAME_TRANSITION_EASE_IN, 1));
+                timeline.AddKeyFrame(KeyFrame.MakePos((int)g.Spider.Animation.x, (int)(g.Spider.Animation.y - MathF.Max(cameraWindow.h, SCREEN_HEIGHT)), KeyFrame.TransitionType.FRAME_TRANSITION_EASE_IN, 1));
             }
             else
             {
                 timeline.AddKeyFrame(KeyFrame.MakePos((int)g.Spider.Animation.x, (int)g.Spider.Animation.y, KeyFrame.TransitionType.FRAME_TRANSITION_EASE_OUT, 0));
                 timeline.AddKeyFrame(KeyFrame.MakePos((int)g.Spider.Animation.x, (int)(g.Spider.Animation.y - 50), KeyFrame.TransitionType.FRAME_TRANSITION_EASE_OUT, 0.3f));
-                timeline.AddKeyFrame(KeyFrame.MakePos((int)g.Spider.Animation.x, (int)(g.Spider.Animation.y + SCREEN_HEIGHT), KeyFrame.TransitionType.FRAME_TRANSITION_EASE_IN, 1));
+                timeline.AddKeyFrame(KeyFrame.MakePos((int)g.Spider.Animation.x, (int)(g.Spider.Animation.y + MathF.Max(cameraWindow.h, SCREEN_HEIGHT)), KeyFrame.TransitionType.FRAME_TRANSITION_EASE_IN, 1));
             }
             timeline.AddKeyFrame(KeyFrame.MakeRotation(0, KeyFrame.TransitionType.FRAME_TRANSITION_LINEAR, 0));
             timeline.AddKeyFrame(KeyFrame.MakeRotation(RND_RANGE(-120, 120), KeyFrame.TransitionType.FRAME_TRANSITION_LINEAR, 1));
@@ -549,13 +549,13 @@ namespace CutTheRopeDX.GameMain
             {
                 timeline.AddKeyFrame(KeyFrame.MakePos((int)sg.Spider.Animation.x, (int)(sg.Spider.Animation.y - 10), KeyFrame.TransitionType.FRAME_TRANSITION_EASE_OUT, 0));
                 timeline.AddKeyFrame(KeyFrame.MakePos((int)sg.Spider.Animation.x, (int)(sg.Spider.Animation.y + 70), KeyFrame.TransitionType.FRAME_TRANSITION_EASE_OUT, 0.3f));
-                timeline.AddKeyFrame(KeyFrame.MakePos((int)sg.Spider.Animation.x, (int)(sg.Spider.Animation.y - SCREEN_HEIGHT), KeyFrame.TransitionType.FRAME_TRANSITION_EASE_IN, 1));
+                timeline.AddKeyFrame(KeyFrame.MakePos((int)sg.Spider.Animation.x, (int)(sg.Spider.Animation.y - MathF.Max(cameraWindow.h, SCREEN_HEIGHT)), KeyFrame.TransitionType.FRAME_TRANSITION_EASE_IN, 1));
             }
             else
             {
                 timeline.AddKeyFrame(KeyFrame.MakePos((int)sg.Spider.Animation.x, (int)(sg.Spider.Animation.y - 10), KeyFrame.TransitionType.FRAME_TRANSITION_EASE_OUT, 0));
                 timeline.AddKeyFrame(KeyFrame.MakePos((int)sg.Spider.Animation.x, (int)(sg.Spider.Animation.y - 70), KeyFrame.TransitionType.FRAME_TRANSITION_EASE_OUT, 0.3f));
-                timeline.AddKeyFrame(KeyFrame.MakePos((int)sg.Spider.Animation.x, (int)(sg.Spider.Animation.y + SCREEN_HEIGHT), KeyFrame.TransitionType.FRAME_TRANSITION_EASE_IN, 1));
+                timeline.AddKeyFrame(KeyFrame.MakePos((int)sg.Spider.Animation.x, (int)(sg.Spider.Animation.y + MathF.Max(cameraWindow.h, SCREEN_HEIGHT)), KeyFrame.TransitionType.FRAME_TRANSITION_EASE_IN, 1));
             }
             image.AddTimelinewithID(timeline, 0);
             image.PlayTimeline(0);

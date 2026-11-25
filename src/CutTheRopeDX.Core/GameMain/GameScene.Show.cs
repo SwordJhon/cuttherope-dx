@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using System.Xml.Linq;
 
@@ -224,7 +225,7 @@ namespace CutTheRopeDX.GameMain
             ConstrainedPoint restingFocus = CameraFocusPoint();
             Vector resting = BoundedCameraPosition(
                 restingFocus.pos.X - (SCREEN_WIDTH / 2f),
-                restingFocus.pos.Y - (SCREEN_HEIGHT / 2f));
+                restingFocus.pos.Y - (MathF.Min(cameraWindow.h, SCREEN_HEIGHT) / 2f));
             camera.MoveToXYImmediate(resting.X, resting.Y, true);
             ApplyCameraFit(snapshot);
         }

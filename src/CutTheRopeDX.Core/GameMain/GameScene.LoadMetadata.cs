@@ -107,7 +107,7 @@ namespace CutTheRopeDX.GameMain
                                 {
                                     CreateEarthImageWithOffsetXY(back.width, 0f);
                                 }
-                                if (mapHeight > SCREEN_HEIGHT)
+                                if (mapHeight > (mapHeight > cameraWindow.h ? SCREEN_HEIGHT : cameraWindow.h))
                                 {
                                     CreateEarthImageWithOffsetXY(0f, back.height);
                                 }

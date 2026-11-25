@@ -401,7 +401,7 @@ namespace CutTheRopeDX.GameMain
             // down and to the right and leave the far edges to the repeat. It stays put in the
             // world as the camera moves, so a level taller than the screen still scrolls past it.
             back.x = (SCREEN_WIDTH / 2f / backgroundScale) - (backTexture._realWidth / 2f);
-            back.y = (SCREEN_HEIGHT / 2f / backgroundScale) - (backTexture._realHeight / 2f);
+            back.y = ((mapHeight < cameraWindow.h ? SCREEN_HEIGHT : cameraWindow.h) / 2f / backgroundScale) - (backTexture._realHeight / 2f);
             gravityState.RelayoutEarthAnimations(back.x, back.y);
         }
 

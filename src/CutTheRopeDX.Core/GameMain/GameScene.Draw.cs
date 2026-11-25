@@ -48,7 +48,7 @@ namespace CutTheRopeDX.GameMain
                 backTexture?._realWidth ?? 0,
                 pos.X,
                 SCREEN_WIDTH);
-            int p2Count = BackgroundTiling.GetP2Count(mapHeight, SCREEN_HEIGHT);
+            int p2Count = BackgroundTiling.GetP2Count(mapHeight, MathF.Max(cameraWindow.h, SCREEN_HEIGHT));
             if (p2Count > 0)
             {
                 int pack = Application.SharedRootController().Pack;
