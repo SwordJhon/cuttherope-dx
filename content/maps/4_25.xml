@@ -9,9 +9,9 @@
         <candy x="143" y="136" />
         <grab x="146" y="75" length="40" wheel="false" gun="false" radius="-1" moveLength="-1" moveVertical="false" moveOffset="0" spider="false" part="L" />
         <sock x="66" y="397" group="1" angle="-90" />
-        <sock x="144" y="139" group="1" angle="-180" path="RW90" moveSpeed="150" rotateSpeed="-106" lockAngle="true" />
+        <sock x="144" y="139" group="1" angle="-180" path="RW90" moveSpeed="150" rotateSpeed="-106" syncAngleOnFullRotation="true" />
         <sock x="260" y="395" group="0" angle="-90" />
-        <sock x="144" y="139" group="0" angle="-180" path="RC90" moveSpeed="100" rotateSpeed="70" lockAngle="true" />
+        <sock x="144" y="139" group="0" angle="-180" path="RC90" moveSpeed="100" rotateSpeed="70" syncAngleOnFullRotation="true" />
         <grab x="64" y="301" length="100" wheel="false" gun="false" radius="30" moveLength="-1" moveVertical="false" moveOffset="0" spider="false" part="L" />
         <star x="52" y="357" timeout="-1" />
         <star x="77" y="356" timeout="-1" />
